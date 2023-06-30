@@ -18,6 +18,8 @@ const createWindow = () => {
     frame: false,
   });
 
+  mainWindow.setMinimumSize(450, 300)
+
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
