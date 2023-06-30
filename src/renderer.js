@@ -6,10 +6,16 @@ closeButton.addEventListener('click', () => {
   api.closeWindow();
 });
 
-setTimeout(() => {
-  // close on lost focus
-  window.addEventListener('blur', () => {
-    console.log('window lost focus');
-    api.closeWindow();
-  });
-}, 500);
+// setTimeout(() => {
+//   // close on lost focus
+//   window.addEventListener('blur', () => {
+//     console.log('window lost focus');
+//     // wait 1 second, close if mouse not on window
+//     setTimeout(() => {
+//       if (!window.isFocused()) {
+//         console.log('window is not focused, closing');
+//         api.closeWindow();
+//       }
+//     }, 1000);
+//   });
+// }, 500);

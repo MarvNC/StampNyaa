@@ -14,7 +14,8 @@ html {
   height: 100%;
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -84,7 +85,7 @@ body {
       #top-buttons {
         height: 50px;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-evenly;
 
         .circle {
           height: 40px;
@@ -107,6 +108,8 @@ body {
 
     #main-view {
       flex: 1;
+      padding: 10px;
+      overflow: scroll;
     }
   }
 }
@@ -118,4 +121,25 @@ body {
 
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 48;
+}
+
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
 }

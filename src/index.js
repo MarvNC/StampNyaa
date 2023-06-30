@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } = require('electron');
 const path = require('path');
 
 let window;
@@ -43,15 +43,27 @@ app.on('ready', () => {
 
   globalShortcut.register('CommandOrControl+Shift+P', () => {
     console.log('CommandOrControl+Shift+P is pressed');
-    if (window.isVisible()) {
-      window.hide();
-    } else {
-      window.show();
-    }
+    window.isVisible() ? window.hide() : window.show();
   });
 
   app.on('will-quit', () => {
     globalShortcut.unregisterAll();
+  });
+
+  appIcon = new Tray('./assets/icon.png');
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Quit',
+      click: function () {
+        app.isQuiting = true;
+        app.quit();
+      },
+    },
+  ]);
+
+  appIcon.setContextMenu(contextMenu);
+  appIcon.on('click', () => {
+    window.isVisible() ? window.hide() : window.show();
   });
 });
 
