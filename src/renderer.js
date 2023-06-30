@@ -16,15 +16,37 @@ minimizeButton.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   console.log('dom content loaded');
-  const { dirName } = await api.ready();
+  const { dirName, stickerPackList } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
+  const stickerPackListDiv = document.getElementById('sticker-pack-list');
 
-  for (let i = 0; i < 20; i++) {
-    const stickerDiv = document.createElement('div');
-    stickerDiv.classList.add('sticker');
-    const stickerImg = document.createElement('img');
-    stickerImg.src = `../assets/icon.png`;
-    stickerDiv.appendChild(stickerImg);
-    stickerContainer.appendChild(stickerDiv);
+  for (const stickerPack of stickerPackList) {
+    const stickerIconDiv = document.createElement('div');
+    stickerIconDiv.classList.add('sticker-pack-icon');
+    const stickerIconImg = document.createElement('img');
+    // TODO fix dirs
+    stickerIconImg.src = `../assets/icon.png`;
+    // stickerIconImg.src = path.join(dirName, stickerPack.mainIcon);
+    stickerIconDiv.appendChild(stickerIconImg);
+    stickerPackListDiv.appendChild(stickerIconDiv);
+
+    const stickerPackDiv = document.createElement('div');
+    stickerPackDiv.classList.add('sticker-pack');
+    
+    const stickerPackTitle = document.createElement('h2');
+    stickerPackTitle.innerText = stickerPack.title;
+    stickerPackDiv.appendChild(stickerPackTitle);
+    stickerContainer.appendChild(stickerPackDiv);
+
+    for (const sticker of stickerPack.stickers) {
+      const stickerDiv = document.createElement('div');
+      stickerDiv.classList.add('sticker');
+      const stickerImg = document.createElement('img');
+      // TODO fix dirs
+      stickerImg.src = `../assets/icon.png`;
+      // stickerImg.src = path.join(dirName, sticker.path);
+      stickerDiv.appendChild(stickerImg);
+      stickerPackDiv.appendChild(stickerDiv);
+    }
   }
 });

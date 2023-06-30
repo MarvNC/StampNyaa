@@ -29,7 +29,6 @@ const createWindow = () => {
 
   // Open the DevTools.
   window.webContents.openDevTools();
-
 };
 
 // This method will be called when Electron has finished
@@ -51,10 +50,155 @@ app.on('ready', () => {
     // for now send icon.png
     return {
       dirName: app.getPath('userData'),
-      stickerList: [
+      stickerPackList: [
         {
-          path: './assets/icon.png',
-          type: 'static',
+          title: 'test',
+          mainIcon: '../assets/icon.png',
+          stickers: [
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+            {
+              path: '../assets/icon.png',
+              type: 'static',
+            },
+          ],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
+        },
+        {
+          title: 'test2',
+          mainIcon: '../assets/icon.png',
+          stickers: [],
         },
       ],
     };
@@ -69,7 +213,7 @@ app.on('ready', () => {
     globalShortcut.unregisterAll();
   });
 
-  appIcon = new Tray('./assets/icon.png');
+  appIcon = new Tray('../assets/icon.png');
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',

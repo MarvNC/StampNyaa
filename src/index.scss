@@ -2,11 +2,12 @@
 /* shadow size */
 :root {
   --shadow-size: 7px;
-  --text-color: #2a7693;
+  --text-color: #4aa2c5;
   --primary-color: #b5eaff;
   --background-color: #e8f9ff;
   --white-color: #fff;
   --close-button-color: rgb(255, 160, 160);
+  --scale-power: 1.1;
 }
 
 html {
@@ -31,6 +32,8 @@ body {
   background-color: var(--background-color);
   border-radius: 15px;
   box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 
   #titlebar {
@@ -93,11 +96,19 @@ body {
   #main-content {
     width: 100%;
     height: 100%;
+    min-height: 0;
     display: flex;
+    box-sizing: border-box;
+
     #leftbar {
       height: 100%;
+      min-height: 0;
       background-color: var(--primary-color);
       width: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: scroll;
 
       #top-buttons {
         height: 50px;
@@ -113,7 +124,32 @@ body {
           overflow: hidden;
           display: flex;
           :hover {
-            background-color: white;
+            transform: scale(var(--scale-power));
+          }
+
+          .material-symbols-outlined {
+            color: var(--white-color);
+            font-size: 40px;
+          }
+        }
+      }
+
+      #sticker-pack-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 5px;
+
+        .sticker-pack-icon {
+          cursor: pointer;
+          display: flex;
+          :hover {
+            transform: scale(var(--scale-power));
+          }
+
+          img {
+            max-width: 100%;
+            max-height: 150px;
           }
 
           .material-symbols-outlined {
@@ -124,12 +160,19 @@ body {
       }
     }
 
-    #main-view {
+    #sticker-list {
       flex: 1;
       padding: 10px;
       overflow: scroll;
 
-      #sticker-list {
+      h2 {
+        color: var(--text-color);
+        margin: 0;
+        width: 100%;
+        grid-column: 1 / -1;
+      }
+
+      .sticker-pack {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         grid-gap: 10px;
@@ -151,12 +194,7 @@ body {
 }
 
 .sticker img:hover {
-  transform: scale(1.1);
-}
-
-/* doesn't work when nested for some reason */
-.circle:hover .material-symbols-outlined {
-  color: var(--primary-color) !important;
+  transform: scale(var(--scale-power));
 }
 
 .material-symbols-outlined {
@@ -166,6 +204,7 @@ body {
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
