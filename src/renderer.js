@@ -6,16 +6,25 @@ closeButton.addEventListener('click', () => {
   api.closeWindow();
 });
 
-// setTimeout(() => {
-//   // close on lost focus
-//   window.addEventListener('blur', () => {
-//     console.log('window lost focus');
-//     // wait 1 second, close if mouse not on window
-//     setTimeout(() => {
-//       if (!window.isFocused()) {
-//         console.log('window is not focused, closing');
-//         api.closeWindow();
-//       }
-//     }, 1000);
-//   });
-// }, 500);
+const minimizeButton = document.getElementById('minimize-button');
+
+// minimize on - button
+minimizeButton.addEventListener('click', () => {
+  console.log('minimize button clicked');
+  api.minimizeWindow();
+});
+
+window.addEventListener('DOMContentLoaded', async () => {
+  console.log('dom content loaded');
+  const { dirName } = await api.ready();
+  const stickerContainer = document.getElementById('sticker-list');
+
+  for (let i = 0; i < 20; i++) {
+    const stickerDiv = document.createElement('div');
+    stickerDiv.classList.add('sticker');
+    const stickerImg = document.createElement('img');
+    stickerImg.src = `../assets/icon.png`;
+    stickerDiv.appendChild(stickerImg);
+    stickerContainer.appendChild(stickerDiv);
+  }
+});

@@ -1,0 +1,184 @@
+/* variables */
+/* shadow size */
+:root {
+  --shadow-size: 7px;
+  --text-color: #2a7693;
+  --primary-color: #b5eaff;
+  --background-color: #e8f9ff;
+  --white-color: #fff;
+  --close-button-color: rgb(255, 160, 160);
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+body {
+  font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  padding: var(--shadow-size);
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  background-color: var(--background-color);
+  border-radius: 15px;
+  box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  #titlebar {
+    background-color: var(--primary-color);
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    align-items: center;
+
+    .dragzone {
+      -webkit-app-region: drag;
+      overflow: hidden;
+      position: absolute;
+      right: 70px;
+      width: 100%;
+      height: 30px;
+    }
+
+    #menu-buttons {
+      display: flex;
+      align-items: center;
+
+      .material-symbols-outlined {
+        color: var(--white-color);
+        font-size: 24px;
+      }
+
+      .menu-button {
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        float: right;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      #close-button:hover {
+        background-color: var(--close-button-color);
+      }
+
+      #minimize-button {
+        margin-right: 3px;
+      }
+
+      #minimize-button:hover {
+        background-color: var(--white-color) !important;
+        .material-symbols-outlined {
+          color: var(--primary-color) !important;
+        }
+      }
+    }
+
+    .logo {
+      font-weight: 800;
+      color: var(--white-color);
+    }
+  }
+
+  #main-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    #leftbar {
+      height: 100%;
+      background-color: var(--primary-color);
+      width: 110px;
+
+      #top-buttons {
+        height: 50px;
+        display: flex;
+        justify-content: space-evenly;
+        margin: 5px;
+
+        .circle {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          overflow: hidden;
+          display: flex;
+          :hover {
+            background-color: white;
+          }
+
+          .material-symbols-outlined {
+            color: var(--white-color);
+            font-size: 40px;
+          }
+        }
+      }
+    }
+
+    #main-view {
+      flex: 1;
+      padding: 10px;
+      overflow: scroll;
+
+      #sticker-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-gap: 10px;
+      }
+    }
+  }
+}
+
+.sticker {
+  height: 150px;
+  width: 150px;
+}
+
+.sticker img {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.sticker img:hover {
+  transform: scale(1.1);
+}
+
+/* doesn't work when nested for some reason */
+.circle:hover .material-symbols-outlined {
+  color: var(--primary-color) !important;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 48;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}

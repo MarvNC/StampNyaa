@@ -11,6 +11,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   window = new BrowserWindow({
+    icon: path.join(__dirname, '../assets/icon.png'),
     width: 800,
     height: 600,
     webPreferences: {
@@ -20,7 +21,7 @@ const createWindow = () => {
     frame: false,
   });
 
-  window.setMinimumSize(450, 300);
+  window.setMinimumSize(466, 300);
 
   // and load the index.html of the app.
   window.loadFile(path.join(__dirname, 'index.html'));
@@ -29,6 +30,8 @@ const createWindow = () => {
   window.webContents.openDevTools();
 
   window.focus();
+  window.show();
+  window.setAlwaysOnTop(true, 'floating');
 };
 
 // This method will be called when Electron has finished
@@ -39,6 +42,24 @@ app.on('ready', () => {
 
   ipcMain.on('close-window', () => {
     window.hide();
+  });
+
+  ipcMain.on('minimize-window', () => {
+    window.minimize();
+  });
+
+  ipcMain.handle('ready', (event) => {
+    // get stickers and send to client
+    // for now send icon.png
+    return {
+      dirName: app.getPath('userData'),
+      stickerList: [
+        {
+          path: './assets/icon.png',
+          type: 'static',
+        },
+      ],
+    };
   });
 
   globalShortcut.register('CommandOrControl+Shift+P', () => {
