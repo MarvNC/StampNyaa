@@ -2,11 +2,35 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>スタンプにゃあ～</title>
     <link rel="stylesheet" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="app">
+      <div id="titlebar">
+        <div class="logo">スタンプにゃあ～</div>
+        <div class="circle"><span class="close-x material-symbols-outlined"> close </span></div>
+      </div>
+
+      <div id="main-content">
+        <div id="leftbar">
+          <div id="top-buttons">
+            <div id="settings-cog" class="circle">
+              <span class="material-symbols-outlined"> settings </span>
+            </div>
+            <div id="add-button" class="circle">
+              <span class="material-symbols-outlined"> add </span>
+            </div>
+          </div>
+          <div id="sticker-pack-list"></div>
+        </div>
+        <div id="main-view">
+          <div id="sticker-list"></div>
+      </div>
+    </div>
   </body>
 </html>

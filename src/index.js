@@ -14,6 +14,8 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
+    transparent: true,
+    frame: false,
   });
 
   // and load the index.html of the app.
