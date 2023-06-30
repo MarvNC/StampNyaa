@@ -148,16 +148,18 @@ body {
   padding: 10px;
   overflow: scroll;
 }
-#app #main-content #sticker-list h2 {
-  color: var(--text-color);
-  margin: 0;
-  width: 100%;
-  grid-column: 1/-1;
-}
 #app #main-content #sticker-list .sticker-pack {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   grid-gap: 10px;
+}
+#app #main-content #sticker-list .sticker-pack .sticker-pack-title {
+  color: var(--text-color);
+  grid-column: 1/-1;
+  margin-left: 10px;
+}
+#app #main-content #sticker-list .sticker-pack .sticker-pack-title h2 {
+  margin: 0;
 }
 
 .sticker {

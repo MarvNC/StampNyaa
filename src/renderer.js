@@ -33,10 +33,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     const stickerPackDiv = document.createElement('div');
     stickerPackDiv.classList.add('sticker-pack');
     
+    const stickerPackTitleDiv = document.createElement('div');
+    stickerPackTitleDiv.classList.add('sticker-pack-title');
+
     const stickerPackTitle = document.createElement('h2');
     stickerPackTitle.innerText = stickerPack.title;
-    stickerPackDiv.appendChild(stickerPackTitle);
-    stickerContainer.appendChild(stickerPackDiv);
+
+    stickerPackTitleDiv.appendChild(stickerPackTitle);
+    stickerPackDiv.appendChild(stickerPackTitleDiv);
 
     for (const sticker of stickerPack.stickers) {
       const stickerDiv = document.createElement('div');
@@ -48,5 +52,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       stickerDiv.appendChild(stickerImg);
       stickerPackDiv.appendChild(stickerDiv);
     }
+
+    stickerContainer.appendChild(stickerPackDiv);
   }
 });
