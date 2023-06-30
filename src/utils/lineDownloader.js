@@ -49,9 +49,6 @@ const downloadPack = async (storeURL) => {
     stickerList.push(stickerJSON);
   }
 
-  // staticUrl
-  // animationUrl
-  // popupUrl
   // Each sticker has a static URL, some have either an animation or popup url which is an animated png.
   for (let i = 0; i < stickerList.length; i++) {
     const sticker = stickerList[i];
