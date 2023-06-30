@@ -39,6 +39,10 @@ const downloadPack = async (storeURL) => {
   const response = await axios.get(storeURL);
   const dom = new JSDOM(response.data);
   const document = dom.window.document;
+
+  const title = document.title.split(' - ')[0];
+  console.log(`Got store page for ${title}...`);
+
   const stickerLiList = [...document.querySelectorAll('.mdCMN09Li')];
 
   console.log(`Downloading ${stickerLiList.length} stickers from ${storeURL}...`);
@@ -76,3 +80,5 @@ const downloadPack = async (storeURL) => {
     console.log(`Downloaded ${i + 1}/${stickerList.length} stickers`);
   }
 };
+
+module.exports = downloadPack;
