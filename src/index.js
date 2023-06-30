@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
+
+let window;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -8,7 +10,7 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  window = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -18,19 +20,38 @@ const createWindow = () => {
     frame: false,
   });
 
-  mainWindow.setMinimumSize(450, 300)
+  window.setMinimumSize(450, 300);
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  window.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  window.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+
+  ipcMain.on('close-window', () => {
+    window.hide();
+  });
+
+  globalShortcut.register('CommandOrControl+Shift+P', () => {
+    console.log('CommandOrControl+Shift+P is pressed');
+    if (window.isVisible()) {
+      window.hide();
+    } else {
+      window.show();
+    }
+  });
+
+  app.on('will-quit', () => {
+    globalShortcut.unregisterAll();
+  });
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
