@@ -18,6 +18,7 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "@nut-tree/nut-js": "^3.1.2",
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "jsdom": "^22.1.0"

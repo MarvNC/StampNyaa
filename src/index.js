@@ -1,5 +1,6 @@
 const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } = require('electron');
 const path = require('path');
+const stickerHandler = require('./utils/stickerHandler');
 
 let window;
 
@@ -29,9 +30,6 @@ const createWindow = () => {
   // Open the DevTools.
   window.webContents.openDevTools();
 
-  window.focus();
-  window.show();
-  window.setAlwaysOnTop(true, 'floating');
 };
 
 // This method will be called when Electron has finished
@@ -49,7 +47,7 @@ app.on('ready', () => {
   });
 
   ipcMain.handle('ready', (event) => {
-    // get stickers and send to client
+    // get stickers and settings and stuff and send to client
     // for now send icon.png
     return {
       dirName: app.getPath('userData'),
@@ -64,7 +62,7 @@ app.on('ready', () => {
 
   globalShortcut.register('CommandOrControl+Shift+P', () => {
     console.log('CommandOrControl+Shift+P is pressed');
-    window.isVisible() ? window.hide() : window.show();
+    window.isFocused() ? window.hide() : window.show();
   });
 
   app.on('will-quit', () => {
@@ -84,7 +82,7 @@ app.on('ready', () => {
 
   appIcon.setContextMenu(contextMenu);
   appIcon.on('click', () => {
-    window.isVisible() ? window.hide() : window.show();
+    window.isFocused() ? window.hide() : window.show();
   });
 });
 
