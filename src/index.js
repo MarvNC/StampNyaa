@@ -27,6 +27,8 @@ const createWindow = () => {
 
   // Open the DevTools.
   window.webContents.openDevTools();
+
+  window.focus();
 };
 
 // This method will be called when Electron has finished

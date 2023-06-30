@@ -6,8 +6,10 @@ closeButton.addEventListener('click', () => {
   api.closeWindow();
 });
 
-// close on lost focus
-window.addEventListener('blur', () => {
-  console.log('window lost focus');
-  api.closeWindow();
-});
+setTimeout(() => {
+  // close on lost focus
+  window.addEventListener('blur', () => {
+    console.log('window lost focus');
+    api.closeWindow();
+  });
+}, 500);
