@@ -213,7 +213,7 @@ app.on('ready', () => {
     globalShortcut.unregisterAll();
   });
 
-  appIcon = new Tray('../assets/icon.png');
+  appIcon = new Tray('./assets/icon.png');
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',
