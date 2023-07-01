@@ -102,7 +102,6 @@ body {
   overflow: scroll;
 }
 #app #main-content #leftbar #top-buttons {
-  height: 50px;
   display: flex;
   justify-content: space-evenly;
   margin: 5px;
@@ -160,6 +159,7 @@ body {
 }
 #app #main-content #sticker-list .sticker-pack .sticker-pack-title h2 {
   margin: 0;
+  font-weight: 700;
 }
 
 .sticker {

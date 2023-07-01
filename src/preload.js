@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.send('minimize-window');
   },
   ready: () => ipcRenderer.invoke('ready'),
+  sendSticker: (stickerPath) => {
+    ipcRenderer.send('send-sticker', stickerPath);
+  },
 });

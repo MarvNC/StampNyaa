@@ -2,6 +2,7 @@ const axios = require('axios');
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
+const { app } = require('electron');
 
 const cdnURL = 'https://stickershop.line-scdn.net';
 const mainImageURL = (packID) =>
@@ -15,14 +16,20 @@ const popupStickerURL = (stickerId) =>
 
 const packIDRegex = /stickershop\/product\/(\d+)/;
 
+/**
+ * Downloads a sticker pack from the LINE store.
+ * @param {string} storeURL
+ * @returns {Promise<string>} The title of the sticker pack.
+ */
 const downloadPack = async (storeURL) => {
   const packID = storeURL.match(packIDRegex)[1];
+  const appDir = app.getPath('pictures');
+  const stickersDir = `${appDir}/stickers/`;
+  const packDir = `${stickersDir}${packID}`;
 
-  const stickersDir = path.join(__dirname, '../../stickers/');
   if (!fs.existsSync(stickersDir)) {
     fs.mkdirSync(stickersDir);
   }
-  const packDir = `${stickersDir}${packID}`;
   if (!fs.existsSync(packDir)) {
     fs.mkdirSync(packDir);
   }
@@ -79,6 +86,15 @@ const downloadPack = async (storeURL) => {
 
     console.log(`Downloaded ${i + 1}/${stickerList.length} stickers`);
   }
+  // save title to info.json
+  const info = {
+    title,
+    storeURL,
+  };
+  fs.writeFileSync(path.join(packDir, 'info.json'), JSON.stringify(info));
+  return title;
 };
 
 module.exports = downloadPack;
+
+// downloadPack('https://store.line.me/stickershop/product/28757/ja');

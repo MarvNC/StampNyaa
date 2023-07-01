@@ -1,6 +1,7 @@
 const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } = require('electron');
 const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
+const Config = require('./utils/config');
 
 let window;
 
@@ -26,16 +27,16 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   window.loadFile(path.join(__dirname, 'index.html'));
-
-  // Open the DevTools.
-  window.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.on('ready', async () => {
   createWindow();
+
+  const config = new Config();
+  const stickerPacksMap = stickerHandler.getAllStickerPacks(config.getStickersPath());
 
   ipcMain.on('close-window', () => {
     window.hide();
@@ -45,163 +46,15 @@ app.on('ready', () => {
     window.minimize();
   });
 
-  ipcMain.handle('ready', (event) => {
+  ipcMain.handle('ready', () => {
     // get stickers and settings and stuff and send to client
-    // for now send icon.png
     return {
-      dirName: app.getPath('userData'),
-      stickerPackList: [
-        {
-          title: 'test',
-          mainIcon: '../assets/icon.png',
-          stickers: [
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-            {
-              path: '../assets/icon.png',
-              type: 'static',
-            },
-          ],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-        {
-          title: 'test2',
-          mainIcon: '../assets/icon.png',
-          stickers: [],
-        },
-      ],
+      stickerPacksMap,
     };
+  });
+
+  ipcMain.on('send-sticker', (event, stickerPath) => {
+    stickerHandler.pasteStickerFromPath(stickerPath, window);
   });
 
   globalShortcut.register('CommandOrControl+Shift+P', () => {

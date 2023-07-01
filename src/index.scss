@@ -111,7 +111,6 @@ body {
       overflow: scroll;
 
       #top-buttons {
-        height: 50px;
         display: flex;
         justify-content: space-evenly;
         margin: 5px;
@@ -172,6 +171,7 @@ body {
           margin-left: 10px;
           h2 {
             margin: 0;
+            font-weight: 700;
           }
         }
         display: grid;
