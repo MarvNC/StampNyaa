@@ -3,6 +3,10 @@
   "productName": "stampnyaa",
   "version": "1.0.0",
   "description": "A simple app for using LINE stickers in your favorite messaging applications.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarvNC/StampNyaa"
+  },
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
