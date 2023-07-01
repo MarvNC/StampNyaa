@@ -126,6 +126,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   margin: 5px;
+  gap: 10px;
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon {
   cursor: pointer;
