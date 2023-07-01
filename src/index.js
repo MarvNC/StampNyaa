@@ -5,6 +5,8 @@ const Config = require('./utils/config');
 
 let window;
 
+const iconPath = path.join(__dirname, '../assets/icon.png');
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -13,7 +15,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   window = new BrowserWindow({
-    icon: path.join(__dirname, '../assets/icon.png'),
+    icon: iconPath,
     width: 800,
     height: 600,
     webPreferences: {
@@ -36,7 +38,6 @@ app.on('ready', async () => {
   createWindow();
 
   const config = new Config();
-  const stickerPacksMap = stickerHandler.getAllStickerPacks(config.getStickersPath());
 
   ipcMain.on('close-window', () => {
     window.hide();
@@ -49,7 +50,7 @@ app.on('ready', async () => {
   ipcMain.handle('ready', () => {
     // get stickers and settings and stuff and send to client
     return {
-      stickerPacksMap,
+      stickerPacksMap: stickerHandler.getAllStickerPacks(config.getStickersPath()),
     };
   });
 
@@ -57,8 +58,8 @@ app.on('ready', async () => {
     stickerHandler.pasteStickerFromPath(stickerPath, window);
   });
 
-  globalShortcut.register('CommandOrControl+Shift+P', () => {
-    console.log('CommandOrControl+Shift+P is pressed');
+  globalShortcut.register('CommandOrControl+Shift+A', () => {
+    console.log('CommandOrControl+Shift+A is pressed');
     window.isFocused() ? window.hide() : window.show();
   });
 
@@ -66,7 +67,7 @@ app.on('ready', async () => {
     globalShortcut.unregisterAll();
   });
 
-  appIcon = new Tray('./assets/icon.png');
+  const appIcon = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',
