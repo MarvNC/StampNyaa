@@ -1,6 +1,6 @@
 {
   "name": "stampnyaa",
-  "productName": "stampnyaa",
+  "productName": "StampNyaa",
   "version": "1.0.0",
   "description": "A simple app for using LINE stickers in your favorite messaging applications.",
   "repository": {
@@ -26,7 +26,8 @@
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "jsdom": "^22.1.0"
+    "jsdom": "^22.1.0",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",

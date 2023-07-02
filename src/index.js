@@ -4,6 +4,9 @@ const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
 
+// Auto update
+require('update-electron-app')()
+
 let window;
 
 const iconPath = path.join(__dirname, '../assets/icon.ico');
