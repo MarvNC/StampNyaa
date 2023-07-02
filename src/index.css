@@ -126,6 +126,7 @@ body {
   font-size: 40px;
 }
 #app #main-content #leftbar #sticker-pack-list {
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
