@@ -134,24 +134,23 @@ body {
   gap: 10px;
   scroll-snap-type: y mandatory;
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper {
   cursor: pointer;
   width: 100px;
   height: 100px;
   scroll-margin: 50px;
-  overflow: hidden;
   padding: 0;
   margin: 0;
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon.active {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper.active {
   transform: scale(var(--scale-power));
   outline: 4px dashed var(--white-color);
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon img {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper img {
   max-width: 100%;
   max-height: 100%;
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon .material-symbols-outlined {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper .material-symbols-outlined {
   color: var(--white-color);
   font-size: 40px;
 }

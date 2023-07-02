@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Sticker main icon
     const stickerIconDiv = document.createElement('div');
-    stickerIconDiv.classList.add('sticker-pack-icon');
+    stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
     stickerIconDiv.dataset.packID = stickerPackID;
 
     const stickerIconImg = document.createElement('img');
@@ -116,7 +116,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       const topElementOffset = stickerPackListDiv.offsetTop;
       const scrollPos = e.currentTarget.scrollTop + topElementOffset;
       const stickerPackDivs = document.getElementsByClassName('sticker-pack');
-      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon');
+      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon-wrapper');
       for (let i = 0; i < stickerPackDivs.length; i++) {
         const stickerPackDiv = stickerPackDivs[i];
         const stickerPackIconDiv = stickerPackIconDivs[i];
@@ -196,7 +196,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // sortable
   const sortable = new Draggable.Sortable(stickerPackListDiv, {
-    draggable: '.sticker-pack-icon',
+    draggable: '.sticker-pack-icon-wrapper',
   });
   sortable.on('sortable:stop', (event) => {
     const packs = [];
@@ -204,6 +204,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       packs.push(pack.dataset.packID);
     }
     // api.setStickerPackOrder(packs);
+    // TODO
 
     // rearrange sticker packs
     const rearrangedStickerPack = event.dragEvent.data.source;

@@ -146,12 +146,11 @@ body {
         gap: 10px;
         scroll-snap-type: y mandatory;
 
-        .sticker-pack-icon {
+        .sticker-pack-icon-wrapper {
           cursor: pointer;
           width: 100px;
           height: 100px;
           scroll-margin: 50px;
-          overflow: hidden;
           padding: 0;
           margin: 0;
 
