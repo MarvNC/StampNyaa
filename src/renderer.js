@@ -14,7 +14,6 @@ closeButton.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', async () => {
-  console.log('dom content loaded');
   const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
