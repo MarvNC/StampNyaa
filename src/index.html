@@ -22,9 +22,6 @@
         <div class="dragzone"></div>
         <div class="logo">スタンプにゃあ～</div>
         <div id="menu-buttons">
-          <div id="minimize-button" class="menu-button">
-            <span class="material-symbols-outlined"> minimize </span>
-          </div>
           <div id="close-button" class="menu-button">
             <span class="close-x material-symbols-outlined"> close </span>
           </div>
@@ -44,6 +41,16 @@
           <div id="sticker-pack-list"></div>
         </div>
         <div id="sticker-list"></div>
+      </div>
+    </div>
+    <div id="add-sticker-background" class="modal-background" style="display: none">
+      <div class="modal">
+        <div class="inputbox">
+          <input id="add-sticker-input" type="text" spellcheck="false" />
+        </div>
+        <div id="add-sticker-button">
+          <span class="material-symbols-outlined"> check </span>
+        </div>
       </div>
     </div>
     <script src="renderer.js"></script>

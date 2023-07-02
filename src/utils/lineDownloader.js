@@ -19,9 +19,10 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
 /**
  * Downloads a sticker pack from the LINE store.
  * @param {string} storeURL
+ * @param {MessageChannel} channel
  * @returns {Promise<string>} The title of the sticker pack.
  */
-async function downloadPack(storeURL) {
+async function downloadPack(storeURL, channel) {
   const packID = storeURL.match(packIDRegex)[1];
   const appDir = app.getPath('pictures');
   const stickersDir = `${appDir}/stickers/`;

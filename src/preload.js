@@ -13,4 +13,5 @@ contextBridge.exposeInMainWorld('api', {
   sendSticker: (stickerPath) => {
     ipcRenderer.send('send-sticker', stickerPath);
   },
+  downloadStickerPack: (url) => ipcRenderer.invoke('download-sticker-pack', url),
 });

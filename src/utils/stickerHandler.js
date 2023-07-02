@@ -2,7 +2,6 @@ const { app, clipboard } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
-const downloadPack = require('./lineDownloader');
 
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.

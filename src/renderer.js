@@ -6,14 +6,6 @@ closeButton.addEventListener('click', () => {
   api.closeWindow();
 });
 
-const minimizeButton = document.getElementById('minimize-button');
-
-// minimize on - button
-minimizeButton.addEventListener('click', () => {
-  console.log('minimize button clicked');
-  api.minimizeWindow();
-});
-
 window.addEventListener('DOMContentLoaded', async () => {
   console.log('dom content loaded');
   const { stickerPacksMap } = await api.ready();
@@ -103,6 +95,44 @@ window.addEventListener('DOMContentLoaded', async () => {
       stickerIconDiv.classList.remove('active');
     });
   }
+
+  // Download sticker pack on add button
+  const addButton = document.getElementById('add-button');
+  const modalBackground = document.getElementById('add-sticker-background');
+  const input = document.getElementById('add-sticker-input');
+  const addStickerButton = document.getElementById('add-sticker-button');
+  const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
+
+  let downloadActive = false;
+
+  addButton.addEventListener('click', async () => {
+    modalBackground.style.display = 'block';
+  });
+
+  modalBackground.addEventListener('click', async (e) => {
+    if (e.target === modalBackground && !downloadActive) {
+      modalBackground.style.display = 'none';
+    }
+  });
+
+  addStickerButton.addEventListener('click', async () => {
+    const url = input.value;
+    if (!lineURLRegex.test(url)) {
+      addStickerButton.classList.add('error');
+      addStickerButton.firstElementChild.textContent = 'close';
+      setTimeout(() => {
+        addStickerButton.classList.remove('error');
+        addStickerButton.firstElementChild.textContent = 'check';
+      }, 400);
+      return;
+    }
+    downloadActive = true;
+    addStickerButton.classList.add('loading');
+    const port = await api.downloadStickerPack(url);
+    downloadActive = false;
+    addStickerButton.classList.remove('loading');
+    modalBackground.style.display = 'none';
+  });
 });
 
 function createElementFromHTML(htmlString) {

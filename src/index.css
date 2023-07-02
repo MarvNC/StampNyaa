@@ -6,7 +6,9 @@
   --primary-color: #b5eaff;
   --background-color: #e8f9ff;
   --white-color: #fff;
-  --close-button-color: rgb(255, 160, 160);
+  --red-color: rgb(255, 160, 160);
+  --green-color: rgb(160, 255, 160);
+  --yellow-color: rgb(255, 255, 160);
   --scale-power: 1.1;
 }
 
@@ -30,7 +32,7 @@ body {
   height: 100%;
   width: 100%;
   background-color: var(--background-color);
-  border-radius: 15px;
+  border-radius: 20px;
   box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
@@ -69,7 +71,7 @@ body {
   overflow: hidden;
 }
 #app #titlebar #menu-buttons #close-button:hover {
-  background-color: var(--close-button-color);
+  background-color: var(--red-color);
 }
 #app #titlebar #menu-buttons #minimize-button {
   margin-right: 3px;
@@ -137,7 +139,7 @@ body {
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon :hover, #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon.active {
   transform: scale(var(--scale-power));
-  outline: 2px dashed var(--white-color);
+  outline: 4px dashed var(--white-color);
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon img {
   max-width: 100%;
@@ -179,21 +181,115 @@ body {
   font-weight: 500;
   font-size: 20px;
 }
-
-.sticker {
+#app #main-content #sticker-list .sticker-pack .sticker {
   height: 150px;
   width: 150px;
 }
-
-.sticker img {
+#app #main-content #sticker-list .sticker-pack .sticker img {
   max-width: 100%;
   max-height: 100%;
   cursor: pointer;
   box-sizing: border-box;
 }
-
-.sticker img:hover {
+#app #main-content #sticker-list .sticker-pack .sticker img:hover {
   transform: scale(var(--scale-power));
+}
+
+.modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+}
+.modal-background .modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 650px;
+  height: 150px;
+  background-color: var(--primary-color);
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 25px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+}
+.modal-background .modal div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.modal-background .modal .inputbox {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: var(--white-color);
+}
+.modal-background .modal .inputbox input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  padding: 0 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: var(--text-color);
+  background-color: transparent;
+  outline: none;
+}
+.modal-background .modal #add-sticker-button {
+  background-color: var(--green-color);
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transition: all 0.2s ease-in-out;
+}
+.modal-background .modal #add-sticker-button .material-symbols-outlined {
+  color: var(--white-color);
+  font-size: 50px;
+}
+.modal-background .modal #add-sticker-button:hover {
+  transform: scale(1.05);
+}
+.modal-background .modal #add-sticker-button:active {
+  transform: scale(0.95);
+}
+.modal-background .modal #add-sticker-button:disabled {
+  background-color: var(--gray-color);
+  cursor: not-allowed;
+}
+@keyframes shake {
+  0% {
+    margin-left: 0rem;
+  }
+  25% {
+    margin-left: 0.5rem;
+  }
+  75% {
+    margin-left: -0.5rem;
+  }
+  100% {
+    margin-left: 0rem;
+  }
+}
+.modal-background .modal #add-sticker-button.error {
+  background-color: var(--red-color);
+  animation: shake 0.2s ease-in-out 0s 2;
 }
 
 .material-symbols-outlined {

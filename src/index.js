@@ -2,6 +2,7 @@ const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, shell } = requi
 const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
 const Config = require('./utils/config');
+const downloadPack = require('./utils/lineDownloader');
 
 let window;
 
@@ -61,6 +62,12 @@ app.on('ready', async () => {
 
   ipcMain.on('send-sticker', (event, stickerPath) => {
     stickerHandler.pasteStickerFromPath(stickerPath, window);
+  });
+
+  ipcMain.handle('download-sticker-pack', (event, url) => {
+    const channel = new MessageChannel();
+    downloadPack(url, channel.port1);
+    return channel.port2;
   });
 
   globalShortcut.register('CommandOrControl+Shift+A', () => {

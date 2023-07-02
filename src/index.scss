@@ -6,7 +6,9 @@
   --primary-color: #b5eaff;
   --background-color: #e8f9ff;
   --white-color: #fff;
-  --close-button-color: rgb(255, 160, 160);
+  --red-color: rgb(255, 160, 160);
+  --green-color: rgb(160, 255, 160);
+  --yellow-color: rgb(255, 255, 160);
   --scale-power: 1.1;
 }
 
@@ -30,7 +32,7 @@ body {
   height: 100%;
   width: 100%;
   background-color: var(--background-color);
-  border-radius: 15px;
+  border-radius: 20px;
   box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
@@ -72,7 +74,7 @@ body {
       }
 
       #close-button:hover {
-        background-color: var(--close-button-color);
+        background-color: var(--red-color);
       }
 
       #minimize-button {
@@ -150,7 +152,7 @@ body {
           :hover,
           &.active {
             transform: scale(var(--scale-power));
-            outline: 2px dashed var(--white-color);
+            outline: 4px dashed var(--white-color);
           }
 
           img {
@@ -197,25 +199,135 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         grid-gap: 10px;
         padding: 5px 0px;
+
+        .sticker {
+          height: 150px;
+          width: 150px;
+
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            cursor: pointer;
+            box-sizing: border-box;
+
+            &:hover {
+              transform: scale(var(--scale-power));
+            }
+          }
+        }
       }
     }
   }
 }
 
-.sticker {
-  height: 150px;
-  width: 150px;
-}
+.modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
 
-.sticker img {
-  max-width: 100%;
-  max-height: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-}
+  .modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-.sticker img:hover {
-  transform: scale(var(--scale-power));
+    width: 80%;
+    max-width: 650px;
+    height: 150px;
+
+    background-color: var(--primary-color);
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 25px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+
+    div {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .inputbox {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      background-color: var(--white-color);
+
+      input {
+        height: 100%;
+        width: 100%;
+        border: none;
+        border-radius: 15px;
+        padding: 0 20px;
+        font-size: 25px;
+        font-weight: 500;
+        color: var(--text-color);
+        background-color: transparent;
+        outline: none;
+      }
+    }
+
+    #add-sticker-button {
+      background-color: var(--green-color);
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      transition: all 0.2s ease-in-out;
+
+      .material-symbols-outlined {
+        color: var(--white-color);
+        font-size: 50px;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &:disabled {
+        background-color: var(--gray-color);
+        cursor: not-allowed;
+      }
+
+      @keyframes shake {
+        0% {
+          margin-left: 0rem;
+        }
+        25% {
+          margin-left: 0.5rem;
+        }
+        75% {
+          margin-left: -0.5rem;
+        }
+        100% {
+          margin-left: 0rem;
+        }
+      }
+
+      &.error {
+        background-color: var(--red-color);
+        animation: shake 0.2s ease-in-out 0s 2;
+      }
+    }
+  }
 }
 
 .material-symbols-outlined {
