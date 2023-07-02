@@ -1,6 +1,7 @@
 const closeButton = document.getElementById('close-button');
 
 let mouseX, mouseY;
+let sorting = false;
 document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
@@ -14,12 +15,12 @@ closeButton.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   console.log('dom content loaded');
-  const { stickerPacksMap } = await api.ready();
+  const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
-  let stickerPackIDsOrder = [];
+  let stickerPackIDsOrder = stickerPacksOrder;
 
-  for (const stickerPackID of Object.keys(stickerPacksMap)) {
+  for (const stickerPackID of stickerPackIDsOrder) {
     const stickerPack = stickerPacksMap[stickerPackID];
     const { title, mainIcon, stickers, author, authorURL, storeURL } = stickerPack;
 
@@ -38,7 +39,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     stickerPackDiv.classList.add('sticker-pack');
     stickerPackDiv.dataset.packID = stickerPackID;
     stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
-    stickerPackIDsOrder.push(stickerPackID);
 
     const stickerPackHeader = createElementFromHTML(/* html */ `
 <div class="sticker-pack-header">
@@ -99,7 +99,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       // remove active from all sticker pack icons
       document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
       // add active to current sticker pack icon
-      e.currentTarget.classList.add('active');
+      if (!sorting) {
+        e.currentTarget.classList.add('active');
+      }
     });
   }
 
@@ -198,14 +200,15 @@ window.addEventListener('DOMContentLoaded', async () => {
   const sortable = new Draggable.Sortable(stickerPackListDiv, {
     draggable: '.sticker-pack-icon-wrapper',
   });
+  sortable.on('sortable:start', (event) => {
+    sorting = true;
+  });
+  sortable.on('sortable:sorted', (event) => {
+    // add active to sorted element
+    event.data.dragEvent.data.source.classList.add('active');
+  });
   sortable.on('sortable:stop', (event) => {
-    const packs = [];
-    for (const pack of stickerPackListDiv.children) {
-      packs.push(pack.dataset.packID);
-    }
-    // api.setStickerPackOrder(packs);
-    // TODO
-
+    sorting = false;
     // rearrange sticker packs
     const rearrangedStickerPack = event.dragEvent.data.source;
     const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
@@ -227,6 +230,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       console.log('last');
       stickerContainer.appendChild(rearrangedStickerPackContainer);
     }
+
+    api.setStickerPackOrder(stickerPackIDsOrder);
   });
 });
 

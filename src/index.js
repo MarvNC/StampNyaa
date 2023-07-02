@@ -1,7 +1,7 @@
 const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, shell } = require('electron');
 const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
-const Config = require('./utils/config');
+const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
 
 let window;
@@ -31,6 +31,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   window.loadFile(path.join(__dirname, 'index.html'));
 
+  // open links in default browser
   window.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };
@@ -41,9 +42,9 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  createWindow();
+  const store = initStore();
 
-  const config = new Config();
+  createWindow();
 
   ipcMain.on('close-window', () => {
     window.hide();
@@ -53,10 +54,23 @@ app.on('ready', async () => {
     window.minimize();
   });
 
+  const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('defaultStickersPath'));
+  let stickerPacksOrder = [...new Set(store.get('stickerPacksOrder'))];
+  // check if there are any new sticker packs not in StickerPacksOrder
+  const newStickerPacks = Object.keys(stickerPacksMap).filter(
+    (pack) => !stickerPacksOrder.includes(pack)
+  );
+  if (newStickerPacks.length > 0) {
+    // add new sticker packs to the end of the order
+    stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
+    store.set('stickerPacksOrder', stickerPacksOrder);
+  }
+
   ipcMain.handle('ready', () => {
     // get stickers and settings and stuff and send to client
     return {
-      stickerPacksMap: stickerHandler.getAllStickerPacks(config.getStickersPath()),
+      stickerPacksMap: stickerHandler.getAllStickerPacks(store.get('defaultStickersPath')),
+      stickerPacksOrder: store.get('stickerPacksOrder'),
     };
   });
 
@@ -66,7 +80,11 @@ app.on('ready', async () => {
 
   ipcMain.on('download-sticker-pack', (event, url) => {
     const port = event.ports[0];
-    downloadPack(url, port);
+    downloadPack(url, port, store.get('defaultStickersPath'));
+  });
+
+  ipcMain.on('set-sticker-pack-order', (event, stickerPackOrder) => {
+    store.set('stickerPacksOrder', stickerPackOrder);
   });
 
   globalShortcut.register('CommandOrControl+Shift+A', () => {
@@ -114,3 +132,22 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+/**
+ * Initialize the store
+ * @returns {Store}
+ */
+function initStore() {
+  const store = new Store({
+    defaults: {
+      stickersPathName: 'pictures',
+      stickersPathFolderName: 'stickers',
+      stickerPacksOrder: [],
+    },
+  });
+  store.set(
+    'defaultStickersPath',
+    path.join(app.getPath(store.get('stickersPathName')), store.get('stickersPathFolderName'))
+  );
+  return store;
+}

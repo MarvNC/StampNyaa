@@ -20,4 +20,7 @@ contextBridge.exposeInMainWorld('api', {
       window.postMessage(event.data);
     };
   },
+  setStickerPackOrder(stickerPackOrder) {
+    ipcRenderer.send('set-sticker-pack-order', stickerPackOrder);
+  },
 });
