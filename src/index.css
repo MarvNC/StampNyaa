@@ -127,13 +127,12 @@ body {
 }
 #app #main-content #leftbar #sticker-pack-list {
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-gap: 10px;
+  justify-items: center;
   margin: 5px;
   gap: 10px;
-  scroll-snap-type: y mandatory;
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper {
   cursor: pointer;
