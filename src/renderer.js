@@ -112,6 +112,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   modalBackground.addEventListener('click', async (e) => {
     if (e.target === modalBackground && !downloadActive) {
       modalBackground.style.display = 'none';
+      window.location.reload();
     }
   });
 
@@ -126,13 +127,42 @@ window.addEventListener('DOMContentLoaded', async () => {
       }, 400);
       return;
     }
+
+    api.downloadStickerPack(url);
+
     downloadActive = true;
     addStickerButton.classList.add('loading');
-    const port = await api.downloadStickerPack(url);
-    downloadActive = false;
-    addStickerButton.classList.remove('loading');
-    modalBackground.style.display = 'none';
+    addStickerButton.firstElementChild.textContent = 'more_horiz';
+    addStickerButton.disabled = true;
   });
+
+  const addStickerDownloadFeedback = document.getElementById('add-sticker-download-feedback');
+  const downloadProgressBar = document.getElementById('download-progress');
+  const addStickerTitle = document.getElementById('add-sticker-title');
+  const progressText = document.getElementById('progress-text');
+
+  window.onmessage = (event) => {
+    const data = event.data;
+    if (data.type === 'download-sticker-pack') {
+      addStickerDownloadFeedback.style.display = 'block';
+      addStickerTitle.textContent = data.title;
+      downloadProgressBar.style.width = `${(data.progress / data.stickerCount) * 100}%`;
+      progressText.textContent = `${data.progress}/${data.stickerCount}`;
+      if (data.progress === data.stickerCount) {
+        downloadActive = false;
+        addStickerButton.classList.remove('loading');
+        addStickerButton.firstElementChild.textContent = 'check';
+        addStickerButton.disabled = false;
+
+        setTimeout(() => {
+          addStickerDownloadFeedback.style.display = 'none';
+          downloadProgressBar.style.width = '0%';
+          progressText.textContent = '';
+          addStickerTitle.textContent = '';
+        }, 1000);
+      }
+    }
+  };
 });
 
 function createElementFromHTML(htmlString) {

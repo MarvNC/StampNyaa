@@ -13,5 +13,11 @@ contextBridge.exposeInMainWorld('api', {
   sendSticker: (stickerPath) => {
     ipcRenderer.send('send-sticker', stickerPath);
   },
-  downloadStickerPack: (url) => ipcRenderer.invoke('download-sticker-pack', url),
+  downloadStickerPack: (url) => {
+    const { port1, port2 } = new MessageChannel();
+    ipcRenderer.postMessage('download-sticker-pack', url, [port2]);
+    port1.onmessage = (event) => {
+      window.postMessage(event.data);
+    };
+  },
 });

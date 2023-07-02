@@ -19,10 +19,10 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
 /**
  * Downloads a sticker pack from the LINE store.
  * @param {string} storeURL
- * @param {MessageChannel} channel
+ * @param {MessagePortMain} port
  * @returns {Promise<string>} The title of the sticker pack.
  */
-async function downloadPack(storeURL, channel) {
+async function downloadPack(storeURL, port) {
   const packID = storeURL.match(packIDRegex)[1];
   const appDir = app.getPath('pictures');
   const stickersDir = `${appDir}/stickers/`;
@@ -58,6 +58,13 @@ async function downloadPack(storeURL, channel) {
   const stickerLiList = [...document.querySelectorAll('.mdCMN09Li')];
 
   console.log(`Downloading ${stickerLiList.length} stickers from ${storeURL}...`);
+  port.postMessage({
+    type: 'download-sticker-pack',
+    title,
+    author,
+    stickerCount: stickerLiList.length,
+    progress: 0,
+  });
 
   const stickerList = [];
   for (const stickerLi of stickerLiList) {
@@ -78,6 +85,13 @@ async function downloadPack(storeURL, channel) {
     }
 
     console.log(`Downloaded ${i + 1}/${stickerList.length} stickers`);
+    port.postMessage({
+      type: 'download-sticker-pack',
+      title,
+      author,
+      stickerCount: stickerList.length,
+      progress: i + 1,
+    });
   }
 
   // save title to info.json
@@ -90,6 +104,13 @@ async function downloadPack(storeURL, channel) {
   fs.writeFileSync(path.join(packDir, 'info.json'), JSON.stringify(info));
 
   console.log(`Finished downloading ${title}!`);
+  port.postMessage({
+    type: 'download-sticker-pack',
+    title,
+    author,
+    stickerCount: stickerList.length,
+    progress: stickerList.length,
+  });
 
   return {
     title,

@@ -26,6 +26,7 @@ body {
   padding: var(--shadow-size);
   margin: 0;
   box-sizing: border-box;
+  color: var(--text-color);
 }
 
 #app {
@@ -210,7 +211,6 @@ body {
   transform: translate(-50%, -50%);
   width: 80%;
   max-width: 650px;
-  height: 150px;
   background-color: var(--primary-color);
   border-radius: 15px;
   padding: 30px;
@@ -220,9 +220,10 @@ body {
   align-items: center;
   gap: 25px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  transition: all 0.5s linear;
 }
-.modal-background .modal div {
-  height: 100%;
+.modal-background .modal div.box {
+  height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -231,8 +232,6 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 .modal-background .modal .inputbox {
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,6 +257,10 @@ body {
   height: 100%;
   border-radius: 15px;
   transition: all 0.2s ease-in-out;
+}
+.modal-background .modal #add-sticker-button.loading {
+  background-color: var(--yellow-color);
+  animation: shake 0.5s ease-in-out infinite;
 }
 .modal-background .modal #add-sticker-button .material-symbols-outlined {
   color: var(--white-color);
@@ -290,6 +293,37 @@ body {
 .modal-background .modal #add-sticker-button.error {
   background-color: var(--red-color);
   animation: shake 0.2s ease-in-out 0s 2;
+}
+.modal-background .modal #add-sticker-download-feedback {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.modal-background .modal #add-sticker-download-feedback h2 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--white-color);
+}
+.modal-background .modal #add-sticker-download-feedback #download-progress-bar {
+  border-radius: 15px;
+  background-color: var(--white-color);
+  overflow: hidden;
+  height: 50px;
+  width: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.modal-background .modal #add-sticker-download-feedback #download-progress-bar #download-progress {
+  height: 100%;
+  width: 0%;
+  background-color: var(--green-color);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-background .modal #add-sticker-download-feedback #download-progress-bar #download-progress #progress-text {
+  font-size: 24px;
+  font-weight: 500;
 }
 
 .material-symbols-outlined {

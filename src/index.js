@@ -64,10 +64,9 @@ app.on('ready', async () => {
     stickerHandler.pasteStickerFromPath(stickerPath, window);
   });
 
-  ipcMain.handle('download-sticker-pack', (event, url) => {
-    const channel = new MessageChannel();
-    downloadPack(url, channel.port1);
-    return channel.port2;
+  ipcMain.on('download-sticker-pack', (event, url) => {
+    const port = event.ports[0];
+    downloadPack(url, port);
   });
 
   globalShortcut.register('CommandOrControl+Shift+A', () => {

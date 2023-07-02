@@ -26,6 +26,7 @@ body {
   padding: var(--shadow-size);
   margin: 0;
   box-sizing: border-box;
+  color: var(--text-color);
 }
 
 #app {
@@ -236,7 +237,6 @@ body {
 
     width: 80%;
     max-width: 650px;
-    height: 150px;
 
     background-color: var(--primary-color);
     border-radius: 15px;
@@ -247,9 +247,10 @@ body {
     align-items: center;
     gap: 25px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+    transition: all 0.5s linear;
 
-    div {
-      height: 100%;
+    div.box {
+      height: 50px;
       width: 100%;
       display: flex;
       align-items: center;
@@ -259,8 +260,6 @@ body {
     }
 
     .inputbox {
-      height: 100%;
-      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -289,6 +288,12 @@ body {
       border-radius: 15px;
       transition: all 0.2s ease-in-out;
 
+
+      &.loading {
+        background-color: var(--yellow-color);
+        animation: shake 0.5s ease-in-out infinite;
+      }
+
       .material-symbols-outlined {
         color: var(--white-color);
         font-size: 50px;
@@ -307,6 +312,7 @@ body {
         cursor: not-allowed;
       }
 
+      // https://www.30secondsofcode.org/css/s/shake-invalid-input/
       @keyframes shake {
         0% {
           margin-left: 0rem;
@@ -325,6 +331,41 @@ body {
       &.error {
         background-color: var(--red-color);
         animation: shake 0.2s ease-in-out 0s 2;
+      }
+    }
+
+    #add-sticker-download-feedback {
+      display: block;
+      width: 100%;
+      text-align: center;
+
+      h2 {
+        margin: 0;
+        font-size: 28px;
+        color: var(--white-color);
+      }
+      #download-progress-bar {
+        border-radius: 15px;
+        background-color: var(--white-color);
+        overflow: hidden;
+        height: 50px;
+        width: 100%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+        #download-progress {
+          height: 100%;
+          width: 0%;
+          background-color: var(--green-color);
+          transition: all 0.2s ease-in-out;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          #progress-text {
+            font-size: 24px;
+            font-weight: 500;
+          }
+        }
       }
     }
   }
