@@ -1,5 +1,11 @@
 const closeButton = document.getElementById('close-button');
 
+let mouseX, mouseY;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
 // close on X button
 closeButton.addEventListener('click', () => {
   console.log('close button clicked');
@@ -90,17 +96,42 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Scroll to sticker pack on hover
     stickerIconDiv.addEventListener('mouseover', (e) => {
       stickerPackDiv.scrollIntoView({ behavior: 'instant' });
-    });
-
-    // Scroll sticker pack icons list when scrolling sticker packs
-    stickerPackDiv.addEventListener('mouseover', (e) => {
-      stickerIconDiv.scrollIntoViewIfNeeded({ behavior: 'instant' });
-      stickerIconDiv.classList.add('active');
-    });
-    stickerPackDiv.addEventListener('mouseout', (e) => {
-      stickerIconDiv.classList.remove('active');
+      // remove active from all sticker pack icons
+      document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+      // add active to current sticker pack icon
+      e.currentTarget.classList.add('active');
     });
   }
+
+  // Scroll sticker pack icons list when scrolling sticker packs
+  stickerContainer.addEventListener('scroll', (e) => {
+    // check if mouse is over stickerContainer
+    const stickerContainerRect = stickerContainer.getBoundingClientRect();
+    if (
+      mouseX >= stickerContainerRect.left &&
+      mouseX <= stickerContainerRect.right &&
+      mouseY >= stickerContainerRect.top &&
+      mouseY <= stickerContainerRect.bottom
+    ) {
+      const topElementOffset = stickerPackListDiv.offsetTop;
+      const scrollPos = e.currentTarget.scrollTop + topElementOffset;
+      const stickerPackDivs = document.getElementsByClassName('sticker-pack');
+      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon');
+      for (let i = 0; i < stickerPackDivs.length; i++) {
+        const stickerPackDiv = stickerPackDivs[i];
+        const stickerPackIconDiv = stickerPackIconDivs[i];
+        const stickerPackDivTop = stickerPackDiv.offsetTop;
+        const stickerPackDivBottom = stickerPackDivTop + stickerPackDiv.offsetHeight;
+        if (scrollPos >= stickerPackDivTop && scrollPos <= stickerPackDivBottom) {
+          stickerPackIconDiv.scrollIntoView({ behavior: 'instant' });
+          stickerPackIconDiv.classList.add('active');
+        } else {
+          stickerPackIconDiv.classList.remove('active');
+        }
+      }
+      return;
+    }
+  });
 
   // Download sticker pack on add button
   const addButton = document.getElementById('add-button');
@@ -195,7 +226,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       console.log('last');
       stickerContainer.appendChild(rearrangedStickerPackContainer);
     }
-
   });
 });
 

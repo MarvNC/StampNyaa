@@ -138,8 +138,12 @@ body {
   cursor: pointer;
   max-width: 100px;
   scroll-margin: 50px;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon :hover, #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon.active {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon.active {
+  border-radius: 10px;
   transform: scale(var(--scale-power));
   outline: 4px dashed var(--white-color);
 }
