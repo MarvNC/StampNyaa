@@ -294,6 +294,7 @@ body {
       border-radius: 15px;
       transition: all 0.2s ease-in-out;
 
+
       &.loading {
         background-color: var(--yellow-color);
         animation: shake 0.5s ease-in-out infinite;
@@ -378,4 +379,9 @@ body {
 
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 48;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  display: none;
 }
