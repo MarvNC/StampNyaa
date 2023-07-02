@@ -153,13 +153,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         addStickerButton.classList.remove('loading');
         addStickerButton.firstElementChild.textContent = 'check';
         addStickerButton.disabled = false;
-
-        setTimeout(() => {
-          addStickerDownloadFeedback.style.display = 'none';
-          downloadProgressBar.style.width = '0%';
-          progressText.textContent = '';
-          addStickerTitle.textContent = '';
-        }, 1000);
       }
     }
   };
