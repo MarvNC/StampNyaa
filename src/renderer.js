@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const { stickerPacksMap } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
+  let stickerPackIDsOrder = [];
 
   for (const stickerPackID of Object.keys(stickerPacksMap)) {
     const stickerPack = stickerPacksMap[stickerPackID];
@@ -19,6 +20,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Sticker main icon
     const stickerIconDiv = document.createElement('div');
     stickerIconDiv.classList.add('sticker-pack-icon');
+    stickerIconDiv.dataset.packID = stickerPackID;
+
     const stickerIconImg = document.createElement('img');
     stickerIconImg.src = mainIcon;
     stickerIconDiv.appendChild(stickerIconImg);
@@ -27,6 +30,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Sticker pack
     const stickerPackDiv = document.createElement('div');
     stickerPackDiv.classList.add('sticker-pack');
+    stickerPackDiv.dataset.packID = stickerPackID;
+    stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
+    stickerPackIDsOrder.push(stickerPackID);
 
     const stickerPackHeader = createElementFromHTML(/* html */ `
 <div class="sticker-pack-header">
@@ -156,6 +162,41 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     }
   };
+
+  // sortable
+  const sortable = new Draggable.Sortable(stickerPackListDiv, {
+    draggable: '.sticker-pack-icon',
+  });
+  sortable.on('sortable:stop', (event) => {
+    const packs = [];
+    for (const pack of stickerPackListDiv.children) {
+      packs.push(pack.dataset.packID);
+    }
+    // api.setStickerPackOrder(packs);
+
+    // rearrange sticker packs
+    const rearrangedStickerPack = event.dragEvent.data.source;
+    const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
+    const rearrangedStickerPackContainer = document.getElementById(
+      `sticker-pack-container-${rearrangedStickerPackID}`
+    );
+    stickerContainer.removeChild(rearrangedStickerPackContainer);
+    stickerPackIDsOrder = stickerPackIDsOrder.filter((id) => id !== rearrangedStickerPackID);
+    stickerPackIDsOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
+    // event.data.newIndex is the index of the element in the list
+    if (event.data.newIndex !== stickerPackIDsOrder.length - 1) {
+      stickerContainer.insertBefore(
+        rearrangedStickerPackContainer,
+        document.getElementById(
+          'sticker-pack-container-' + stickerPackIDsOrder[event.data.newIndex + 1]
+        )
+      );
+    } else {
+      console.log('last');
+      stickerContainer.appendChild(rearrangedStickerPackContainer);
+    }
+
+  });
 });
 
 function createElementFromHTML(htmlString) {

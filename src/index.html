@@ -46,12 +46,17 @@
     <div id="add-sticker-background" class="modal-background" style="display: none">
       <div class="modal">
         <div class="inputbox box">
-          <input id="add-sticker-input" type="text" spellcheck="false" placeholder="https://store.line.me/stickershop/product/123456789/ja"/>
+          <input
+            id="add-sticker-input"
+            type="text"
+            spellcheck="false"
+            placeholder="https://store.line.me/stickershop/product/123456789/ja"
+          />
         </div>
         <div id="add-sticker-button" class="box">
           <span class="material-symbols-outlined"> check </span>
         </div>
-        <div id="add-sticker-download-feedback" style="display: none;">
+        <div id="add-sticker-download-feedback" style="display: none">
           <h2 id="add-sticker-title"></h2>
           <div id="download-progress-bar">
             <div id="download-progress">
@@ -61,6 +66,7 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/draggable.bundle.js"></script>
     <script src="renderer.js"></script>
   </body>
 </html>
