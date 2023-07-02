@@ -271,6 +271,9 @@ body {
   background-color: var(--yellow-color);
   animation: shake 0.5s ease-in-out infinite;
 }
+.modal-background .modal #add-sticker-button.loading span {
+  color: var(--gray-color);
+}
 .modal-background .modal #add-sticker-button .material-symbols-outlined {
   color: var(--white-color);
   font-size: 50px;

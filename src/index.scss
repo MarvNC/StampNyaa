@@ -153,7 +153,7 @@ body {
           border-radius: 10px;
           padding: 0;
           margin: 0;
-          
+
           &.active {
             border-radius: 10px;
             transform: scale(var(--scale-power));
@@ -297,10 +297,12 @@ body {
       border-radius: 15px;
       transition: all 0.2s ease-in-out;
 
-
       &.loading {
         background-color: var(--yellow-color);
         animation: shake 0.5s ease-in-out infinite;
+        span {
+          color: var(--gray-color);
+        }
       }
 
       .material-symbols-outlined {
