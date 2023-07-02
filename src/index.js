@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, shell } = require('electron');
 const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
 const Config = require('./utils/config');
@@ -29,6 +29,11 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   window.loadFile(path.join(__dirname, 'index.html'));
+
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
 };
 
 // This method will be called when Electron has finished
