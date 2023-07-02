@@ -12,10 +12,9 @@ const getAllStickerPacks = (stickerPacksDir) => {
   const stickerPacksMap = {};
   const stickerPacks = fs.readdirSync(stickerPacksDir);
   for (const pack of stickerPacks) {
-    const stickerPackData = {};
-    // read info.json
-    const { title } = JSON.parse(fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json')));
-    stickerPackData.title = title;
+    const stickerPackData = JSON.parse(
+      fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
+    );
 
     // pack ID is the folder name
     stickerPackData.id = pack;

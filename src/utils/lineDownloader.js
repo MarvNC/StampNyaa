@@ -21,7 +21,7 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
  * @param {string} storeURL
  * @returns {Promise<string>} The title of the sticker pack.
  */
-const downloadPack = async (storeURL) => {
+async function downloadPack(storeURL) {
   const packID = storeURL.match(packIDRegex)[1];
   const appDir = app.getPath('pictures');
   const stickersDir = `${appDir}/stickers/`;
@@ -50,6 +50,10 @@ const downloadPack = async (storeURL) => {
   const title = document.title.split(' - ')[0];
   console.log(`Got store page for ${title}...`);
 
+  const authorAnchor = document.querySelector('.mdCMN38Item01Author');
+  const author = authorAnchor.textContent;
+  const authorURL = new URL(storeURL).origin + authorAnchor.href;
+
   const stickerLiList = [...document.querySelectorAll('.mdCMN09Li')];
 
   console.log(`Downloading ${stickerLiList.length} stickers from ${storeURL}...`);
@@ -64,37 +68,54 @@ const downloadPack = async (storeURL) => {
   for (let i = 0; i < stickerList.length; i++) {
     const sticker = stickerList[i];
     const staticUrl = stickerURL(sticker.id);
-    const response = await axios({
-      method: 'get',
-      url: staticUrl,
-      responseType: 'stream',
-    });
-    const stickerImage = path.join(packDir, `${sticker.id}.png`);
-    response.data.pipe(fs.createWriteStream(stickerImage));
+    await downloadImage(staticUrl, packDir, `${sticker.id}.png`);
 
     if (sticker.type === 'animation' || sticker.type === 'popup') {
       let downloadURL =
         sticker.type === 'animation' ? animatedStickerURL(sticker.id) : popupStickerURL(sticker.id);
-      const response = await axios({
-        method: 'get',
-        url: downloadURL,
-        responseType: 'stream',
-      });
-      const stickerImage = path.join(packDir, `${sticker.id}_${sticker.type}.png`);
-      response.data.pipe(fs.createWriteStream(stickerImage));
+      await downloadImage(downloadURL, packDir, `${sticker.id}_${sticker.type}.png`);
     }
 
     console.log(`Downloaded ${i + 1}/${stickerList.length} stickers`);
   }
+
   // save title to info.json
   const info = {
     title,
     storeURL,
+    author,
+    authorURL,
   };
   fs.writeFileSync(path.join(packDir, 'info.json'), JSON.stringify(info));
-  return title;
-};
+
+  console.log(`Finished downloading ${title}!`);
+
+  return {
+    title,
+    author,
+    authorURL,
+  };
+}
+
+/**
+ * Downloads an image from a url to a given directory after checking if it's already downloaded.
+ * @param {string} url
+ * @param {string} dir
+ * @param {string} filename
+ * @returns {Promise<boolean>} Whether the image was downloaded.
+ */
+async function downloadImage(url, dir, filename) {
+  const filePath = path.join(dir, filename);
+  if (!fs.existsSync(filePath)) {
+    const response = await axios({
+      method: 'get',
+      url,
+      responseType: 'stream',
+    });
+    response.data.pipe(fs.createWriteStream(filePath));
+    return true;
+  }
+  return false;
+}
 
 module.exports = downloadPack;
-
-// downloadPack('https://store.line.me/stickershop/product/28757/ja');
