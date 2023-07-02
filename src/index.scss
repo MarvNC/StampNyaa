@@ -9,6 +9,7 @@
   --red-color: rgb(255, 160, 160);
   --green-color: rgb(160, 255, 160);
   --yellow-color: rgb(255, 255, 160);
+  --gray-color: rgb(160, 160, 160);
   --scale-power: 1.1;
 }
 
@@ -266,7 +267,7 @@ body {
       border-radius: 15px;
       background-color: var(--white-color);
 
-      input {
+      input#add-sticker-input {
         height: 100%;
         width: 100%;
         border: none;
@@ -277,6 +278,11 @@ body {
         color: var(--text-color);
         background-color: transparent;
         outline: none;
+
+        &::placeholder {
+          color: var(--gray-color);
+          opacity: 0.6;
+        }
       }
     }
 
