@@ -95,7 +95,7 @@ body {
   height: 100%;
   min-height: 0;
   background-color: var(--primary-color);
-  width: 110px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -125,15 +125,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   margin: 5px;
   gap: 10px;
+  scroll-snap-type: y mandatory;
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon {
   cursor: pointer;
-  display: flex;
+  max-width: 100px;
+  scroll-margin: 50px;
 }
-#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon :hover {
+#app #main-content #leftbar #sticker-pack-list .sticker-pack-icon :hover, #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon.active {
   transform: scale(var(--scale-power));
+  outline: 2px dashed var(--white-color);
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon img {
   max-width: 100%;
@@ -154,14 +158,26 @@ body {
   grid-gap: 10px;
   padding: 5px 0px;
 }
-#app #main-content #sticker-list .sticker-pack .sticker-pack-title {
-  color: var(--text-color);
+#app #main-content #sticker-list .sticker-pack .sticker-pack-header {
   grid-column: 1/-1;
-  margin-left: 10px;
+  gap: 10px;
 }
-#app #main-content #sticker-list .sticker-pack .sticker-pack-title h2 {
+#app #main-content #sticker-list .sticker-pack .sticker-pack-header a {
+  color: var(--text-color);
   margin: 0;
   font-weight: 700;
+  text-decoration: none;
+}
+#app #main-content #sticker-list .sticker-pack .sticker-pack-header .sticker-pack-title {
+  float: left;
+  margin-left: 10px;
+  font-size: 28px;
+}
+#app #main-content #sticker-list .sticker-pack .sticker-pack-header .sticker-pack-author {
+  float: right;
+  margin-right: 10px;
+  font-weight: 500;
+  font-size: 20px;
 }
 
 .sticker {

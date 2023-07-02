@@ -104,7 +104,7 @@ body {
       height: 100%;
       min-height: 0;
       background-color: var(--primary-color);
-      width: 110px;
+      width: 120px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -137,14 +137,20 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        align-items: center;
         margin: 5px;
         gap: 10px;
+        scroll-snap-type: y mandatory;
 
         .sticker-pack-icon {
           cursor: pointer;
-          display: flex;
-          :hover {
+          max-width: 100px;
+          scroll-margin: 50px;
+
+          :hover,
+          &.active {
             transform: scale(var(--scale-power));
+            outline: 2px dashed var(--white-color);
           }
 
           img {
@@ -166,13 +172,25 @@ body {
       overflow: scroll;
 
       .sticker-pack {
-        .sticker-pack-title {
-          color: var(--text-color);
+        .sticker-pack-header {
           grid-column: 1 / -1;
-          margin-left: 10px;
-          h2 {
+          gap: 10px;
+          a {
+            color: var(--text-color);
             margin: 0;
             font-weight: 700;
+            text-decoration: none;
+          }
+          .sticker-pack-title {
+            float: left;
+            margin-left: 10px;
+            font-size: 28px;
+          }
+          .sticker-pack-author {
+            float: right;
+            margin-right: 10px;
+            font-weight: 500;
+            font-size: 20px;
           }
         }
         display: grid;

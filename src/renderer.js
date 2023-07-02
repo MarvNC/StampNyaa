@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   for (const stickerPackID of Object.keys(stickerPacksMap)) {
     const stickerPack = stickerPacksMap[stickerPackID];
-    const { title, mainIcon, stickers } = stickerPack;
+    const { title, mainIcon, stickers, author, authorURL, storeURL } = stickerPack;
 
     // Sticker main icon
     const stickerIconDiv = document.createElement('div');
@@ -36,15 +36,15 @@ window.addEventListener('DOMContentLoaded', async () => {
     const stickerPackDiv = document.createElement('div');
     stickerPackDiv.classList.add('sticker-pack');
 
-    // Title
-    const stickerPackTitleDiv = document.createElement('div');
-    stickerPackTitleDiv.classList.add('sticker-pack-title');
-    const stickerPackTitle = document.createElement('h2');
-    stickerPackTitle.innerText = title;
+    const stickerPackHeader = createElementFromHTML(/* html */ `
+<div class="sticker-pack-header">
+  <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
+  <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
+</div>
+`);
+    stickerPackDiv.appendChild(stickerPackHeader);
 
-    stickerPackTitleDiv.appendChild(stickerPackTitle);
-    stickerPackDiv.appendChild(stickerPackTitleDiv);
-
+    // loop through stickers
     for (const stickerID of Object.keys(stickers)) {
       const sticker = stickers[stickerID];
       const stickerDiv = document.createElement('div');
@@ -89,9 +89,24 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     stickerContainer.appendChild(stickerPackDiv);
 
-    // JS stuff
+    // Scroll to sticker pack on hover
     stickerIconDiv.addEventListener('mouseover', (e) => {
       stickerPackDiv.scrollIntoView({ behavior: 'instant' });
     });
+
+    // Scroll sticker pack icons list when scrolling sticker packs
+    stickerPackDiv.addEventListener('mouseover', (e) => {
+      stickerIconDiv.scrollIntoViewIfNeeded({ behavior: 'instant' });
+      stickerIconDiv.classList.add('active');
+    });
+    stickerPackDiv.addEventListener('mouseout', (e) => {
+      stickerIconDiv.classList.remove('active');
+    });
   }
 });
+
+function createElementFromHTML(htmlString) {
+  const div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  return div.firstChild;
+}
