@@ -9,9 +9,9 @@ StampNyaa is a simple cross-platform desktop app for using LINE stickers in your
 
 ## 📚 About
 
-| ![Main UI](img/Main_UI.png) | ![Discord Send Sticker](img/DiscordSendSticker.gif) |
-| :-------------------------: | :-------------------------------------------------: |
-| **Simple and Easy to Use**  |          **Send Fun Stickers on Discord**           |
+| ![Discord Send Sticker](img/DiscordSendSticker.gif) |
+| :-------------------------------------------------: |
+|          **Send Fun Stickers on Discord**           |
 
 | ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
 | :-----------------------------------------------: | :---------------------------------------: |
