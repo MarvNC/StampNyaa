@@ -143,6 +143,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   let downloadActive = false;
 
+  function errorButton(addStickerButton) {
+    addStickerButton.classList.add('error');
+    addStickerButton.firstElementChild.textContent = 'close';
+    setTimeout(() => {
+      addStickerButton.classList.remove('error');
+      addStickerButton.firstElementChild.textContent = 'check';
+    }, 600);
+  }
+
   addButton.addEventListener('click', async () => {
     modalBackground.style.display = 'block';
   });
@@ -155,14 +164,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   addStickerButton.addEventListener('click', async () => {
+    if (downloadActive) {
+      return;
+    }
     const url = input.value;
     if (!lineURLRegex.test(url)) {
-      addStickerButton.classList.add('error');
-      addStickerButton.firstElementChild.textContent = 'close';
-      setTimeout(() => {
-        addStickerButton.classList.remove('error');
-        addStickerButton.firstElementChild.textContent = 'check';
-      }, 400);
+      errorButton(addStickerButton);
       return;
     }
 
@@ -180,17 +187,28 @@ window.addEventListener('DOMContentLoaded', async () => {
   const progressText = document.getElementById('progress-text');
 
   window.onmessage = (event) => {
+    // Updates the progress bar and button
+    function finishDownload(addStickerButton) {
+      downloadActive = false;
+      addStickerButton.classList.remove('loading');
+      addStickerButton.firstElementChild.textContent = 'check';
+      addStickerButton.disabled = false;
+    }
     const data = event.data;
     if (data.type === 'download-sticker-pack') {
+      if (data.error) {
+        finishDownload(addStickerButton);
+        setTimeout(() => {
+          errorButton(addStickerButton);
+        }, 100);
+        return;
+      }
       addStickerDownloadFeedback.style.display = 'block';
       addStickerTitle.textContent = data.title;
       downloadProgressBar.style.width = `${(data.progress / data.stickerCount) * 100}%`;
       progressText.textContent = `${data.progress}/${data.stickerCount}`;
       if (data.progress === data.stickerCount) {
-        downloadActive = false;
-        addStickerButton.classList.remove('loading');
-        addStickerButton.firstElementChild.textContent = 'check';
-        addStickerButton.disabled = false;
+        finishDownload(addStickerButton);
       }
     }
   };

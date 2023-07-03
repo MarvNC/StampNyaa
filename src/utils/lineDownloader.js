@@ -2,7 +2,6 @@ const axios = require('axios');
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
-const { app } = require('electron');
 
 const cdnURL = 'https://stickershop.line-scdn.net';
 const mainImageURL = (packID) =>
@@ -24,6 +23,20 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
  * @returns {Promise<string>} The title of the sticker pack.
  */
 async function downloadPack(storeURL, port, directory) {
+  // Check URL first for valid pack
+  let response;
+  try {
+    response = await axios.get(storeURL);
+  } catch (error) {
+    port.postMessage({
+      type: 'download-sticker-pack',
+      error: 'Error getting store page',
+    });
+    return;
+  }
+  const dom = new JSDOM(response.data);
+  const document = dom.window.document;
+
   const packID = storeURL.match(packIDRegex)[1];
   const packDir = path.join(directory, '/', packID);
 
@@ -43,9 +56,6 @@ async function downloadPack(storeURL, port, directory) {
     });
     response.data.pipe(fs.createWriteStream(mainImage));
   }
-  const response = await axios.get(storeURL);
-  const dom = new JSDOM(response.data);
-  const document = dom.window.document;
 
   const title = document.title.split(' - ')[0];
   console.log(`Got store page for ${title}...`);
