@@ -15,9 +15,20 @@ const getAllStickerPacks = (stickerPacksDir) => {
   }
   const stickerPacks = fs.readdirSync(stickerPacksDir);
   for (const pack of stickerPacks) {
+    // check if info.json exists, if not create it
+    if (!fs.existsSync(path.join(stickerPacksDir, pack, 'info.json'))) {
+      fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), "{}");
+    }
     const stickerPackData = JSON.parse(
       fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
     );
+
+    if (!stickerPackData.title) {
+      stickerPackData.title = pack;
+    }
+    if (!stickerPackData.author) {
+      stickerPackData.author = 'Unknown';
+    }
 
     // pack ID is the folder name
     stickerPackData.id = pack;
