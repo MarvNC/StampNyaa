@@ -9,6 +9,10 @@ const { keyboard, Key } = require('@nut-tree/nut-js');
  */
 const getAllStickerPacks = (stickerPacksDir) => {
   const stickerPacksMap = {};
+  // check if sticker packs directory exists, if not create it
+  if (!fs.existsSync(stickerPacksDir)) {
+    fs.mkdirSync(stickerPacksDir);
+  }
   const stickerPacks = fs.readdirSync(stickerPacksDir);
   for (const pack of stickerPacks) {
     const stickerPackData = JSON.parse(
