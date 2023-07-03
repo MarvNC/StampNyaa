@@ -5,7 +5,7 @@ const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
 
 // Auto update
-require('update-electron-app')()
+require('update-electron-app')();
 
 let window;
 
@@ -55,19 +55,20 @@ app.on('ready', async () => {
     window.minimize();
   });
 
-  const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('defaultStickersPath'));
-  let stickerPacksOrder = [...new Set(store.get('stickerPacksOrder'))];
-  // check if there are any new sticker packs not in StickerPacksOrder
-  const newStickerPacks = Object.keys(stickerPacksMap).filter(
-    (pack) => !stickerPacksOrder.includes(pack)
-  );
-  if (newStickerPacks.length > 0) {
-    // add new sticker packs to the end of the order
-    stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
-    store.set('stickerPacksOrder', stickerPacksOrder);
-  }
-
   ipcMain.handle('ready', () => {
+    const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('defaultStickersPath'));
+    let stickerPacksOrder = [...new Set(store.get('stickerPacksOrder'))].filter(
+      (pack) => pack in stickerPacksMap
+    );
+    // check if there are any new sticker packs not in StickerPacksOrder
+    const newStickerPacks = Object.keys(stickerPacksMap).filter(
+      (pack) => !stickerPacksOrder.includes(pack)
+    );
+    if (newStickerPacks.length > 0) {
+      // add new sticker packs to the end of the order
+      stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
+      store.set('stickerPacksOrder', stickerPacksOrder);
+    }
     // get stickers and settings and stuff and send to client
     return {
       stickerPacksMap: stickerHandler.getAllStickerPacks(store.get('defaultStickersPath')),
