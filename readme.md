@@ -21,11 +21,8 @@ Remember that sticker packs from LINE are created by talented artists and are no
 
 Here are the creators whose stickers are shown in the above GIFs:
 
-<details>
-  <summary>Click to expand</summary>
-
 - [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
-- [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nekoha Shizuku
+- [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nyaa stamps
 - [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous eroge SD artist
 - [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
 - [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft, multiple packs
@@ -33,8 +30,6 @@ Here are the creators whose stickers are shown in the above GIFs:
 - [clear_blue](https://store.line.me/stickershop/author/552857/ja) - Publisher of stickers for Yuzusoft and Lose
 - [マインドウェイブ](https://store.line.me/stickershop/author/585746/ja) - Animated cat stickers
 - [SNOOPY](https://store.line.me/stickershop/product/28777/ja) - Snoopy
-
-</details>
 
 <!-- add images and stuff -->
 
