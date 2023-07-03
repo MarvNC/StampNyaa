@@ -7,16 +7,50 @@
 
 StampNyaa is a simple cross-platform desktop app for using LINE stickers in your favorite messaging applications like Discord and Whatsapp.
 
-<!-- ## 🛠️ How It Works -->
+## 📚 About
+
+| ![Main UI](img/Main_UI.png) | ![Discord Send Sticker](img/DiscordSendSticker.gif) |
+| :-------------------------: | :-------------------------------------------------: |
+| **Simple and Easy to Use**  |          **Send Fun Stickers on Discord**           |
+
+| ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
+| :-----------------------------------------------: | :---------------------------------------: |
+|     **Download New Sticker Packs from LINE**      |     **Manage and Sort Your Stickers**     |
+
+Remember that sticker packs from LINE are created by talented artists and are not free to use. Please support the creators by purchasing the sticker packs you download; they deserve it!
+
+Here are the creators whose stickers are shown in the above GIFs:
+
+<details>
+  <summary>Click to expand</summary>
+
+- [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
+- [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nekoha Shizuku
+- [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous eroge SD artist
+- [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
+- [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft, multiple packs
+- [Navel](https://store.line.me/stickershop/author/79657/ja) - Navel, featuring 小倉朝日
+- [clear_blue](https://store.line.me/stickershop/author/552857/ja) - Publisher of stickers for Yuzusoft and Lose
+- [マインドウェイブ](https://store.line.me/stickershop/author/585746/ja) - Animated cat stickers
+- [SNOOPY](https://store.line.me/stickershop/product/28777/ja) - Snoopy
+
+</details>
 
 <!-- add images and stuff -->
 
-<!-- ## 🚀 Download
+## 🚀 Download
 
-| Windows | MacOS | Linux |
+StampNyaa is not yet released. Please check back later!
+
+<!-- Click here to go to the releases page and choose the appropriate installer for your operating system - `.exe` for Windows, `.dmg` for MacOS, and `.AppImage` for Linux. -->
+
+<!-- | Windows | MacOS | Linux |
 | ------- | ----- | ----- |
-|         |       |       | -->
+|         |       |       |
+ -->
 
-## 🤝 Acknowledgements
+## 🤝 Acknowledgements & Contribution
 
 This app would not exist if it were not for jeffshee's **[LINEStickerKeyboard](https://github.com/jeffshee/LINEStickerKeyboard/)** Android app which I use frequently, inspiring me to build StampNyaa for desktop.
+
+Contributions are welcome! If you have any bug reports, feature requests, or questions, please open an issue.
