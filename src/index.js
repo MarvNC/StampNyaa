@@ -9,8 +9,6 @@ require('update-electron-app')()
 
 let window;
 
-const iconPath = path.join(__dirname, '../assets/icon.ico');
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -19,7 +17,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   window = new BrowserWindow({
-    icon: iconPath,
+    icon: path.join(__dirname, '../assets/icon.ico'),
     width: 944,
     height: 900,
     webPreferences: {
@@ -99,7 +97,7 @@ app.on('ready', async () => {
     globalShortcut.unregisterAll();
   });
 
-  const appIcon = new Tray(iconPath);
+  const appIcon = new Tray(path.join(__dirname, '../assets/icon-16x16.png'));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',
