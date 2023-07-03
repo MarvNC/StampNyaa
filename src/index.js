@@ -67,11 +67,11 @@ app.on('ready', async () => {
     if (newStickerPacks.length > 0) {
       // add new sticker packs to the end of the order
       stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
-      store.set('stickerPacksOrder', stickerPacksOrder);
     }
+    store.set('stickerPacksOrder', stickerPacksOrder);
     // get stickers and settings and stuff and send to client
     return {
-      stickerPacksMap: stickerHandler.getAllStickerPacks(store.get('defaultStickersPath')),
+      stickerPacksMap: stickerPacksMap,
       stickerPacksOrder: store.get('stickerPacksOrder'),
     };
   });
