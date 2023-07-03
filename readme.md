@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/Icon.png" alt="StampNyaa" width="250" height="250">
+  <img src="./assets/icon.png" alt="StampNyaa" width="250" height="250">
 </p>
 <h1 align="center">StampNyaa</h1>
 
