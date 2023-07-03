@@ -1,6 +1,7 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    executableName: 'stampnyaa',
     icon: './assets/icon',
   },
   rebuildConfig: {},
