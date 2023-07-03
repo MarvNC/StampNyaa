@@ -17,7 +17,12 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      executableName: 'stampnyaa',
+      config: {
+        options: {
+          icon: './assets/icon.png',
+        },
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
