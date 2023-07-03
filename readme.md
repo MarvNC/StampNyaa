@@ -31,7 +31,7 @@ Here are the creators whose stickers are shown in the above GIFs:
 - [マインドウェイブ](https://store.line.me/stickershop/author/585746/ja) - Animated cat stickers
 - [SNOOPY](https://store.line.me/stickershop/product/28777/ja) - Snoopy
 
-<!-- add images and stuff -->
+<!-- ## 🎨 Add Your Own Stickers -->
 
 ## 🚀 Download
 
@@ -49,3 +49,27 @@ StampNyaa is not yet released. Please check back later!
 This app would not exist if it were not for jeffshee's **[LINEStickerKeyboard](https://github.com/jeffshee/LINEStickerKeyboard/)** Android app which I use frequently, inspiring me to build StampNyaa for desktop.
 
 Contributions are welcome! If you have any bug reports, feature requests, or questions, please open an issue.
+
+## Development
+
+To run StampNyaa locally, you will need to have [Node.js](https://nodejs.org/en/) installed.
+
+Then clone the repository and install dependencies with npm or yarn:
+
+```bash
+git clone https://github.com/MarvNC/StampNyaa.git
+cd StampNyaa
+npm install
+```
+
+To build an installer for your operating system, run:
+
+```bash
+npm run build
+```
+
+To run:
+
+```bash
+npm start
+```
