@@ -5,17 +5,17 @@
 
 ## 🎉 Use LINE Stamps With Your Favorite Messaging Apps
 
-StampNyaa is a simple cross-platform desktop app for using LINE stickers in your favorite messaging applications like Discord and Whatsapp.
+StampNyaa is a simple cross-platform desktop app for using LINE stickers in your favorite messaging applications like Discord, Whatsapp, and anywhere else you can paste images.
 
 ## 📚 About
 
-| ![Discord Send Sticker](img/DiscordSendSticker.gif) |
-| :-------------------------------------------------: |
 |          **Send Fun Stickers on Discord**           |
+| :-------------------------------------------------: |
+| ![Discord Send Sticker](img/DiscordSendSticker.gif) |
 
-| ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
-| :-----------------------------------------------: | :---------------------------------------: |
 |     **Download New Sticker Packs from LINE**      |     **Manage and Sort Your Stickers**     |
+| :-----------------------------------------------: | :---------------------------------------: |
+| ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
 
 Remember that sticker packs from LINE are created by talented artists and are not free to use. Please support the creators by purchasing the sticker packs you download; they deserve it!
 
