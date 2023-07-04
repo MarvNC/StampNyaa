@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>スタンプにゃあ～</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../dist/index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,7 +31,7 @@
       <div id="main-content">
         <div id="leftbar">
           <div id="top-buttons">
-            <div id="settings-cog" class="circle">
+            <div id="settings-button" class="circle">
               <span class="material-symbols-outlined"> settings </span>
             </div>
             <div id="add-button" class="circle">
@@ -43,8 +43,9 @@
         <div id="sticker-list"></div>
       </div>
     </div>
+
     <div id="add-sticker-background" class="modal-background" style="display: none">
-      <div class="modal">
+      <div id="add-sticker-modal" class="modal">
         <div class="inputbox box">
           <input
             id="add-sticker-input"
@@ -62,6 +63,49 @@
             <div id="download-progress">
               <span id="progress-text"></span>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-background" class="modal-background" style="display: none">
+      <div id="settings-modal" class="modal">
+        <div class="settingsRow">
+          <div class="icons">
+            <span class="material-symbols-outlined"> keyboard_alt </span>
+          </div>
+          <input id="hotkeyInput" type="text" />
+        </div>
+
+        <div class="settingsRow">
+          <div class="icons">
+            <span class="material-symbols-outlined"> computer </span>
+            <span class="material-symbols-outlined"> rocket_launch </span>
+          </div>
+          <div>
+            <h2>Run on Startup</h2>
+          </div>
+          <div id="runOnStartup">
+            <span id="runOnStartupCheck" class="material-symbols-outlined"> check </span>
+          </div>
+        </div>
+
+        <div class="settingsRow divider"></div>
+
+        <div class="settingsRow">
+          <div class="icons">
+            <span class="material-symbols-outlined"> brush </span>
+            <span class="material-symbols-outlined heart"> favorite </span>
+          </div>
+          <div>
+            <a href="https://github.com/MarvNC/StampNyaa" target="_blank">
+              <h2>by MarvNC</h2>
+            </a>
+          </div>
+          <div>
+            <a href="https://github.com/MarvNC/StampNyaa" target="_blank">
+              <img src="../assets/github-mark/github-mark-white.svg" alt="GitHub icon" />
+            </a>
           </div>
         </div>
       </div>

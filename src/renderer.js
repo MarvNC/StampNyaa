@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Download sticker pack on add button
   const addButton = document.getElementById('add-button');
-  const modalBackground = document.getElementById('add-sticker-background');
+  const addStickerModalBackground = document.getElementById('add-sticker-background');
   const input = document.getElementById('add-sticker-input');
   const addStickerButton = document.getElementById('add-sticker-button');
   const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
@@ -153,12 +153,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   addButton.addEventListener('click', async () => {
-    modalBackground.style.display = 'block';
+    addStickerModalBackground.style.display = 'block';
   });
 
-  modalBackground.addEventListener('click', async (e) => {
-    if (e.target === modalBackground && !downloadActive) {
-      modalBackground.style.display = 'none';
+  addStickerModalBackground.addEventListener('click', async (e) => {
+    if (e.target === addStickerModalBackground && !downloadActive) {
+      addStickerModalBackground.style.display = 'none';
       window.location.reload();
     }
   });
@@ -212,6 +212,22 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     }
   };
+
+  // Settings modal
+  const settingsModalBackground = document.getElementById('settings-background');
+  const settingsButton = document.getElementById('settings-button');
+  
+  settingsButton.addEventListener('click', () => {
+    settingsModalBackground.style.display = 'block';
+  });
+
+  settingsModalBackground.addEventListener('click', (e) => {
+    if (e.target === settingsModalBackground) {
+      settingsModalBackground.style.display = 'none';
+    }
+  });
+
+  // Settings
 
   // sortable
   const sortable = new Draggable.Sortable(stickerPackListDiv, {

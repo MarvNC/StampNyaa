@@ -25,9 +25,9 @@ const createWindow = () => {
     },
     transparent: true,
     frame: false,
+    minWidth: 624,
+    minHeight: 450,
   });
-
-  window.setMinimumSize(466, 300);
 
   // and load the index.html of the app.
   window.loadFile(path.join(__dirname, 'index.html'));
