@@ -31,18 +31,18 @@ Here are the creators whose stickers are shown in the above GIFs:
 - [マインドウェイブ](https://store.line.me/stickershop/author/585746/ja) - Animated cat stickers
 - [SNOOPY](https://store.line.me/stickershop/product/28777/ja) - Snoopy
 
-<!-- ## 🎨 Add Your Own Stickers -->
+## 🎨 Add Your Own Stickers
+
+StampNyaa supports adding your own sticker packs to the app.
+
+- Simply add a folder to the `stickers` directory in the app's sticker folder, which is located in your `{user}/Pictures` folder by default.
+- The folder name will be used as the sticker pack name by default, and the images inside will be used as the stickers.
+- You will also need to add a sticker named `main.png` to be used as the icon representing the sticker pack in the sidebar.
+- Note that only `.png` images are currently supported.
 
 ## 🚀 Download
 
-StampNyaa is not yet released. Please check back later!
-
-<!-- Click here to go to the releases page and choose the appropriate installer for your operating system - `.exe` for Windows, `.dmg` for MacOS, and `.AppImage` for Linux. -->
-
-<!-- | Windows | MacOS | Linux |
-| ------- | ----- | ----- |
-|         |       |       |
- -->
+#### [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases) and download the appropriate installer for your operating system - `.exe` for Windows, `.dmg` for MacOS, and `.AppImage` for Linux.
 
 ## 🤝 Acknowledgements & Contribution
 
