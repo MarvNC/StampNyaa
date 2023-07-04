@@ -49,7 +49,7 @@ StampNyaa supports adding your own sticker packs to the app.
 
 ## 🚀 Download
 
-#### [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases) and download the appropriate installer for your operating system - `.exe` for Windows, `.dmg` for MacOS, and `.AppImage` for Linux.
+### [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases) and download the appropriate installer for your operating system.
 
 ## 🤝 Acknowledgements & Contribution
 
