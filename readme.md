@@ -3,9 +3,9 @@
 </p>
 <h1 align="center">StampNyaa</h1>
 
-## 🎉 Use LINE Stamps With Your Favorite Messaging Apps
+## 🎉 Use LINE Stamps on Desktop With Your Favorite Messaging Apps
 
-StampNyaa is a simple cross-platform desktop app for using LINE stickers in your favorite messaging applications like Discord, Whatsapp, and anywhere else you can paste images.
+StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in your favorite messaging applications like Discord, Whatsapp, and anywhere else you can paste images.
 
 ## 📚 About
 
