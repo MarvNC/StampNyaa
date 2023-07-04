@@ -300,7 +300,7 @@ body {
 }
 .modal-background .modal#add-sticker-modal {
   width: 80%;
-  max-width: 800px;
+  max-width: 650px;
 }
 .modal-background .modal#settings-modal {
   width: max-content;
