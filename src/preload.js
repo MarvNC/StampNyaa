@@ -23,4 +23,8 @@ contextBridge.exposeInMainWorld('api', {
   setStickerPackOrder(stickerPackOrder) {
     ipcRenderer.send('set-sticker-pack-order', stickerPackOrder);
   },
+  getHotkey: () => ipcRenderer.invoke('get-hotkey'),
+  setHotkey: (hotkey) => ipcRenderer.send('set-hotkey', hotkey),
+  disableHotkey: () => ipcRenderer.send('disable-hotkey'),
+  enableHotkey: () => ipcRenderer.send('enable-hotkey'),
 });

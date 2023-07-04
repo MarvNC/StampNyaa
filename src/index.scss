@@ -361,22 +361,28 @@ body {
           gap: 10px;
         }
 
+        #hotkey-input-container {
+          width: 100%;
+          #hotkey-input {
+            width: 100%;
+          }
+          &.active {
+            border: 4px dashed var(--text-color);
+          }
+        }
+
         input {
           height: 100%;
           border-radius: 15px;
           border: none;
           padding: 0 20px;
-          font-size: 22px;
+          font-size: 24px;
           font-weight: 500;
           font-family: inherit;
           text-align: center;
           color: var(--text-color);
           background-color: var(--white-color);
           outline: none;
-
-          &#hotkeyInput {
-            width: 100%;
-          }
         }
 
         h2 {

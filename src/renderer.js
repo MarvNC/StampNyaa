@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       'green-color',
       'yellow-color',
       'gray-color',
-      'text-color'
+      'text-color',
     ];
     const root = document.documentElement;
     for (const color of colors) {
@@ -242,6 +242,41 @@ window.addEventListener('DOMContentLoaded', async () => {
   settingsModalBackground.addEventListener('click', (e) => {
     if (e.target === settingsModalBackground) {
       settingsModalBackground.style.display = 'none';
+    }
+  });
+
+  const hotkeyInputContainer = document.getElementById('hotkey-input-container');
+  const hotkeyInput = document.getElementById('hotkey-input');
+  const pressedkeys = new Set();
+  let hotkeyString = api.getHotkey();
+  // let hotkeyString = 'Control+Shift+A';
+  hotkeyInput.value = hotkeyString;
+  let newHotkey = '';
+  hotkeyInput.addEventListener('keydown', (e) => {
+    // api.disableHotkey();
+    e.preventDefault();
+    hotkeyInputContainer.classList.add('active');
+    if (e.key === 'Escape') {
+      hotkeyInput.value = hotkeyString;
+      pressedkeys.clear();
+      return;
+    } else {
+      pressedkeys.add(e.key);
+      newHotkey = [...pressedkeys].join('+');
+      hotkeyInput.value = newHotkey;
+    }
+  });
+  hotkeyInput.addEventListener('keyup', (e) => {
+    e.preventDefault();
+    pressedkeys.delete(e.key);
+    if (pressedkeys.size === 0) {
+      console.log(newHotkey);
+      hotkeyInputContainer.classList.remove('active');
+      // save hotkey
+      hotkeyString = newHotkey;
+      // api.setHotkey(hotkeyString);
+      // api.enableHotkey();
+      return;
     }
   });
 

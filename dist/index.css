@@ -322,21 +322,27 @@ body {
   align-items: center;
   gap: 10px;
 }
+.modal-background .modal#settings-modal .settingsRow #hotkey-input-container {
+  width: 100%;
+}
+.modal-background .modal#settings-modal .settingsRow #hotkey-input-container #hotkey-input {
+  width: 100%;
+}
+.modal-background .modal#settings-modal .settingsRow #hotkey-input-container.active {
+  border: 4px dashed var(--text-color);
+}
 .modal-background .modal#settings-modal .settingsRow input {
   height: 100%;
   border-radius: 15px;
   border: none;
   padding: 0 20px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
   font-family: inherit;
   text-align: center;
   color: var(--text-color);
   background-color: var(--white-color);
   outline: none;
-}
-.modal-background .modal#settings-modal .settingsRow input#hotkeyInput {
-  width: 100%;
 }
 .modal-background .modal#settings-modal .settingsRow h2 {
   color: var(--white-color);
