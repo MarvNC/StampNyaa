@@ -37,6 +37,12 @@ const createWindow = () => {
     shell.openExternal(url);
     return { action: 'deny' };
   });
+
+  // Open the DevTools if in development mode.
+  if (process.env.NODE_ENV === 'development') {
+    window.webContents.openDevTools();
+    window.setSize(1600, 900);
+  }
 };
 
 // This method will be called when Electron has finished
