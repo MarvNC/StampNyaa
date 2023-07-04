@@ -1,15 +1,33 @@
 /* variables */
 /* shadow size */
 :root {
+  /* Blue theme */
+  --blue-primary-color: rgb(186 235 255);
+  --blue-background-color: rgb(232, 249, 255);
+  --blue-white-color: rgb(255, 255, 255);
+  --blue-red-color: rgb(255, 160, 160);
+  --blue-green-color: rgb(160, 255, 160);
+  --blue-yellow-color: rgb(255, 255, 160);
+  --blue-gray-color: rgb(160, 160, 160);
+  --blue-text-color: rgb(67 178 223);
+  /* Pink theme */
+  --pink-primary-color: rgb(255 219 238);
+  --pink-background-color: rgb(255 238 247);
+  --pink-white-color: rgb(255, 255, 255);
+  --pink-red-color: rgb(255, 160, 160);
+  --pink-green-color: rgb(160, 255, 160);
+  --pink-yellow-color: rgb(255, 255, 160);
+  --pink-gray-color: rgb(160, 160, 160);
+  --pink-text-color: rgb(241 131 209);
   --shadow-size: 7px;
-  --text-color: #4aa2c5;
-  --primary-color: #b5eaff;
-  --background-color: #e8f9ff;
-  --white-color: #fff;
-  --red-color: rgb(255, 160, 160);
-  --green-color: rgb(160, 255, 160);
-  --yellow-color: rgb(255, 255, 160);
-  --gray-color: rgb(160, 160, 160);
+  --primary-color: var(--blue-primary-color);
+  --background-color: var(--blue-background-color);
+  --white-color: var(--blue-white-color);
+  --red-color: var(--blue-red-color);
+  --green-color: var(--blue-green-color);
+  --yellow-color: var(--blue-yellow-color);
+  --gray-color: var(--blue-gray-color);
+  --text-color: var(--blue-text-color);
   --scale-power: 1.1;
 }
 
@@ -105,6 +123,61 @@ body {
   justify-content: flex-start;
   overflow: scroll;
 }
+#app #main-content #leftbar #theme-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 20px;
+  /* The switch - the box around the slider */
+  /* The slider */
+}
+#app #main-content #leftbar #theme-toggle .switch {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 34px;
+  /* Hide default HTML checkbox */
+}
+#app #main-content #leftbar #theme-toggle .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+#app #main-content #leftbar #theme-toggle .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--pink-primary-color);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+#app #main-content #leftbar #theme-toggle .slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 5px;
+  bottom: 5px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+#app #main-content #leftbar #theme-toggle input:checked + .slider {
+  background-color: var(--blue-primary-color);
+}
+#app #main-content #leftbar #theme-toggle input:checked + .slider:before {
+  -webkit-transform: translateX(46px);
+  -ms-transform: translateX(46px);
+  transform: translateX(46px);
+}
+#app #main-content #leftbar #theme-toggle input:focus + .slider {
+  box-shadow: 0 0 1px var(--blue-primary-color);
+}
 #app #main-content #leftbar #top-buttons {
   display: flex;
   justify-content: space-evenly;
@@ -132,13 +205,14 @@ body {
   grid-gap: 10px;
   justify-items: center;
   margin: 5px;
+  margin-top: 10px;
   gap: 10px;
 }
 #app #main-content #leftbar #sticker-pack-list .sticker-pack-icon-wrapper {
   cursor: pointer;
   width: 100px;
   height: 100px;
-  scroll-margin: 50px;
+  scroll-margin: 100px;
   padding: 0;
   margin: 0;
 }

@@ -14,6 +14,26 @@ closeButton.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', async () => {
+  // change theme
+  const themeToggleCheckbox = document.getElementById('theme-toggle-checkbox');
+  themeToggleCheckbox.addEventListener('change', () => {
+    const theme = themeToggleCheckbox.checked ? 'pink' : 'blue';
+    const colors = [
+      'primary-color',
+      'background-color',
+      'white-color',
+      'red-color',
+      'green-color',
+      'yellow-color',
+      'gray-color',
+      'text-color'
+    ];
+    const root = document.documentElement;
+    for (const color of colors) {
+      root.style.setProperty(`--${color}`, `var(--${theme}-${color})`);
+    }
+  });
+
   const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
@@ -214,7 +234,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Settings modal
   const settingsModalBackground = document.getElementById('settings-background');
   const settingsButton = document.getElementById('settings-button');
-  
+
   settingsButton.addEventListener('click', () => {
     settingsModalBackground.style.display = 'block';
   });
@@ -258,7 +278,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         )
       );
     } else {
-      console.log('last');
       stickerContainer.appendChild(rearrangedStickerPackContainer);
     }
 
