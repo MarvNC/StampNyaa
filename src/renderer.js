@@ -178,7 +178,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     downloadActive = true;
     addStickerButton.classList.add('loading');
     addStickerButton.firstElementChild.textContent = 'more_horiz';
-    addStickerButton.disabled = true;
   });
 
   const addStickerDownloadFeedback = document.getElementById('add-sticker-download-feedback');
@@ -192,7 +191,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       downloadActive = false;
       addStickerButton.classList.remove('loading');
       addStickerButton.firstElementChild.textContent = 'check';
-      addStickerButton.disabled = false;
     }
     const data = event.data;
     if (data.type === 'download-sticker-pack') {
