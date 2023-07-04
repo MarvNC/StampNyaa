@@ -1,11 +1,15 @@
 <p align="center">
   <img src="./assets/icon.png" alt="StampNyaa" width="250" height="250">
 </p>
-<h1 align="center">StampNyaa</h1>
+<h1 align="center">StampNyaa | スタンプにゃあ～</h1>
 
-## 🎉 Use LINE Stamps on Desktop With Your Favorite Messaging Apps
+## 🎉 Download LINE Stickers and Use Them Anywhere
 
-StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in your favorite messaging applications like Discord, Whatsapp, and anywhere else you can paste images.
+StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in Discord, Whatsapp, and anywhere else you can paste images.
+
+## [🚀 Download](https://github.com/MarvNC/StampNyaa/releases)
+
+[Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases) and download the appropriate installer for your operating system.
 
 ## 📚 About
 
@@ -13,18 +17,24 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 | :-------------------------------------------------: |
 | ![Discord Send Sticker](img/DiscordSendSticker.gif) |
 
-|     **Download New Sticker Packs from LINE**      |     **Manage and Sort Your Stickers**     |
+|       **Download Sticker Packs from LINE**        |     **Manage and Sort Your Stickers**     |
 | :-----------------------------------------------: | :---------------------------------------: |
 | ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
+
+<!--
+| **🌸 Choose a pink theme** | **...or a dark theme🕶** |
+| :------------------------: | :---------------------: |
+|                            |                         |
+ -->
 
 ### 🔧 Usage
 
 - **Use the hotkey** `Ctrl+Shift+A` by default to open the app at any time, or click the icon in your system tray.
 - **Find your favorite sticker packs** on the [LINE Sticker Shop](https://store.line.me/stickershop/).
-- **Download the sticker packs** you want to use with StampNyaa by pressing the + button in the sidebar and pasting the sticker pack's URL.
-- **Use the stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
+- **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL.
+- **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
 
-Remember that sticker packs from LINE are created by talented artists and are not free to use. Please support the creators by purchasing the sticker packs you download; they deserve it!
+Keep in mind that sticker packs from LINE are created by talented artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to support the creators by purchasing the sticker packs you use!
 
 Here are the creators whose stickers are shown in the above GIFs:
 
@@ -47,17 +57,13 @@ StampNyaa supports adding your own sticker packs to the app.
 - You will also need to add a sticker named `main.png` to be used as the icon representing the sticker pack in the sidebar.
 - Note that only `.png` images are currently supported.
 
-## 🚀 Download
-
-### [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases) and download the appropriate installer for your operating system.
-
 ## 🤝 Acknowledgements & Contribution
 
 This app would not exist if it were not for jeffshee's **[LINEStickerKeyboard](https://github.com/jeffshee/LINEStickerKeyboard/)** Android app which I use frequently, inspiring me to build StampNyaa for desktop.
 
 Contributions are welcome! If you have any bug reports, feature requests, or questions, please open an issue.
 
-## Development
+## 🛠️ Development
 
 To run StampNyaa locally, you will need to have [Node.js](https://nodejs.org/en/) installed.
 
