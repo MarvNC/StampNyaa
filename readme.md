@@ -17,6 +17,13 @@ StampNyaa is a simple cross-platform desktop app for using LINE stickers in your
 | :-----------------------------------------------: | :---------------------------------------: |
 | ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
 
+### 🔧 Usage
+
+- **Use the hotkey** `Ctrl+Shift+A` by default to open the app at any time, or click the icon in your system tray.
+- **Find your favorite sticker packs** on the [LINE Sticker Shop](https://store.line.me/stickershop/).
+- **Download the sticker packs** you want to use with StampNyaa by pressing the + button in the sidebar and pasting the sticker pack's URL.
+- **Use the stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
+
 Remember that sticker packs from LINE are created by talented artists and are not free to use. Please support the creators by purchasing the sticker packs you download; they deserve it!
 
 Here are the creators whose stickers are shown in the above GIFs:
