@@ -18,7 +18,7 @@ jobs:
         run: yarn install
       - name: publish
         env:
-          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run publish
 
   publish_on_mac:
@@ -32,7 +32,7 @@ jobs:
         run: yarn install
       - name: publish
         env:
-          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run publish
 
   publish_on_win:
@@ -46,5 +46,5 @@ jobs:
         run: yarn install
       - name: publish
         env:
-          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          ACCESS_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run publish
