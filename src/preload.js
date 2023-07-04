@@ -27,4 +27,6 @@ contextBridge.exposeInMainWorld('api', {
   setHotkey: (hotkey) => ipcRenderer.send('set-hotkey', hotkey),
   disableHotkey: () => ipcRenderer.send('disable-hotkey'),
   enableHotkey: () => ipcRenderer.send('enable-hotkey'),
+  getTheme: () => ipcRenderer.invoke('get-theme'),
+  setTheme: (theme) => ipcRenderer.send('set-theme', theme),
 });

@@ -30,12 +30,6 @@
 
       <div id="main-content">
         <div id="leftbar">
-          <div id="theme-toggle">
-            <label class="switch">
-              <input id="theme-toggle-checkbox" type="checkbox" />
-              <span class="slider round"></span>
-            </label>
-          </div>
           <div id="top-buttons">
             <div id="settings-button" class="circle">
               <span class="material-symbols-outlined"> settings </span>
@@ -76,6 +70,17 @@
 
     <div id="settings-background" class="modal-background" style="display: none">
       <div id="settings-modal" class="modal">
+        <div class="settingsRow">
+          <div class="icons">
+            <span class="material-symbols-outlined"> palette </span>
+          </div>
+          <div id="theme-select">
+            <div data-theme="blue" class="themeSelector"></div>
+            <div data-theme="pink" class="themeSelector"></div>
+            <div data-theme="dracula" class="themeSelector"></div>
+            <div data-theme="night-pink" class="themeSelector"></div>
+          </div>
+        </div>
         <div class="settingsRow">
           <div class="icons">
             <span class="material-symbols-outlined"> keyboard_alt </span>

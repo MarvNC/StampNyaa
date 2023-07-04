@@ -15,9 +15,9 @@ closeButton.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   // change theme
-  const themeToggleCheckbox = document.getElementById('theme-toggle-checkbox');
-  themeToggleCheckbox.addEventListener('change', () => {
-    const theme = themeToggleCheckbox.checked ? 'pink' : 'blue';
+  let theme = 'blue';
+  // let theme = api.getTheme() ?? 'blue';
+  function setTheme(theme) {
     const colors = [
       'primary-color',
       'background-color',
@@ -32,7 +32,29 @@ window.addEventListener('DOMContentLoaded', async () => {
     for (const color of colors) {
       root.style.setProperty(`--${color}`, `var(--${theme}-${color})`);
     }
-  });
+  }
+  setTheme(theme);
+  const themeSelect = document.getElementById('theme-select');
+  const themes = [...themeSelect.children];
+  for (const themeSelector of themes) {
+    const elementTheme = themeSelector.dataset.theme;
+    if (elementTheme === theme) {
+      themeSelector.classList.add('active');
+      console.log(`active theme: ${theme}`);
+      console.log(themeSelector);
+    }
+    themeSelector.style.backgroundColor = `var(--${elementTheme}-background-color)`;
+
+    themeSelector.addEventListener('click', () => {
+      for (const themeSelector of themes) {
+        themeSelector.classList.remove('active');
+      }
+      themeSelector.classList.add('active');
+      theme = elementTheme;
+      setTheme(theme);
+      api.setTheme(theme);
+    });
+  }
 
   const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
