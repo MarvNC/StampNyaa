@@ -60,7 +60,6 @@ body {
   height: 100%;
   overflow: hidden;
   user-select: none;
-  padding: var(--shadow-size);
   margin: 0;
   box-sizing: border-box;
   color: var(--text-color);
@@ -71,7 +70,6 @@ body {
   width: 100%;
   background-color: var(--background-color);
   border-radius: 20px;
-  box-shadow: 0 0 var(--shadow-size) rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -243,7 +241,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(5px);
   transition: all 0.2s ease-in-out;
 }
 .modal-background .modal {
@@ -289,10 +286,11 @@ body {
   display: flex;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 .modal-background .modal#settings-modal .settingsRow #theme-select .themeSelector {
-  height: 50px;
-  width: 50px;
+  height: 100%;
+  width: 100%;
   border-radius: 15px;
   cursor: pointer;
   overflow: hidden;
@@ -330,14 +328,14 @@ body {
   color: var(--white-color);
   font-size: 30px;
 }
-.modal-background .modal#settings-modal .settingsRow #runOnStartup {
+.modal-background .modal#settings-modal .settingsRow #run-on-startup {
   height: 50px;
   width: 50px;
   background-color: var(--white-color);
   border-radius: 15px;
   cursor: pointer;
 }
-.modal-background .modal#settings-modal .settingsRow #runOnStartup #runOnStartupCheck {
+.modal-background .modal#settings-modal .settingsRow #run-on-startup #run-on-startup-check {
   color: var(--text-color);
 }
 .modal-background .modal#settings-modal .settingsRow.divider {
@@ -356,6 +354,9 @@ body {
 }
 .modal-background .modal#settings-modal .settingsRow img {
   max-height: 50px;
+}
+.modal-background .modal#settings-modal .settingsRow.credits {
+  justify-content: center;
 }
 .modal-background .modal div.box {
   height: 50px;

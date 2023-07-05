@@ -4,10 +4,33 @@ const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
 
-// Auto update
-require('update-electron-app')();
+// Auto update, but not on first run
+const args = process.argv.slice(1);
+if (!args.includes('--squirrel-firstrun')) {
+  require('update-electron-app')();
+}
 
 let window;
+
+// Initialize config
+const store = new Store({
+  defaults: {
+    stickersPath: path.join(app.getPath('pictures'), 'Stickers'),
+  },
+});
+const config = new Store({
+  cwd: store.get('stickersPath'),
+  defaults: {
+    stickerPacksOrder: [],
+    theme: 'blue',
+    hotkey: 'CommandOrControl+Shift+A',
+    runOnStartup: true,
+  },
+});
+const stickersDataStore = new Store({
+  name: 'stickers',
+  cwd: store.get('stickersPath'),
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -18,7 +41,7 @@ const createWindow = () => {
   // Create the browser window.
   window = new BrowserWindow({
     icon: path.join(__dirname, '../assets/icon.ico'),
-    width: 944,
+    width: 930,
     height: 900,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -72,6 +95,7 @@ app.on('ready', async () => {
   });
 
   registerHotkey(config.get('hotkey'));
+  setRunOnStartup(config.get('runOnStartup'));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -93,27 +117,6 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-/**
- * Initialize the store
- */
-const store = new Store({
-  defaults: {
-    stickersPath: path.join(app.getPath('pictures'), 'Stickers'),
-  },
-});
-const config = new Store({
-  cwd: store.get('stickersPath'),
-  defaults: {
-    stickerPacksOrder: [],
-    theme: 'blue',
-    hotkey: 'CommandOrControl+Shift+A',
-  },
-});
-const stickersDataStore = new Store({
-  name: 'stickers',
-  cwd: store.get('stickersPath'),
-});
 
 // Migrate stickerPacksOrder to config in stickers folder
 if (store.has('stickerPacksOrder')) {
@@ -200,4 +203,27 @@ ipcMain.on('disable-hotkey', () => {
 
 ipcMain.on('enable-hotkey', () => {
   registerHotkey(config.get('hotkey'));
+});
+
+function setRunOnStartup(runOnStartup) {
+  // https://www.electronjs.org/docs/latest/api/app#appsetloginitemsettingssettings-macos-windows
+  const appFolder = path.dirname(process.execPath);
+  const updateExe = path.resolve(appFolder, '..', 'Update.exe');
+  const exeName = path.basename(process.execPath);
+
+  app.setLoginItemSettings({
+    openAtLogin: runOnStartup,
+    openAsHidden: true,
+    path: updateExe,
+    args: ['--processStart', `"${exeName}"`, '--process-start-args', '"--hidden"'],
+  });
+}
+
+ipcMain.handle('get-run-on-startup', () => {
+  return config.get('runOnStartup');
+});
+
+ipcMain.on('set-run-on-startup', (event, runOnStartup) => {
+  setRunOnStartup(runOnStartup);
+  config.set('runOnStartup', runOnStartup);
 });
