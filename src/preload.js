@@ -22,5 +22,6 @@ contextBridge.exposeInMainWorld('api', {
   enableHotkey: () => ipcRenderer.send('enable-hotkey'),
   getTheme: () => ipcRenderer.invoke('get-theme'),
   setTheme: (theme) => ipcRenderer.send('set-theme', theme),
+  getRunOnStartup: () => ipcRenderer.invoke('get-run-on-startup'),
   setRunOnStartup: (runOnStartup) => ipcRenderer.send('set-run-on-startup', runOnStartup),
 });

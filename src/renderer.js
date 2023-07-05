@@ -311,6 +311,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   const runOnStartup = document.getElementById('run-on-startup');
   const runOnStartupCheck = document.getElementById('run-on-startup-check');
+  const runOnStartupEnabled = await api.getRunOnStartup();
+  runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
   runOnStartup.addEventListener('click', () => {
     if (runOnStartupCheck.style.display === 'none') {
       runOnStartupCheck.style.display = 'block';
