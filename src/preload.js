@@ -3,16 +3,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  closeWindow: () => {
-    ipcRenderer.send('close-window');
-  },
-  minimizeWindow: () => {
-    ipcRenderer.send('minimize-window');
-  },
+  closeWindow: () => ipcRenderer.send('close-window'),
+  minimizeWindow: () => ipcRenderer.send('minimize-window'),
   ready: () => ipcRenderer.invoke('ready'),
-  sendSticker: (stickerPath) => {
-    ipcRenderer.send('send-sticker', stickerPath);
-  },
+  sendSticker: (stickerPath) => ipcRenderer.send('send-sticker', stickerPath),
   downloadStickerPack: (url) => {
     const { port1, port2 } = new MessageChannel();
     ipcRenderer.postMessage('download-sticker-pack', url, [port2]);
@@ -20,9 +14,8 @@ contextBridge.exposeInMainWorld('api', {
       window.postMessage(event.data);
     };
   },
-  setStickerPackOrder(stickerPackOrder) {
-    ipcRenderer.send('set-sticker-pack-order', stickerPackOrder);
-  },
+  setStickerPackOrder: (stickerPackOrder) =>
+    ipcRenderer.send('set-sticker-pack-order', stickerPackOrder),
   getHotkey: () => ipcRenderer.invoke('get-hotkey'),
   setHotkey: (hotkey) => ipcRenderer.send('set-hotkey', hotkey),
   disableHotkey: () => ipcRenderer.send('disable-hotkey'),
