@@ -15,8 +15,7 @@ closeButton.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   // change theme
-  let theme = 'blue';
-  // let theme = api.getTheme() ?? 'blue';
+  let theme = await api.getTheme();
   function setTheme(theme) {
     const colors = [
       'primary-color',
@@ -270,34 +269,47 @@ window.addEventListener('DOMContentLoaded', async () => {
   const hotkeyInputContainer = document.getElementById('hotkey-input-container');
   const hotkeyInput = document.getElementById('hotkey-input');
   const pressedkeys = new Set();
-  let hotkeyString = api.getHotkey();
-  // let hotkeyString = 'Control+Shift+A';
+  let hotkeyString = await api.getHotkey();
   hotkeyInput.value = hotkeyString;
   let newHotkey = '';
+
+  function keyToUpper(key) {
+    if (key.length === 1) {
+      key = key.toUpperCase();
+    }
+    return key;
+  }
+
   hotkeyInput.addEventListener('keydown', (e) => {
-    // api.disableHotkey();
+    const key = keyToUpper(e.key);
+    if (key == 'Meta') {
+      return;
+    }
+
+    api.disableHotkey();
     e.preventDefault();
     hotkeyInputContainer.classList.add('active');
-    if (e.key === 'Escape') {
+    if (key === 'Escape') {
       hotkeyInput.value = hotkeyString;
       pressedkeys.clear();
       return;
     } else {
-      pressedkeys.add(e.key);
+      pressedkeys.add(key);
       newHotkey = [...pressedkeys].join('+');
       hotkeyInput.value = newHotkey;
     }
   });
   hotkeyInput.addEventListener('keyup', (e) => {
+    const key = keyToUpper(e.key);
     e.preventDefault();
-    pressedkeys.delete(e.key);
+    pressedkeys.delete(key);
     if (pressedkeys.size === 0) {
       console.log(newHotkey);
       hotkeyInputContainer.classList.remove('active');
       // save hotkey
       hotkeyString = newHotkey;
-      // api.setHotkey(hotkeyString);
-      // api.enableHotkey();
+      api.setHotkey(hotkeyString);
+      api.enableHotkey();
       return;
     }
   });

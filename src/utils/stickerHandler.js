@@ -15,6 +15,10 @@ const getAllStickerPacks = (stickerPacksDir) => {
   }
   const stickerPacks = fs.readdirSync(stickerPacksDir);
   for (const pack of stickerPacks) {
+    // check if pack is a directory
+    if (!fs.lstatSync(path.join(stickerPacksDir, pack)).isDirectory()) {
+      continue;
+    }
     // check if info.json exists, if not create it
     if (!fs.existsSync(path.join(stickerPacksDir, pack, 'info.json'))) {
       fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), "{}");

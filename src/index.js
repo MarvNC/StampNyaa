@@ -49,56 +49,7 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  const store = initStore();
-
   createWindow();
-
-  ipcMain.on('close-window', () => {
-    window.hide();
-  });
-
-  ipcMain.on('minimize-window', () => {
-    window.minimize();
-  });
-
-  ipcMain.handle('ready', () => {
-    const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('defaultStickersPath'));
-    let stickerPacksOrder = [...new Set(store.get('stickerPacksOrder'))].filter(
-      (pack) => pack in stickerPacksMap
-    );
-    // check if there are any new sticker packs not in StickerPacksOrder
-    const newStickerPacks = Object.keys(stickerPacksMap).filter(
-      (pack) => !stickerPacksOrder.includes(pack)
-    );
-    if (newStickerPacks.length > 0) {
-      // add new sticker packs to the end of the order
-      stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
-    }
-    store.set('stickerPacksOrder', stickerPacksOrder);
-    // get stickers and settings and stuff and send to client
-    return {
-      stickerPacksMap: stickerPacksMap,
-      stickerPacksOrder: store.get('stickerPacksOrder'),
-    };
-  });
-
-  ipcMain.on('send-sticker', (event, stickerPath) => {
-    stickerHandler.pasteStickerFromPath(stickerPath, window);
-  });
-
-  ipcMain.on('download-sticker-pack', (event, url) => {
-    const port = event.ports[0];
-    downloadPack(url, port, store.get('defaultStickersPath'));
-  });
-
-  ipcMain.on('set-sticker-pack-order', (event, stickerPackOrder) => {
-    store.set('stickerPacksOrder', stickerPackOrder);
-  });
-
-  globalShortcut.register('CommandOrControl+Shift+A', () => {
-    console.log('CommandOrControl+Shift+A is pressed');
-    window.isFocused() ? window.hide() : window.show();
-  });
 
   app.on('will-quit', () => {
     globalShortcut.unregisterAll();
@@ -119,6 +70,8 @@ app.on('ready', async () => {
   appIcon.on('click', () => {
     window.isFocused() ? window.hide() : window.show();
   });
+
+  registerHotkey(config.get('hotkey'));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -143,19 +96,108 @@ app.on('activate', () => {
 
 /**
  * Initialize the store
- * @returns {Store}
  */
-function initStore() {
-  const store = new Store({
-    defaults: {
-      stickersPathName: 'pictures',
-      stickersPathFolderName: 'stickers',
-      stickerPacksOrder: [],
-    },
-  });
-  store.set(
-    'defaultStickersPath',
-    path.join(app.getPath(store.get('stickersPathName')), store.get('stickersPathFolderName'))
-  );
-  return store;
+const store = new Store({
+  defaults: {
+    stickersPath: path.join(app.getPath('pictures'), 'Stickers'),
+  },
+});
+const config = new Store({
+  cwd: store.get('stickersPath'),
+  defaults: {
+    stickerPacksOrder: [],
+    theme: 'blue',
+    hotkey: 'CommandOrControl+Shift+A',
+  },
+});
+const stickersDataStore = new Store({
+  name: 'stickers',
+  cwd: store.get('stickersPath'),
+});
+
+// Migrate stickerPacksOrder to config in stickers folder
+if (store.has('stickerPacksOrder')) {
+  config.set('stickerPacksOrder', store.get('stickerPacksOrder'));
+  store.delete('stickerPacksOrder');
 }
+
+// Register hotkey
+
+function registerHotkey(hotkey) {
+  try {
+    globalShortcut.register(hotkey, () => {
+      window.isFocused() ? window.hide() : window.show();
+    });
+  } catch (error) {
+    config.reset('hotkey');
+  }
+}
+
+// IPC handlers
+
+ipcMain.on('close-window', () => {
+  window.hide();
+});
+
+ipcMain.on('minimize-window', () => {
+  window.minimize();
+});
+
+ipcMain.handle('ready', () => {
+  const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('stickersPath'));
+  let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
+    (pack) => pack in stickerPacksMap
+  );
+  // check if there are any new sticker packs not in StickerPacksOrder
+  const newStickerPacks = Object.keys(stickerPacksMap).filter(
+    (pack) => !stickerPacksOrder.includes(pack)
+  );
+  if (newStickerPacks.length > 0) {
+    // add new sticker packs to the end of the order
+    stickerPacksOrder = stickerPacksOrder.concat(newStickerPacks);
+  }
+  config.set('stickerPacksOrder', stickerPacksOrder);
+  // get stickers and settings and stuff and send to client
+  return {
+    stickerPacksMap: stickerPacksMap,
+    stickerPacksOrder: config.get('stickerPacksOrder'),
+    hotkey: config.get('hotkey'),
+  };
+});
+
+ipcMain.on('send-sticker', (event, stickerPath) => {
+  stickerHandler.pasteStickerFromPath(stickerPath, window);
+});
+
+ipcMain.on('download-sticker-pack', (event, url) => {
+  const port = event.ports[0];
+  downloadPack(url, port, store.get('stickersPath'));
+});
+
+ipcMain.on('set-sticker-pack-order', (event, stickerPackOrder) => {
+  config.set('stickerPacksOrder', stickerPackOrder);
+});
+
+ipcMain.handle('get-theme', () => {
+  return config.get('theme');
+});
+
+ipcMain.on('set-theme', (event, theme) => {
+  config.set('theme', theme);
+});
+
+ipcMain.handle('get-hotkey', () => {
+  return config.get('hotkey');
+});
+
+ipcMain.on('set-hotkey', (event, hotkey) => {
+  config.set('hotkey', hotkey);
+});
+
+ipcMain.on('disable-hotkey', () => {
+  globalShortcut.unregisterAll();
+});
+
+ipcMain.on('enable-hotkey', () => {
+  registerHotkey(config.get('hotkey'));
+});
