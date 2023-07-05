@@ -329,14 +329,14 @@ body {
   color: var(--white-color);
   font-size: 30px;
 }
-.modal-background .modal#settings-modal .settingsRow #runOnStartup {
+.modal-background .modal#settings-modal .settingsRow #run-on-startup {
   height: 50px;
   width: 50px;
   background-color: var(--white-color);
   border-radius: 15px;
   cursor: pointer;
 }
-.modal-background .modal#settings-modal .settingsRow #runOnStartup #runOnStartupCheck {
+.modal-background .modal#settings-modal .settingsRow #run-on-startup #run-on-startup-check {
   color: var(--text-color);
 }
 .modal-background .modal#settings-modal .settingsRow.divider {

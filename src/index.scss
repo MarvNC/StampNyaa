@@ -369,14 +369,14 @@ body {
           font-size: 30px;
         }
 
-        #runOnStartup {
+        #run-on-startup {
           height: 50px;
           width: 50px;
           background-color: var(--white-color);
           border-radius: 15px;
           cursor: pointer;
 
-          #runOnStartupCheck {
+          #run-on-startup-check {
             color: var(--text-color);
           }
         }

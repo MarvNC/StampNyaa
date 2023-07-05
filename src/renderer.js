@@ -8,7 +8,6 @@ document.addEventListener('mousemove', (e) => {
 // close on X button
 const closeButton = document.getElementById('close-button');
 closeButton.addEventListener('click', () => {
-  console.log('close button clicked');
   api.closeWindow();
 });
 
@@ -38,8 +37,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     const elementTheme = themeSelector.dataset.theme;
     if (elementTheme === theme) {
       themeSelector.classList.add('active');
-      console.log(`active theme: ${theme}`);
-      console.log(themeSelector);
     }
     themeSelector.style.backgroundColor = `var(--${elementTheme}-background-color)`;
 
@@ -251,7 +248,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Settings modal
+  // Settings modal stuff
   const settingsModalBackground = document.getElementById('settings-background');
   const settingsButton = document.getElementById('settings-button');
 
@@ -303,7 +300,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     pressedkeys.delete(key);
     if (pressedkeys.size === 0) {
-      console.log(newHotkey);
       hotkeyInputContainer.classList.remove('active');
       // save hotkey
       hotkeyString = newHotkey;
@@ -313,9 +309,19 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Settings
+  const runOnStartup = document.getElementById('run-on-startup');
+  const runOnStartupCheck = document.getElementById('run-on-startup-check');
+  runOnStartup.addEventListener('click', () => {
+    if (runOnStartupCheck.style.display === 'none') {
+      runOnStartupCheck.style.display = 'block';
+      api.setRunOnStartup(true);
+    } else {
+      runOnStartupCheck.style.display = 'none';
+      api.setRunOnStartup(false);
+    }
+  });
 
-  // sortable
+  // Sort sticker packs on drag
   const sortable = new Draggable.Sortable(stickerPackListDiv, {
     draggable: '.sticker-pack-icon-wrapper',
   });
