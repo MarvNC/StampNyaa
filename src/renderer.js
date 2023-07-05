@@ -1,5 +1,3 @@
-const closeButton = document.getElementById('close-button');
-
 let mouseX, mouseY;
 let sorting = false;
 document.addEventListener('mousemove', (e) => {
@@ -8,6 +6,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 // close on X button
+const closeButton = document.getElementById('close-button');
 closeButton.addEventListener('click', () => {
   console.log('close button clicked');
   api.closeWindow();
