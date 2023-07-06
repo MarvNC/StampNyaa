@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/icon.png" alt="StampNyaa" width="250" height="250">
+  <img src="./assets/banner_transparent.png" alt="StampNyaa" height="300">
 </p>
 <h1 align="center">StampNyaa | スタンプにゃあ～</h1>
 
