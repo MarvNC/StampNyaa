@@ -5,7 +5,7 @@
 
 ## 🎉 Download LINE Stickers and Use Them Anywhere
 
-StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in Discord, Whatsapp, and anywhere else you can paste images.
+StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in Discord, Whatsapp, Telegram, and anywhere else you can paste images.
 
 ## [🚀 Download](https://github.com/MarvNC/StampNyaa/releases/latest)
 
