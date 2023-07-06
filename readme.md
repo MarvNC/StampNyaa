@@ -13,40 +13,35 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 ## 📚 About
 
-|          **Send Fun Stickers on Discord**           |
-| :-------------------------------------------------: |
-| ![Discord Send Sticker](img/DiscordSendSticker.gif) |
-
-|       **Download Sticker Packs from LINE**        |     **Manage and Sort Your Stickers**     |
-| :-----------------------------------------------: | :---------------------------------------: |
-| ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
-
-<!--
-| **🌸 Choose a pink theme** | **...or a dark theme🕶** |
-| :------------------------: | :---------------------: |
-|                            |                         |
- -->
-
 ### 🔧 Usage
 
 - **Use the hotkey** `Ctrl+Shift+A` by default to open the app at any time, or click the icon in your system tray.
 - **Find your favorite sticker packs** on the [LINE Sticker Shop](https://store.line.me/stickershop/).
-- **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL.
+- **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL. Or you can **[add your own stickers](#-add-your-own-stickers)**.
 - **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
 
 Keep in mind that sticker packs from LINE are created by talented artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to support the creators by purchasing the sticker packs you use!
 
-Here are the creators whose stickers are shown in the above GIFs:
+### 🎞️ Showcase
+
+<h3 align="center">Choose a Theme</h3>
+
+| ![Blue](img/Theme_Blue.png) | ![Pink](img/Theme_Pink.png) | ![Dracula](img/Theme_Dracula.png) | ![NightPink](img/Theme_NightPink.png) |
+| :-------------------------: | :-------------------------: | :-------------------------------: | :-----------------------------------: |
+
+|            **Send Stickers on Discord**             |       **Download Sticker Packs from LINE**        |     **Manage and Sort Your Stickers**     |
+| :-------------------------------------------------: | :-----------------------------------------------: | :---------------------------------------: |
+| ![Discord Send Sticker](img/DiscordSendSticker.gif) | ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
+
+Here are the creators whose stickers are shown in the above images:
 
 - [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
 - [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nyaa stamps
 - [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous eroge SD artist
 - [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
-- [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft, multiple packs
+- [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft
 - [Navel](https://store.line.me/stickershop/author/79657/ja) - Navel, featuring 小倉朝日
-- [clear_blue](https://store.line.me/stickershop/author/552857/ja) - Publisher of stickers for Yuzusoft and Lose
-- [マインドウェイブ](https://store.line.me/stickershop/author/585746/ja) - Animated cat stickers
-- [SNOOPY](https://store.line.me/stickershop/product/28777/ja) - Snoopy
+- [clear_blue](https://store.line.me/stickershop/author/552857/ja) - Publisher of stickers for Yuzusoft
 
 ## 🎨 Add Your Own Stickers
 
