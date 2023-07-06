@@ -1,16 +1,24 @@
 const axios = require('axios');
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
+const { finished } = require('node:stream/promises');
 const path = require('path');
+const sharp = require('sharp');
 
 const cdnURL = 'https://stickershop.line-scdn.net';
 const mainImageURL = (packID) =>
   `${cdnURL}/stickershop/v1/product/${packID}/LINEStorePC/main.png?v=1`;
 const stickerURL = (stickerId) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/IOS/sticker@2x.png`;
+const fallbackStickerURL = (stickerId) =>
+  `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker.png`;
 const animatedStickerURL = (stickerId) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/iPhone/sticker_animation@2x.png`;
+const fallbackAnimatedStickerURL = (stickerId) =>
+  `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker_animation.png`;
 const popupStickerURL = (stickerId) =>
+  `${cdnURL}/stickershop/v1/sticker/${stickerId}/IOS/sticker_popup.png`;
+const fallbackPopupStickerURL = (stickerId) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker_popup.png`;
 
 const packIDRegex = /stickershop\/product\/(\d+)/;
@@ -86,11 +94,25 @@ async function downloadPack(storeURL, port, directory) {
     const sticker = stickerList[i];
     const staticUrl = stickerURL(sticker.id);
     await downloadImage(staticUrl, packDir, `${sticker.id}.png`);
+    const isValid = await checkImageValidity(path.join(packDir, `${sticker.id}.png`));
+    if (!isValid) {
+      await downloadImage(fallbackStickerURL(sticker.id), packDir, `${sticker.id}.png`);
+    }
 
     if (sticker.type === 'animation' || sticker.type === 'popup') {
       let downloadURL =
         sticker.type === 'animation' ? animatedStickerURL(sticker.id) : popupStickerURL(sticker.id);
       await downloadImage(downloadURL, packDir, `${sticker.id}_${sticker.type}.png`);
+      const isValid = await checkImageValidity(
+        path.join(packDir, `${sticker.id}_${sticker.type}.png`)
+      );
+      if (!isValid) {
+        downloadURL =
+          sticker.type === 'animation'
+            ? fallbackAnimatedStickerURL(sticker.id)
+            : fallbackPopupStickerURL(sticker.id);
+        await downloadImage(downloadURL, packDir, `${sticker.id}_${sticker.type}.png`);
+      }
     }
 
     console.log(`Downloaded ${i + 1}/${stickerList.length} stickers`);
@@ -136,17 +158,33 @@ async function downloadPack(storeURL, port, directory) {
  * @returns {Promise<boolean>} Whether the image was downloaded.
  */
 async function downloadImage(url, dir, filename) {
-  const filePath = path.join(dir, filename);
-  if (!fs.existsSync(filePath)) {
-    const response = await axios({
-      method: 'get',
-      url,
-      responseType: 'stream',
+  console.log(`Downloading ${url} to ${filename}...`);
+  return new Promise(async (resolve, reject) => {
+    const filePath = path.join(dir, filename);
+    const writer = fs.createWriteStream(filePath);
+    axios.get(url, { responseType: 'stream' }).then((response) => {
+      response.data.pipe(writer);
     });
-    response.data.pipe(fs.createWriteStream(filePath));
+    await finished(writer);
+    console.log(`Wrote ${filename}`);
+    resolve(true);
+  });
+}
+
+/**
+ * Checks if an image is valid.
+ * @param {string} imagePath
+ */
+async function checkImageValidity(imagePath) {
+  try {
+    await sharp(imagePath).metadata();
+    console.log('Image is valid.');
     return true;
+  } catch (error) {
+    console.log('Image is invalid.');
+    console.error(error);
+    return false;
   }
-  return false;
 }
 
 module.exports = downloadPack;
