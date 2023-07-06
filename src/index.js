@@ -16,7 +16,6 @@ let window;
 const store = new Store({
   defaults: {
     stickersPath: path.join(app.getPath('pictures'), 'Stickers'),
-    favorites: [],
   },
 });
 const config = new Store({
@@ -31,6 +30,9 @@ const config = new Store({
 const stickersDataStore = new Store({
   name: 'stickers',
   cwd: store.get('stickersPath'),
+  defaults: {
+    favorites: [],
+  }
 });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -152,7 +154,7 @@ ipcMain.handle('ready', () => {
   let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
     (pack) => pack in stickerPacksMap
   );
-  const favorites = store.get('favorites');
+  const favorites = stickersDataStore.get('favorites');
   // check if there are any new sticker packs not in StickerPacksOrder
   const newStickerPacks = Object.keys(stickerPacksMap).filter(
     (pack) => !stickerPacksOrder.includes(pack)
@@ -176,11 +178,11 @@ ipcMain.on('send-sticker', (event, stickerPath) => {
 });
 
 ipcMain.on('favorite-sticker', (event, packID, stickerID) => {
-  config.set('favorites', [...config.get('favorites'), { packID, stickerID }]);
+  stickersDataStore.set('favorites', [...config.get('favorites'), { packID, stickerID }]);
 });
 
 ipcMain.on('unfavorite-sticker', (event, packID, stickerID) => {
-  config.set('favorites', config.get('favorites').filter((sticker) => !(sticker.packID == packID && sticker.stickerID == stickerID)));
+  stickersDataStore.set('favorites', config.get('favorites').filter((sticker) => !(sticker.packID == packID && sticker.stickerID == stickerID)));
 });
 
 

@@ -59,11 +59,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   //favorites
   const favoriteDiv = document.createElement('div');
   favoriteDiv.classList.add('sticker-pack');
+  favoriteDiv.dataset.packID = 'favorites';
   favoriteDiv.id = `sticker-pack-container-favorites`;
 
   const favoriteHeader = createElementFromHTML(/* html */ `
   <div class="sticker-pack-header">
-  <a class="sticker-pack-title" href="" target="_blank">⭐</a>
+  <span class="material-symbols-outlined sticker-pack-title"> star </span>
   <a class="sticker-pack-author" href="" target="_blank"></a>
 </div>
   `);
