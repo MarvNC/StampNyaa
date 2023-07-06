@@ -26,8 +26,8 @@
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
+    "jimp": "^0.22.8",
     "jsdom": "^22.1.0",
-    "sharp": "^0.32.1",
     "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
