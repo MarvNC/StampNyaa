@@ -25,6 +25,7 @@ const config = new Store({
     theme: 'blue',
     hotkey: 'CommandOrControl+Shift+A',
     runOnStartup: true,
+    favorites: []
   },
 });
 const stickersDataStore = new Store({
@@ -151,6 +152,7 @@ ipcMain.handle('ready', () => {
   let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
     (pack) => pack in stickerPacksMap
   );
+  const favorites = config.get('favorites');
   // check if there are any new sticker packs not in StickerPacksOrder
   const newStickerPacks = Object.keys(stickerPacksMap).filter(
     (pack) => !stickerPacksOrder.includes(pack)
@@ -164,6 +166,7 @@ ipcMain.handle('ready', () => {
   return {
     stickerPacksMap: stickerPacksMap,
     stickerPacksOrder: config.get('stickerPacksOrder'),
+    favorites: favorites,
     hotkey: config.get('hotkey'),
   };
 });
@@ -171,6 +174,15 @@ ipcMain.handle('ready', () => {
 ipcMain.on('send-sticker', (event, stickerPath) => {
   stickerHandler.pasteStickerFromPath(stickerPath, window);
 });
+
+ipcMain.on('favorite-sticker', (event, packID, stickerID) => {
+  config.set('favorites', [...config.get('favorites'), { packID, stickerID }]);
+});
+
+ipcMain.on('unfavorite-sticker', (event, packID, stickerID) => {
+  config.set('favorites', config.get('favorites').filter((sticker) => !(sticker.packID == packID && sticker.stickerID == stickerID)));
+});
+
 
 ipcMain.on('download-sticker-pack', (event, url) => {
   const port = event.ports[0];
