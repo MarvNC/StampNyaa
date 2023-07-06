@@ -24,14 +24,11 @@ Keep in mind that sticker packs from LINE are created by talented artists and ar
 
 ### 🎞️ Showcase
 
-<h3 align="center">Choose a Theme</h3>
-
-| ![Blue](img/Theme_Blue.png) | ![Pink](img/Theme_Pink.png) | ![Dracula](img/Theme_Dracula.png) | ![NightPink](img/Theme_NightPink.png) |
-| :-------------------------: | :-------------------------: | :-------------------------------: | :-----------------------------------: |
-
-|            **Send Stickers on Discord**             |       **Download Sticker Packs from LINE**        |     **Manage and Sort Your Stickers**     |
-| :-------------------------------------------------: | :-----------------------------------------------: | :---------------------------------------: |
-| ![Discord Send Sticker](img/DiscordSendSticker.gif) | ![Download Line Packs](img/DownloadLinePacks.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
+|            **Send Stickers on Discord**             |       **Download Sticker Packs from LINE**        |
+| :-------------------------------------------------: | :-----------------------------------------------: |
+| ![Discord Send Sticker](img/DiscordSendSticker.gif) | ![Download Line Packs](img/DownloadLinePacks.gif) |
+|                 **Choose a Theme**                  |         **Manage and Sort Your Stickers**         |
+|       ![Choose A Theme](img/ChooseATheme.gif)       |     ![Manage and Sort](img/ManageAndSort.gif)     |
 
 Here are the creators whose stickers are shown in the above images:
 
