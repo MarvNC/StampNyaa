@@ -16,6 +16,7 @@ let window;
 const store = new Store({
   defaults: {
     stickersPath: path.join(app.getPath('pictures'), 'Stickers'),
+    favorites: [],
   },
 });
 const config = new Store({
@@ -25,7 +26,6 @@ const config = new Store({
     theme: 'blue',
     hotkey: 'CommandOrControl+Shift+A',
     runOnStartup: true,
-    favorites: []
   },
 });
 const stickersDataStore = new Store({
@@ -152,7 +152,7 @@ ipcMain.handle('ready', () => {
   let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
     (pack) => pack in stickerPacksMap
   );
-  const favorites = config.get('favorites');
+  const favorites = store.get('favorites');
   // check if there are any new sticker packs not in StickerPacksOrder
   const newStickerPacks = Object.keys(stickerPacksMap).filter(
     (pack) => !stickerPacksOrder.includes(pack)
