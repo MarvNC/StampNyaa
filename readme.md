@@ -53,7 +53,7 @@ StampNyaa supports adding your own sticker packs to the app.
 
 This app would not exist if it were not for jeffshee's **[LINEStickerKeyboard](https://github.com/jeffshee/LINEStickerKeyboard/)** Android app which I use frequently, inspiring me to build StampNyaa for desktop.
 
-Contributions are welcome! If you have any bug reports, feature requests, or questions, please open an issue.
+Contributions are welcome! If you have any bug reports, feature requests, or questions, please open an issue. If you want to contribute code, please contact me first so we can discuss the changes you want to make.
 
 ## 🛠️ Development
 
