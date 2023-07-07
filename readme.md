@@ -9,6 +9,8 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 ## [🚀 Download](https://github.com/MarvNC/StampNyaa/releases/latest)
 
+[![Total Downloads](https://img.shields.io/github/downloads/MarvNC/StampNyaa/total)](https://github.com/MarvNC/StampNyaa/releases/latest)
+
 [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases/latest) and download the appropriate installer for your operating system in "Assets".
 
 ## 📚 About
