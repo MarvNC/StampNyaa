@@ -51,97 +51,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  const { stickerPacksMap, stickerPacksOrder, favorites } = await api.ready();
+  const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
   let stickerPackIDsOrder = stickerPacksOrder;
-
-  //favorites
-  const favoriteDiv = document.createElement('div');
-  favoriteDiv.classList.add('sticker-pack');
-  favoriteDiv.dataset.packID = 'favorites';
-  favoriteDiv.id = `sticker-pack-container-favorites`;
-
-  const favoriteHeader = createElementFromHTML(/* html */ `
-  <div class="sticker-pack-header">
-  <span class="material-symbols-outlined sticker-pack-title"> star </span>
-  <a class="sticker-pack-author" href="" target="_blank"></a>
-</div>
-  `);
-  favoriteDiv.appendChild(favoriteHeader);
-  favoriteDiv.style.display = 'none';
-  stickerContainer.appendChild(favoriteDiv);
-
-  //function for adding davorites to dom
-  function renderFav(favorite) {
-    favoriteDiv.style.display = 'grid';
-    const sticker = stickerPacksMap[favorite.packID].stickers[favorite.stickerID];
-    const stickerDiv = document.createElement('div');
-    stickerDiv.classList.add('sticker');
-    stickerDiv.classList.add(`${favorite.packID}-${favorite.stickerID}`)
-    stickerDiv.dataset.stickerID = favorite.stickerID;
-    stickerDiv.dataset.type = sticker.type;
-    stickerDiv.dataset.filepath = sticker.filepath;
-    stickerDiv.dataset.packID = favorite.packID;
-
-    const stickerImg = document.createElement('img');
-    stickerImg.src = sticker.filepath;
-
-    stickerDiv.appendChild(stickerImg);
-    favoriteDiv.appendChild(stickerDiv);
-
-    // if special type
-    if (sticker.type !== 'static') {
-      stickerDiv.classList.add('special');
-      stickerDiv.dataset.specialPath = sticker.specialPath;
-      stickerDiv.addEventListener('mouseover', async (e) => {
-        const { specialPath } = e.currentTarget.dataset;
-        e.currentTarget.firstChild.src = specialPath;
-      });
-      stickerDiv.addEventListener('mouseout', async (e) => {
-        const { filepath } = e.currentTarget.dataset;
-        e.currentTarget.firstChild.src = filepath;
-      });
-
-    }
-    // on click send sticker
-    stickerDiv.addEventListener('click', async (e) => {
-      // determine whether special or not, send appropriate sticker path
-      const { type, filepath, specialPath } = e.currentTarget.dataset;
-      let stickerPath = filepath;
-      if (type !== 'static') {
-        stickerPath = specialPath;
-      }
-      api.sendSticker(stickerPath);
-    });
-
-    //right click to remove favorite
-    stickerDiv.addEventListener('mousedown', async (e) => {
-      if (e.button == 2) {
-        api.unfavoriteSticker(stickerDiv.dataset.packID, stickerDiv.dataset.stickerID);
-        var existing = document.getElementsByClassName(`${stickerDiv.dataset.packID}-${stickerDiv.dataset.stickerID}`);
-        while (existing.length > 0) {
-          existing[0].remove();
-        }
-        if (favoriteDiv.children.length == 1) {
-          favoriteDiv.style.display = 'none';
-        }
-      }
-    }, false)
-  }
-  //render em
-  if (favorites.length > 0) {
-    favoriteDiv.style.display = 'grid';
-
-    for (const favorite of favorites) {
-      renderFav(favorite);
-    }
-
-
-    stickerContainer.appendChild(favoriteDiv);
-  }
-
-
 
   for (const stickerPackID of stickerPackIDsOrder) {
     const stickerPack = stickerPacksMap[stickerPackID];
@@ -212,17 +125,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
         api.sendSticker(stickerPath);
       });
-
-      //On right click, favorite sticker
-      stickerDiv.addEventListener('mousedown', async (e) => {
-        if (e.button == 2) {
-          if (document.getElementsByClassName(`${stickerDiv.dataset.packID}-${stickerDiv.dataset.stickerID}`).length == 0) {
-            api.favoriteSticker(stickerDiv.dataset.packID, stickerDiv.dataset.stickerID);
-            renderFav({ packID: stickerDiv.dataset.packID, stickerID: stickerDiv.dataset.stickerID })
-          }
-        }
-      }, false)
-
     }
 
     stickerContainer.appendChild(stickerPackDiv);
