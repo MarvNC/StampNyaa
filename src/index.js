@@ -51,6 +51,7 @@ const createWindow = () => {
     frame: false,
     minWidth: 624,
     minHeight: 450,
+    skipTaskbar: true,
   });
 
   // and load the index.html of the app.
@@ -84,7 +85,6 @@ app.on('ready', async () => {
     {
       label: 'Quit',
       click: function () {
-        app.isQuiting = true;
         app.quit();
       },
     },
@@ -92,7 +92,11 @@ app.on('ready', async () => {
 
   appIcon.setContextMenu(contextMenu);
   appIcon.on('click', () => {
-    window.isFocused() ? window.hide() : window.show();
+    if (window.isVisible()) {
+      window.hide();
+    } else {
+      window.show();
+    }
   });
 
   registerHotkey(config.get('hotkey'));
@@ -141,10 +145,6 @@ function registerHotkey(hotkey) {
 
 ipcMain.on('close-window', () => {
   window.hide();
-});
-
-ipcMain.on('minimize-window', () => {
-  window.minimize();
 });
 
 ipcMain.handle('ready', () => {

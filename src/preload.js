@@ -4,7 +4,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
   closeWindow: () => ipcRenderer.send('close-window'),
-  minimizeWindow: () => ipcRenderer.send('minimize-window'),
   ready: () => ipcRenderer.invoke('ready'),
   sendSticker: (stickerPath, settings) => ipcRenderer.send('send-sticker', stickerPath, settings),
   downloadStickerPack: (url) => {
