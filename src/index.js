@@ -168,8 +168,8 @@ ipcMain.handle('ready', () => {
   };
 });
 
-ipcMain.on('send-sticker', (event, stickerPath) => {
-  stickerHandler.pasteStickerFromPath(stickerPath, window);
+ipcMain.on('send-sticker', (event, stickerPath, settings) => {
+  stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
 });
 
 ipcMain.on('download-sticker-pack', (event, url) => {

@@ -10,7 +10,7 @@ const resizeFolder = 'temp';
  * Reads the sticker packs directory and returns a map of sticker pack objects.
  * @returns {Array} Array of sticker pack objects
  */
-const getAllStickerPacks = (stickerPacksDir) => {
+function getAllStickerPacks(stickerPacksDir) {
   const stickerPacksMap = {};
   // check if sticker packs directory exists, if not create it
   if (!fs.existsSync(stickerPacksDir)) {
@@ -73,7 +73,7 @@ const getAllStickerPacks = (stickerPacksDir) => {
     stickerPacksMap[pack] = stickerPackData;
   }
   return stickerPacksMap;
-};
+}
 
 /**
  * Pastes a sticker from the given directory path to the clipboard and sends it to the previous window.
@@ -81,11 +81,11 @@ const getAllStickerPacks = (stickerPacksDir) => {
  * @param {*} window
  * @param {*} closeWindowAfterSend
  */
-const pasteStickerFromPath = async (
+async function pasteStickerFromPath(
   stickerPath,
   window,
-  { closeWindowAfterSend = true, resizeImageWidth } = {}
-) => {
+  { closeWindowAfterSend = true, resizeImageWidth, title = 'Unknown', author = 'Unknown' } = {}
+) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
     throw new Error('Invalid file path');
@@ -103,13 +103,15 @@ const pasteStickerFromPath = async (
     fs.mkdirSync(tempStickerFolder);
   }
 
-  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerFolderName}_${stickerID}.png`);
+  author = stripIllegalCharacters(author);
+  title = stripIllegalCharacters(title);
+  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${author}_${title}.png`);
 
   // if resizeImageWidth is set, resize the image to the given width
   if (resizeImageWidth) {
     const image = await Jimp.read(stickerPath);
     await image.resize(resizeImageWidth, Jimp.AUTO);
-    
+
     // save in temp path
     await image.writeAsync(tempStickerPath);
   } else {
@@ -142,21 +144,18 @@ const pasteStickerFromPath = async (
     window.setFocusable(true);
     window.setAlwaysOnTop(false);
   }
-};
+}
 
 /**
- * Uses a given sticker
- * @param {string} stickerID
- * @param {string} packName
- * @param {string} stickersPath
+ * Removes illegal filepath characters from a string.
+ * @param {string} string
+ * @returns {string} String with illegal characters removed
  */
-const sendSticker = async (stickerID, packName, stickersPath, window) => {
-  const stickerPath = path.join(stickersPath, packName, `${stickerID}.png`);
-  await pasteStickerFromPath(stickerPath, window, false);
-};
+function stripIllegalCharacters(string) {
+  return string.replace(/[/\\?%*:|"<>]/g, '');
+}
 
 module.exports = {
   pasteStickerFromPath,
   getAllStickerPacks,
-  sendSticker,
 };

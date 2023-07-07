@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('api', {
   closeWindow: () => ipcRenderer.send('close-window'),
   minimizeWindow: () => ipcRenderer.send('minimize-window'),
   ready: () => ipcRenderer.invoke('ready'),
-  sendSticker: (stickerPath) => ipcRenderer.send('send-sticker', stickerPath),
+  sendSticker: (stickerPath, settings) => ipcRenderer.send('send-sticker', stickerPath, settings),
   downloadStickerPack: (url) => {
     const { port1, port2 } = new MessageChannel();
     ipcRenderer.postMessage('download-sticker-pack', url, [port2]);

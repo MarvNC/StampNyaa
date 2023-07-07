@@ -94,6 +94,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       stickerDiv.dataset.packName = title;
       stickerDiv.dataset.filepath = sticker.filepath;
       stickerDiv.dataset.packID = stickerPackID;
+      stickerDiv.dataset.author = author;
 
       const stickerImg = document.createElement('img');
       stickerImg.src = sticker.filepath;
@@ -123,7 +124,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (type !== 'static') {
           stickerPath = specialPath;
         }
-        api.sendSticker(stickerPath);
+        api.sendSticker(stickerPath, { title, author });
       });
     }
 
