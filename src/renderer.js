@@ -176,7 +176,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Download sticker pack on add button
   const addButton = document.getElementById('add-button');
   const addStickerModalBackground = document.getElementById('add-sticker-background');
-  const input = document.getElementById('add-sticker-input');
+  const addStickerInput = document.getElementById('add-sticker-input');
   const addStickerButton = document.getElementById('add-sticker-button');
   const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
 
@@ -193,6 +193,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   addButton.addEventListener('click', async () => {
     addStickerModalBackground.style.display = 'block';
+    addStickerInput.focus();
   });
 
   addStickerModalBackground.addEventListener('click', async (e) => {
@@ -206,7 +207,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (downloadActive) {
       return;
     }
-    const url = input.value;
+    const url = addStickerInput.value;
     if (!lineURLRegex.test(url)) {
       errorButton(addStickerButton);
       return;

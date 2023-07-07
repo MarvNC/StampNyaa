@@ -454,10 +454,6 @@ body {
           color: var(--gray-color);
           opacity: 0.6;
         }
-
-        &:focus::placeholder {
-          color: transparent;
-        }
       }
     }
 
