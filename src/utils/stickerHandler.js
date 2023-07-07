@@ -91,11 +91,6 @@ async function pasteStickerFromPath(
     throw new Error('Invalid file path');
   }
 
-  const stickerFolderName = path.basename(path.dirname(stickerPath));
-  const stickerID = path.parse(stickerPath).name;
-
-  console.log(`Sending sticker ${stickerID} from ${stickerFolderName}`);
-
   const tempStickerFolder = path.join(app.getPath('appData'), 'temp');
 
   // create temp folder if it doesn't exist
