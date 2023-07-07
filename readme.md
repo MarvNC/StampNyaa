@@ -37,7 +37,7 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 ### 🔧 Usage
 
-- **Use the hotkey** `Ctrl+Shift+A` by default to open the app at any time, or click the icon in your system tray.
+- **Use the hotkey** `Ctrl/Command+Shift+A` by default to open the app at any time, or click the icon in your system tray.
 - **Find your favorite sticker packs** on the [LINE Sticker Shop](https://store.line.me/stickershop/).
 - **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL. Or you can **[add your own stickers](#-add-your-own-stickers)**.
 - **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
@@ -74,7 +74,7 @@ StampNyaa supports adding your own sticker packs to the app.
 - You will also need to add a sticker named `main.png` to be used as the icon representing the sticker pack in the sidebar.
 - Note that only `.png` images are currently supported.
 
-## Known Limitations
+## ⚠️ Known Limitations
 
 - Animated stickers are not supported in certain apps like Discord because they don't support animated pngs for whatever reason 💢. I might add a workaround converting them to `gif` in the future.
 
