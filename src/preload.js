@@ -14,8 +14,6 @@ contextBridge.exposeInMainWorld('api', {
       window.postMessage(event.data);
     };
   },
-  favoriteSticker: (packID, stickerID) => ipcRenderer.send('favorite-sticker', packID, stickerID),
-  unfavoriteSticker: (packID, stickerID) => ipcRenderer.send('unfavorite-sticker', packID, stickerID),
   setStickerPackOrder: (stickerPackOrder) =>
     ipcRenderer.send('set-sticker-pack-order', stickerPackOrder),
   getHotkey: () => ipcRenderer.invoke('get-hotkey'),
