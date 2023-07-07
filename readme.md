@@ -15,11 +15,14 @@
       alt="Total Downloads"
     />
   </a>
-  <img
-    src="https://img.shields.io/badge/スタンプ-nyaa-blue?style=for-the-badge&&color=26C2FF&labelColor=A0A0A0"
-    alt="nyaa"
-  />
+  <a href="https://github.com/MarvNC/StampNyaa">
+    <img
+      src="https://img.shields.io/badge/スタンプ-nyaa-blue?style=for-the-badge&&color=26C2FF&labelColor=A0A0A0"
+      alt="nyaa"
+    />
+  </a>
 </p>
+
 
 ## 🎉 Download LINE Stickers and Use Them Anywhere
 
@@ -57,7 +60,7 @@ Here are the creators whose stickers are shown in the above images:
 
 - [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
 - [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nyaa stamps
-- [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous eroge SD artist
+- [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous SD chibi artist
 - [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
 - [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft
 - [Navel](https://store.line.me/stickershop/author/79657/ja) - Navel, featuring 小倉朝日
