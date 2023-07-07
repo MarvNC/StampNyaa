@@ -70,6 +70,7 @@
 
     <div id="settings-background" class="modal-background" style="display: none">
       <div id="settings-modal" class="modal">
+        <!-- Theme select -->
         <div class="settingsRow">
           <div class="icons">
             <span class="material-symbols-outlined"> palette </span>
@@ -81,6 +82,7 @@
             <div data-theme="night-pink" class="themeSelector"></div>
           </div>
         </div>
+        <!-- Set hotkey -->
         <div class="settingsRow">
           <div class="icons">
             <span class="material-symbols-outlined"> keyboard_alt </span>
@@ -90,10 +92,9 @@
           </div>
         </div>
 
+        <!-- Run on startup -->
         <div class="settingsRow">
           <div class="icons">
-            <span class="material-symbols-outlined"> computer </span>
-            <span class="material-symbols-outlined"> power_rounded </span>
             <span class="material-symbols-outlined"> rocket_launch </span>
           </div>
           <div>
@@ -104,24 +105,33 @@
           </div>
         </div>
 
+        <!-- Fit to width -->
+        <div class="settingsRow">
+          <div class="icons">
+            <span class="material-symbols-outlined"> image </span>
+          </div>
+          <div>
+            <h2>Fit to Width</h2>
+          </div>
+          <div class="rightSideContainer">
+            <input id="fit-to-width-input" type="number" />
+          </div>
+        </div>
+
         <div class="settingsRow divider"></div>
 
-        <div class="settingsRow credits">
+        <a href="https://github.com/MarvNC/StampNyaa" target="_blank" class="settingsRow credits">
           <div class="icons">
             <span class="material-symbols-outlined"> brush </span>
             <span class="material-symbols-outlined heart"> favorite </span>
           </div>
           <div>
-            <a href="https://github.com/MarvNC/StampNyaa" target="_blank">
-              <h2>by MarvNC</h2>
-            </a>
+            <h2>by MarvNC</h2>
           </div>
           <div>
-            <a href="https://github.com/MarvNC/StampNyaa" target="_blank">
-              <img src="../assets/github-mark/github-mark-white.svg" alt="GitHub icon" />
-            </a>
+            <img src="../assets/github-mark/github-mark-white.svg" alt="GitHub icon" />
           </div>
-        </div>
+        </a>
       </div>
     </div>
     <script src="../libs/draggable@1.0.0-beta.11_lib_draggable.bundle.js"></script>

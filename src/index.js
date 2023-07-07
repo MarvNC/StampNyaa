@@ -25,6 +25,7 @@ const config = new Store({
     theme: 'blue',
     hotkey: 'CommandOrControl+Shift+A',
     runOnStartup: true,
+    resizeWidth: 200,
   },
 });
 const stickersDataStore = new Store({
@@ -168,8 +169,8 @@ ipcMain.handle('ready', () => {
   };
 });
 
-ipcMain.on('send-sticker', (event, stickerPath) => {
-  stickerHandler.pasteStickerFromPath(stickerPath, window);
+ipcMain.on('send-sticker', (event, stickerPath, settings) => {
+  stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
 });
 
 ipcMain.on('download-sticker-pack', (event, url) => {
@@ -226,4 +227,12 @@ ipcMain.handle('get-run-on-startup', () => {
 ipcMain.on('set-run-on-startup', (event, runOnStartup) => {
   setRunOnStartup(runOnStartup);
   config.set('runOnStartup', runOnStartup);
+});
+
+ipcMain.handle('get-resize-width', (event) => {
+  return config.get('resizeWidth');
+});
+
+ipcMain.on('set-resize-width', (event, width) => {
+  config.set('resizeWidth', width);
 });

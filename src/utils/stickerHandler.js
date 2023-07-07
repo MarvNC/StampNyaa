@@ -2,12 +2,15 @@ const { app, clipboard } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
+const Jimp = require('jimp');
+
+const resizeFolder = 'temp';
 
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
  * @returns {Array} Array of sticker pack objects
  */
-const getAllStickerPacks = (stickerPacksDir) => {
+function getAllStickerPacks(stickerPacksDir) {
   const stickerPacksMap = {};
   // check if sticker packs directory exists, if not create it
   if (!fs.existsSync(stickerPacksDir)) {
@@ -21,7 +24,7 @@ const getAllStickerPacks = (stickerPacksDir) => {
     }
     // check if info.json exists, if not create it
     if (!fs.existsSync(path.join(stickerPacksDir, pack, 'info.json'))) {
-      fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), "{}");
+      fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), '{}');
     }
     const stickerPackData = JSON.parse(
       fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
@@ -70,7 +73,7 @@ const getAllStickerPacks = (stickerPacksDir) => {
     stickerPacksMap[pack] = stickerPackData;
   }
   return stickerPacksMap;
-};
+}
 
 /**
  * Pastes a sticker from the given directory path to the clipboard and sends it to the previous window.
@@ -78,14 +81,49 @@ const getAllStickerPacks = (stickerPacksDir) => {
  * @param {*} window
  * @param {*} closeWindowAfterSend
  */
-const pasteStickerFromPath = async (stickerPath, window, closeWindowAfterSend = true) => {
+async function pasteStickerFromPath(
+  stickerPath,
+  window,
+  { closeWindowAfterSend = true, resizeWidth, title = 'Unknown', author = 'Unknown' } = {}
+) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
     throw new Error('Invalid file path');
   }
 
-  // write sticker image to clipboard
-  clipboard.writeImage(stickerPath);
+  const tempStickerFolder = path.join(app.getPath('appData'), 'temp');
+
+  // create temp folder if it doesn't exist
+  if (!fs.existsSync(tempStickerFolder)) {
+    fs.mkdirSync(tempStickerFolder);
+  }
+
+  author = stripIllegalCharacters(author);
+  title = stripIllegalCharacters(title);
+  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${author}_${title}.png`);
+
+  // if resizeImageWidth is set, resize the image to the given width
+  if (resizeWidth) {
+    const image = await Jimp.read(stickerPath);
+    // check if width is bigger than resizeImageWidth
+    if (image.getWidth() > resizeWidth) {
+      await image.resize(resizeWidth, Jimp.AUTO);
+    }
+
+    // save in temp path
+    await image.writeAsync(tempStickerPath);
+  } else {
+    // copy sticker to temp path
+    fs.copyFileSync(stickerPath, tempStickerPath);
+  }
+
+  // write sticker file to clipboard
+  // Thanks Kastow https://stackoverflow.com/a/76242802/22187538
+  clipboard.writeBuffer(
+    'FileNameW',
+    Buffer.concat([Buffer.from(tempStickerPath, 'ucs-2'), Buffer.from([0, 0])])
+  );
+  console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
     window.minimize();
@@ -104,21 +142,18 @@ const pasteStickerFromPath = async (stickerPath, window, closeWindowAfterSend = 
     window.setFocusable(true);
     window.setAlwaysOnTop(false);
   }
-};
+}
 
 /**
- * Uses a given sticker
- * @param {string} stickerID
- * @param {string} packName
- * @param {string} stickersPath
+ * Removes illegal filepath characters from a string.
+ * @param {string} string
+ * @returns {string} String with illegal characters removed
  */
-const sendSticker = async (stickerID, packName, stickersPath, window) => {
-  const stickerPath = path.join(stickersPath, packName, `${stickerID}.png`);
-  await pasteStickerFromPath(stickerPath, window, false);
-};
+function stripIllegalCharacters(string) {
+  return string.replace(/[/\\?%*:|"<>]/g, '');
+}
 
 module.exports = {
   pasteStickerFromPath,
   getAllStickerPacks,
-  sendSticker,
 };
