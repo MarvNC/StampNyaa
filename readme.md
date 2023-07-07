@@ -74,6 +74,10 @@ StampNyaa supports adding your own sticker packs to the app.
 - You will also need to add a sticker named `main.png` to be used as the icon representing the sticker pack in the sidebar.
 - Note that only `.png` images are currently supported.
 
+## Known Limitations
+
+- Animated stickers are not supported in certain apps like Discord because they don't support animated pngs for whatever reason 💢. I might add a workaround converting them to `gif` in the future.
+
 ## 🤝 Acknowledgements & Contribution
 
 This app would not exist if it were not for jeffshee's **[LINEStickerKeyboard](https://github.com/jeffshee/LINEStickerKeyboard/)** Android app which I use frequently, inspiring me to build StampNyaa for desktop.
