@@ -1,15 +1,33 @@
 <p align="center">
-  <img src="./assets/banner_transparent.png" alt="StampNyaa" height="300">
+  <img src="./assets/banner_transparent.png" alt="StampNyaa Banner" height="300" />
 </p>
 <h1 align="center">StampNyaa | スタンプにゃあ～</h1>
+<p align="center">
+  <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
+    <img
+      src="https://img.shields.io/github/v/release/MarvNC/StampNyaa?style=for-the-badge&color=26C2FF&labelColor=A0A0A0"
+      alt="Release Version"
+    />
+  </a>
+  <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
+    <img
+      src="https://img.shields.io/github/downloads/MarvNC/StampNyaa/total.svg?style=for-the-badge&color=26C2FF&labelColor=A0A0A0"
+      alt="Total Downloads"
+    />
+  </a>
+  <img
+    src="https://img.shields.io/badge/スタンプ-nyaa-blue?style=for-the-badge&&color=26C2FF&labelColor=A0A0A0"
+    alt="nyaa"
+  />
+</p>
 
 ## 🎉 Download LINE Stickers and Use Them Anywhere
 
 StampNyaa is a simple cross-platform desktop app for downloading and using LINE stickers in Discord, Whatsapp, Telegram, and anywhere else you can paste images.
 
-## [🚀 Download](https://github.com/MarvNC/StampNyaa/releases/latest)
+## 🚀 Download
 
-[![Total Downloads](https://img.shields.io/github/downloads/MarvNC/StampNyaa/total)](https://github.com/MarvNC/StampNyaa/releases/latest)
+[![Download button](https://img.shields.io/badge/-download-blue?style=for-the-badge&color=26C2FF)](https://github.com/MarvNC/StampNyaa/releases/latest)
 
 [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases/latest) and download the appropriate installer for your operating system in "Assets".
 
@@ -23,6 +41,9 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 - **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
 
 Keep in mind that sticker packs from LINE are created by talented artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to support the creators by purchasing the sticker packs you use!
+
+> **Warning**
+> Some stickers are region locked and cannot be downloaded in certain countries. If you are unable to download a sticker pack, try using a VPN to change your location. You can check if the sticker pack works in a country by opening the store page in incognito with a VPN set to that country.
 
 ### 🎞️ Showcase
 
