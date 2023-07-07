@@ -2,6 +2,9 @@ const { app, clipboard } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
+const Jimp = require('jimp');
+
+const resizeFolder = 'temp';
 
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
@@ -21,7 +24,7 @@ const getAllStickerPacks = (stickerPacksDir) => {
     }
     // check if info.json exists, if not create it
     if (!fs.existsSync(path.join(stickerPacksDir, pack, 'info.json'))) {
-      fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), "{}");
+      fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), '{}');
     }
     const stickerPackData = JSON.parse(
       fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
@@ -78,14 +81,49 @@ const getAllStickerPacks = (stickerPacksDir) => {
  * @param {*} window
  * @param {*} closeWindowAfterSend
  */
-const pasteStickerFromPath = async (stickerPath, window, closeWindowAfterSend = true) => {
+const pasteStickerFromPath = async (
+  stickerPath,
+  window,
+  { closeWindowAfterSend = true, resizeImageWidth } = {}
+) => {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
     throw new Error('Invalid file path');
   }
 
-  // write sticker image to clipboard
-  clipboard.writeImage(stickerPath);
+  const stickerFolderName = path.basename(path.dirname(stickerPath));
+  const stickerID = path.parse(stickerPath).name;
+
+  console.log(`Sending sticker ${stickerID} from ${stickerFolderName}`);
+
+  const tempStickerFolder = path.join(app.getPath('appData'), 'temp');
+
+  // create temp folder if it doesn't exist
+  if (!fs.existsSync(tempStickerFolder)) {
+    fs.mkdirSync(tempStickerFolder);
+  }
+
+  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerFolderName}_${stickerID}.png`);
+
+  // if resizeImageWidth is set, resize the image to the given width
+  if (resizeImageWidth) {
+    const image = await Jimp.read(stickerPath);
+    await image.resize(resizeImageWidth, Jimp.AUTO);
+    
+    // save in temp path
+    await image.writeAsync(tempStickerPath);
+  } else {
+    // copy sticker to temp path
+    fs.copyFileSync(stickerPath, tempStickerPath);
+  }
+
+  // write sticker file to clipboard
+  // Thanks Kastow https://stackoverflow.com/a/76242802/22187538
+  clipboard.writeBuffer(
+    'FileNameW',
+    Buffer.concat([Buffer.from(tempStickerPath, 'ucs-2'), Buffer.from([0, 0])])
+  );
+  console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
     window.minimize();
