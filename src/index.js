@@ -30,6 +30,9 @@ const config = new Store({
 const stickersDataStore = new Store({
   name: 'stickers',
   cwd: store.get('stickersPath'),
+  defaults: {
+    favorites: [],
+  }
 });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -151,6 +154,7 @@ ipcMain.handle('ready', () => {
   let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
     (pack) => pack in stickerPacksMap
   );
+  const favorites = stickersDataStore.get('favorites');
   // check if there are any new sticker packs not in StickerPacksOrder
   const newStickerPacks = Object.keys(stickerPacksMap).filter(
     (pack) => !stickerPacksOrder.includes(pack)
@@ -164,6 +168,7 @@ ipcMain.handle('ready', () => {
   return {
     stickerPacksMap: stickerPacksMap,
     stickerPacksOrder: config.get('stickerPacksOrder'),
+    favorites: favorites,
     hotkey: config.get('hotkey'),
   };
 });
@@ -171,6 +176,15 @@ ipcMain.handle('ready', () => {
 ipcMain.on('send-sticker', (event, stickerPath) => {
   stickerHandler.pasteStickerFromPath(stickerPath, window);
 });
+
+ipcMain.on('favorite-sticker', (event, packID, stickerID) => {
+  stickersDataStore.set('favorites', [...config.get('favorites'), { packID, stickerID }]);
+});
+
+ipcMain.on('unfavorite-sticker', (event, packID, stickerID) => {
+  stickersDataStore.set('favorites', config.get('favorites').filter((sticker) => !(sticker.packID == packID && sticker.stickerID == stickerID)));
+});
+
 
 ipcMain.on('download-sticker-pack', (event, url) => {
   const port = event.ports[0];
