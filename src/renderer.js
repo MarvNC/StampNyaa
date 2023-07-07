@@ -4,6 +4,7 @@ document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
+let resizeWidth;
 
 // close on X button
 const closeButton = document.getElementById('close-button');
@@ -124,7 +125,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (type !== 'static') {
           stickerPath = specialPath;
         }
-        api.sendSticker(stickerPath, { title, author });
+        api.sendSticker(stickerPath, { title, author, resizeWidth });
       });
     }
 
@@ -263,6 +264,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Set hotkey
   const hotkeyInputContainer = document.getElementById('hotkey-input-container');
   const hotkeyInput = document.getElementById('hotkey-input');
   const pressedkeys = new Set();
@@ -310,6 +312,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Run on startup
   const runOnStartup = document.getElementById('run-on-startup');
   const runOnStartupCheck = document.getElementById('run-on-startup-check');
   const runOnStartupEnabled = await api.getRunOnStartup();
@@ -321,6 +324,26 @@ window.addEventListener('DOMContentLoaded', async () => {
     } else {
       runOnStartupCheck.style.display = 'none';
       api.setRunOnStartup(false);
+    }
+  });
+
+  // Width setting
+  const widthInput = document.getElementById('fit-to-width-input');
+  resizeWidth = await api.getResizeWidth();
+  widthInput.value = resizeWidth;
+  widthInput.addEventListener('change', () => {
+    // validate
+    const inputWidth = parseInt(widthInput.value);
+    if (isNaN(inputWidth) || inputWidth <= 0) {
+      widthInput.value = resizeWidth;
+      return;
+    }
+    resizeWidth = inputWidth;
+    api.setResizeWidth(resizeWidth);
+  });
+  widthInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      widthInput.blur();
     }
   });
 

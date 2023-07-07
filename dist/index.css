@@ -330,13 +330,25 @@ body {
 }
 .modal-background .modal#settings-modal .settingsRow #run-on-startup {
   height: 50px;
-  width: 50px;
+  width: 100px;
   background-color: var(--white-color);
   border-radius: 15px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
 .modal-background .modal#settings-modal .settingsRow #run-on-startup #run-on-startup-check {
   color: var(--text-color);
+}
+.modal-background .modal#settings-modal .settingsRow .rightSideContainer {
+  height: 50px;
+  width: 100px;
+  background-color: var(--white-color);
+  border-radius: 15px;
+}
+.modal-background .modal#settings-modal .settingsRow .rightSideContainer input#fit-to-width-input {
+  width: 100%;
+  height: 100%;
 }
 .modal-background .modal#settings-modal .settingsRow.divider {
   height: 10px;
@@ -480,4 +492,14 @@ body {
 img {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

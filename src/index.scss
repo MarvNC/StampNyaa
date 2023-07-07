@@ -49,7 +49,7 @@
   --yellow-color: var(--blue-yellow-color);
   --gray-color: var(--blue-gray-color);
   --text-color: var(--blue-text-color);
-  
+
   --shadow-size: 7px;
   --scale-power: 1.1;
 }
@@ -58,6 +58,7 @@ html {
   width: 100%;
   height: 100%;
 }
+
 body {
   font-family: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
@@ -326,7 +327,6 @@ body {
             border-radius: 15px;
             cursor: pointer;
             overflow: hidden;
-            // transition: all 0.2s ease-in-out;
             box-sizing: border-box;
 
             &:hover:not(.active) {
@@ -370,13 +370,27 @@ body {
 
         #run-on-startup {
           height: 50px;
-          width: 50px;
+          width: 100px;
           background-color: var(--white-color);
           border-radius: 15px;
           cursor: pointer;
+          display: flex;
+          justify-content: center;
 
           #run-on-startup-check {
             color: var(--text-color);
+          }
+        }
+
+        .rightSideContainer {
+          height: 50px;
+          width: 100px;
+          background-color: var(--white-color);
+          border-radius: 15px;
+
+          input#fit-to-width-input {
+            width: 100%;
+            height: 100%;
           }
         }
 
@@ -549,4 +563,16 @@ body {
 img {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+// no text decoration
+a {
+  text-decoration: none;
+}
+
+// Remove number input arrows
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

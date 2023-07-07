@@ -84,7 +84,7 @@ function getAllStickerPacks(stickerPacksDir) {
 async function pasteStickerFromPath(
   stickerPath,
   window,
-  { closeWindowAfterSend = true, resizeImageWidth, title = 'Unknown', author = 'Unknown' } = {}
+  { closeWindowAfterSend = true, resizeWidth, title = 'Unknown', author = 'Unknown' } = {}
 ) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
@@ -103,9 +103,12 @@ async function pasteStickerFromPath(
   const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${author}_${title}.png`);
 
   // if resizeImageWidth is set, resize the image to the given width
-  if (resizeImageWidth) {
+  if (resizeWidth) {
     const image = await Jimp.read(stickerPath);
-    await image.resize(resizeImageWidth, Jimp.AUTO);
+    // check if width is bigger than resizeImageWidth
+    if (image.getWidth() > resizeWidth) {
+      await image.resize(resizeWidth, Jimp.AUTO);
+    }
 
     // save in temp path
     await image.writeAsync(tempStickerPath);
