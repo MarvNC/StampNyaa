@@ -18,11 +18,10 @@
   <a href="https://github.com/MarvNC/StampNyaa">
     <img
       src="https://img.shields.io/badge/スタンプ-nyaa-blue?style=for-the-badge&&color=26C2FF&labelColor=A0A0A0"
-      alt="nyaa"
+      alt="StampNyaa"
     />
   </a>
 </p>
-
 
 ## 🎉 Download LINE Stickers and Use Them Anywhere
 
@@ -43,7 +42,7 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 - **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL. Or you can **[add your own stickers](#-add-your-own-stickers)**.
 - **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
 
-Keep in mind that sticker packs from LINE are created by talented artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to support the creators by purchasing the sticker packs you use!
+Keep in mind that sticker packs from LINE are created by skilled artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to **support the creators** by purchasing the sticker packs you use! LINE supports PayPal and various other payment methods, so purchasing shouldn't be an issue outside of region locks.
 
 > **Warning**
 > Some stickers are region locked and cannot be downloaded in certain countries. If you are unable to download a sticker pack, try using a VPN to change your location. You can check if the sticker pack works in a country by opening the store page in incognito with a VPN set to that country.
