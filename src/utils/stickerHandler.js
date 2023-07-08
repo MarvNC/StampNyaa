@@ -4,8 +4,6 @@ const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
 const Jimp = require('jimp');
 
-const resizeFolder = 'temp';
-
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
  * @returns {Array} Array of sticker pack objects

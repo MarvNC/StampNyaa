@@ -13,7 +13,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "format": "prettier --write \"src/**/*.js\"",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": {
@@ -40,6 +42,12 @@
     "@electron-forge/publisher-github": "^6.2.1",
     "electron": "25.2.0",
     "electron-builder": "^24.4.0",
-    "electronmon": "^2.0.2"
+    "electronmon": "^2.0.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "3.0.0"
+  },
+  "lint-staged": {
+    "*.js": "prettier --write"
   }
 }

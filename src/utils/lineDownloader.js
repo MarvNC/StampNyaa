@@ -68,7 +68,7 @@ async function downloadPack(storeURL, port, directory) {
   const title = document.title.split(' - ')[0];
   console.log(`Got store page for ${title}...`);
 
-  const authorAnchor = document.querySelector('a[data-test="sticker-author"]')
+  const authorAnchor = document.querySelector('a[data-test="sticker-author"]');
   const author = authorAnchor.textContent;
   const authorURL = new URL(storeURL).origin + authorAnchor.href;
 
