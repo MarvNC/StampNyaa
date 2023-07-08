@@ -416,7 +416,9 @@ body {
         }
 
         &.credits {
-          justify-content: center;
+          justify-content: space-evenly;
+          gap: 10px;
+          font-size: small;
         }
       }
     }

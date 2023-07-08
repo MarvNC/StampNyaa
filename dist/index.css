@@ -368,7 +368,9 @@ body {
   max-height: 50px;
 }
 .modal-background .modal#settings-modal .settingsRow.credits {
-  justify-content: center;
+  justify-content: space-evenly;
+  gap: 10px;
+  font-size: small;
 }
 .modal-background .modal div.box {
   height: 50px;
