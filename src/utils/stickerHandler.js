@@ -102,14 +102,18 @@ async function pasteStickerFromPath(
 
   // if resizeImageWidth is set, resize the image to the given width
   if (resizeWidth) {
-    const image = await Jimp.read(stickerPath);
-    // check if width is bigger than resizeImageWidth
-    if (image.getWidth() > resizeWidth) {
-      await image.resize(resizeWidth, Jimp.AUTO);
+    try {
+      const image = await Jimp.read(stickerPath);
+      // check if width is bigger than resizeImageWidth
+      if (image.getWidth() > resizeWidth) {
+        await image.resize(resizeWidth, Jimp.AUTO);
+      }
+      // save in temp path
+      await image.writeAsync(tempStickerPath);
+    } catch (error) {
+      console.log('Unsupported image format, could not resize');
+      fs.copyFileSync(stickerPath, tempStickerPath);
     }
-
-    // save in temp path
-    await image.writeAsync(tempStickerPath);
   } else {
     // copy sticker to temp path
     fs.copyFileSync(stickerPath, tempStickerPath);
