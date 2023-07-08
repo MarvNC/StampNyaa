@@ -4,9 +4,11 @@ const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
 const Jimp = require('jimp');
 
+let clipboardEx;
+
 // if not linux
 if (process.platform !== 'linux') {
-  const clipboardEx = require('electron-clipboard-ex');
+  clipboardEx = require('electron-clipboard-ex');
 }
 
 /**
