@@ -120,17 +120,18 @@ async function pasteStickerFromPath(
   }
 
   // write sticker file to clipboard
-  if (process.platform === 'darwin') {
-    // Buffer method doesn't work on mac
+  if (process.platform === 'darwin' || process.platform === 'linux') {
+    // Buffer method doesn't work on mac or linux
     clipboard.writeImage(tempStickerPath);
   } else {
     // Thanks Kastow https://stackoverflow.com/a/76242802/22187538А
+    // Only works on windows?
     clipboard.writeBuffer(
       'FileNameW',
       Buffer.concat([Buffer.from(tempStickerPath, 'ucs-2'), Buffer.from([0, 0])])
     );
-    console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
   }
+  console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
     // windows / linux
