@@ -124,7 +124,14 @@ async function pasteStickerFromPath(
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
+    // windows
     window.minimize();
+    // linux
+    window.hide();
+    // mac
+    if (process.platform === 'darwin') {
+      app.hide();
+    }
   } else {
     window.setAlwaysOnTop(true);
     window.setFocusable(false);
