@@ -3,7 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
 const Jimp = require('jimp');
-const clipboardEx = require('electron-clipboard-ex');
+
+// if not linux
+if (process.platform !== 'linux') {
+  const clipboardEx = require('electron-clipboard-ex');
+}
 
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
@@ -120,8 +124,13 @@ async function pasteStickerFromPath(
     fs.copyFileSync(stickerPath, tempStickerPath);
   }
 
-  // write sticker file to clipboard
-  clipboardEx.writeFilePaths([tempStickerPath]);
+  // write sticker file to clipboard if not linux
+  if (process.platform !== 'linux') {
+    clipboardEx.writeFilePaths([tempStickerPath]);
+  } else {
+    // linux
+    clipboard.writeImage(tempStickerPath);
+  }
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
