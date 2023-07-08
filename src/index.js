@@ -239,7 +239,7 @@ ipcMain.on('set-resize-width', (event, width) => {
 });
 
 ipcMain.handle('get-updates', async () => {
-  return await checkUpdate();
+  return await checkUpdate(config);
 });
 
 ipcMain.handle('get-version', () => {

@@ -252,105 +252,124 @@ window.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Settings modal stuff
-  {
-    const settingsModalBackground = document.getElementById('settings-background');
-    const settingsButton = document.getElementById('settings-button');
 
-    settingsButton.addEventListener('click', () => {
-      settingsModalBackground.style.display = 'block';
-    });
+  const settingsModalBackground = document.getElementById('settings-background');
+  const settingsButton = document.getElementById('settings-button');
 
-    settingsModalBackground.addEventListener('click', (e) => {
-      if (e.target === settingsModalBackground) {
-        settingsModalBackground.style.display = 'none';
-      }
-    });
+  settingsButton.addEventListener('click', () => {
+    settingsModalBackground.style.display = 'block';
+  });
 
-    // Set hotkey
-    const hotkeyInputContainer = document.getElementById('hotkey-input-container');
-    const hotkeyInput = document.getElementById('hotkey-input');
-    const pressedkeys = new Set();
-    let hotkeyString = await api.getHotkey();
-    hotkeyInput.value = hotkeyString;
-    let newHotkey = '';
+  settingsModalBackground.addEventListener('click', (e) => {
+    if (e.target === settingsModalBackground) {
+      settingsModalBackground.style.display = 'none';
+    }
+  });
 
-    function keyToUpper(key) {
-      if (key.length === 1) {
-        key = key.toUpperCase();
-      }
-      return key;
+  // Set hotkey
+  const hotkeyInputContainer = document.getElementById('hotkey-input-container');
+  const hotkeyInput = document.getElementById('hotkey-input');
+  const pressedkeys = new Set();
+  let hotkeyString = await api.getHotkey();
+  hotkeyInput.value = hotkeyString;
+  let newHotkey = '';
+
+  function keyToUpper(key) {
+    if (key.length === 1) {
+      key = key.toUpperCase();
+    }
+    return key;
+  }
+
+  hotkeyInput.addEventListener('keydown', (e) => {
+    const key = keyToUpper(e.key);
+    if (key == 'Meta') {
+      return;
     }
 
-    hotkeyInput.addEventListener('keydown', (e) => {
-      const key = keyToUpper(e.key);
-      if (key == 'Meta') {
-        return;
-      }
+    api.disableHotkey();
+    e.preventDefault();
+    hotkeyInputContainer.classList.add('active');
+    if (key === 'Escape') {
+      hotkeyInput.value = hotkeyString;
+      pressedkeys.clear();
+      return;
+    } else {
+      pressedkeys.add(key);
+      newHotkey = [...pressedkeys].join('+');
+      hotkeyInput.value = newHotkey;
+    }
+  });
+  hotkeyInput.addEventListener('keyup', (e) => {
+    const key = keyToUpper(e.key);
+    e.preventDefault();
+    pressedkeys.delete(key);
+    if (pressedkeys.size === 0) {
+      hotkeyInputContainer.classList.remove('active');
+      // save hotkey
+      hotkeyString = newHotkey;
+      api.setHotkey(hotkeyString);
+      api.enableHotkey();
+      return;
+    }
+  });
 
-      api.disableHotkey();
-      e.preventDefault();
-      hotkeyInputContainer.classList.add('active');
-      if (key === 'Escape') {
-        hotkeyInput.value = hotkeyString;
-        pressedkeys.clear();
-        return;
-      } else {
-        pressedkeys.add(key);
-        newHotkey = [...pressedkeys].join('+');
-        hotkeyInput.value = newHotkey;
-      }
-    });
-    hotkeyInput.addEventListener('keyup', (e) => {
-      const key = keyToUpper(e.key);
-      e.preventDefault();
-      pressedkeys.delete(key);
-      if (pressedkeys.size === 0) {
-        hotkeyInputContainer.classList.remove('active');
-        // save hotkey
-        hotkeyString = newHotkey;
-        api.setHotkey(hotkeyString);
-        api.enableHotkey();
-        return;
-      }
-    });
+  // Run on startup
+  const runOnStartup = document.getElementById('run-on-startup');
+  const runOnStartupCheck = document.getElementById('run-on-startup-check');
+  const runOnStartupEnabled = await api.getRunOnStartup();
+  runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
+  runOnStartup.addEventListener('click', () => {
+    if (runOnStartupCheck.style.display === 'none') {
+      runOnStartupCheck.style.display = 'block';
+      api.setRunOnStartup(true);
+    } else {
+      runOnStartupCheck.style.display = 'none';
+      api.setRunOnStartup(false);
+    }
+  });
 
-    // Run on startup
-    const runOnStartup = document.getElementById('run-on-startup');
-    const runOnStartupCheck = document.getElementById('run-on-startup-check');
-    const runOnStartupEnabled = await api.getRunOnStartup();
-    runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
-    runOnStartup.addEventListener('click', () => {
-      if (runOnStartupCheck.style.display === 'none') {
-        runOnStartupCheck.style.display = 'block';
-        api.setRunOnStartup(true);
-      } else {
-        runOnStartupCheck.style.display = 'none';
-        api.setRunOnStartup(false);
-      }
-    });
+  // Width setting
+  const widthInput = document.getElementById('fit-to-width-input');
+  resizeWidth = await api.getResizeWidth();
+  widthInput.value = resizeWidth;
+  widthInput.addEventListener('change', () => {
+    // validate
+    const inputWidth = parseInt(widthInput.value);
+    if (isNaN(inputWidth) || inputWidth <= 0) {
+      widthInput.value = resizeWidth;
+      return;
+    }
+    resizeWidth = inputWidth;
+    api.setResizeWidth(resizeWidth);
+  });
+  widthInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      widthInput.blur();
+    }
+  });
 
-    // Width setting
-    const widthInput = document.getElementById('fit-to-width-input');
-    resizeWidth = await api.getResizeWidth();
-    widthInput.value = resizeWidth;
-    widthInput.addEventListener('change', () => {
-      // validate
-      const inputWidth = parseInt(widthInput.value);
-      if (isNaN(inputWidth) || inputWidth <= 0) {
-        widthInput.value = resizeWidth;
-        return;
-      }
-      resizeWidth = inputWidth;
-      api.setResizeWidth(resizeWidth);
-    });
-    widthInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        widthInput.blur();
-      }
-    });
+  // Version
+  const version = await api.getVersion();
+  document.getElementById('versionString').textContent = version;
 
-    // Version
+  // Update modal
+  const updateModalBackground = document.getElementById('update-background');
+  const updateText = document.getElementById('update-text');
+  async function checkUpdates() {
+    const needsUpdateVersion = await api.getUpdates();
+    console.log(`Needs update: ${needsUpdateVersion}`);
+    if (needsUpdateVersion) {
+      updateModalBackground.style.display = 'block';
+      updateText.textContent = `New Update ${needsUpdateVersion} Available!`;
+      const updateButton = document.getElementById('update-button');
+      updateButton.addEventListener('click', () => {
+        updateModalBackground.style.display = 'none';
+      });
+    }
   }
+  // Check once per hour
+  setInterval(checkUpdates, 60 * 60 * 1000);
 
   // Sort sticker packs on drag
   const sortable = new Draggable.Sortable(stickerPackListDiv, {

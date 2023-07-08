@@ -1,5 +1,6 @@
 const { app } = require('electron');
 const axios = require('axios');
+const Store = require('electron-store');
 
 const version = app.getVersion();
 const platform = process.platform;
@@ -7,18 +8,43 @@ const platform = process.platform;
 /**
  * Checks if the operating system is MacOS or Linux and if there are updates available.
  * Returns the version number of the latest release if there are updates available. Otherwise, returns null.
+ * Also does not check for updates if the last update check was less than five minutes ago.
+ * @param {Store} config
  * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns null.
  */
-async function checkUpdate() {
+async function checkUpdate(config) {
+  // Do not check if Windows
+  if (platform === 'win32') {
+    return null;
+  }
+
+  // Get last check update time
+  const lastCheckUpdateTime = config.get('lastCheckUpdateTime', new Date(0).valueOf());
+  console.log(
+    `Last check update time: ${new Date(lastCheckUpdateTime).toLocaleString()} which was ${(
+      (Date.now() - lastCheckUpdateTime) /
+      1000 /
+      60
+    ).toFixed(1)} minutes ago.`
+  );
+  // Set last check update time to now
+  // Check if the last check update time was less than five minutes ago
+  if (Date.now() - lastCheckUpdateTime < 5 * 60 * 1000) {
+    return null;
+  }
+
+  config.set('lastCheckUpdateTime', Date.now().valueOf());
   const url = 'https://api.github.com/repos/MarvNC/StampNyaa/releases/latest';
-  const { data } = await axios.get(url);
+  const { data } = await axios.get(url, {
+    headers: {
+      'User-Agent': 'StampNyaa Update Check',
+    },
+  });
   const latestVersion = data.tag_name.split('v')[1];
+  console.log(`Latest version: ${latestVersion}`);
   // Check if the latest version is newer than the current version
   if (compareVersionString(latestVersion, version)) {
-    // Check if the operating system is MacOS or Linux
-    if (platform === 'darwin' || platform === 'linux') {
-      return latestVersion;
-    }
+    return latestVersion;
   }
   return null;
 }
