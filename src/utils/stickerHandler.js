@@ -116,7 +116,11 @@ async function pasteStickerFromPath(
   }
 
   // write sticker file to clipboard
-  // Thanks Kastow https://stackoverflow.com/a/76242802/22187538
+  if (process.platform === 'darwin') {
+    // Not sure if buffer works on mac
+    clipboard.writeImage(tempStickerPath);
+  }
+  // Thanks Kastow https://stackoverflow.com/a/76242802/22187538А
   clipboard.writeBuffer(
     'FileNameW',
     Buffer.concat([Buffer.from(tempStickerPath, 'ucs-2'), Buffer.from([0, 0])])
@@ -124,7 +128,14 @@ async function pasteStickerFromPath(
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
   if (closeWindowAfterSend) {
+    // windows
     window.minimize();
+    // linux
+    window.hide();
+    // mac
+    if (process.platform === 'darwin') {
+      app.hide();
+    }
   } else {
     window.setAlwaysOnTop(true);
     window.setFocusable(false);
