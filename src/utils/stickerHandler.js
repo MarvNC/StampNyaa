@@ -89,7 +89,7 @@ function getAllStickerPacks(stickerPacksDir) {
 async function pasteStickerFromPath(
   stickerPath,
   window,
-  { closeWindowAfterSend = true, resizeWidth, title = 'Unknown', author = 'Unknown' } = {}
+  { closeWindowAfterSend = true, resizeWidth, title = '', author = '', stickerPackID = '' } = {}
 ) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
@@ -103,9 +103,11 @@ async function pasteStickerFromPath(
     fs.mkdirSync(tempStickerFolder);
   }
 
+  // strip illegal characters from author and title and ID
   author = stripIllegalCharacters(author);
   title = stripIllegalCharacters(title);
-  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${author}_${title}.png`);
+  stickerPackID = stripIllegalCharacters(stickerPackID);
+  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.png`);
 
   // if resizeImageWidth is set, resize the image to the given width
   if (resizeWidth) {

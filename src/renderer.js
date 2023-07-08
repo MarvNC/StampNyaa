@@ -125,7 +125,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (type !== 'static') {
           stickerPath = specialPath;
         }
-        api.sendSticker(stickerPath, { title, author, resizeWidth });
+        api.sendSticker(stickerPath, { stickerPackID, title, author, resizeWidth });
       });
     }
 
