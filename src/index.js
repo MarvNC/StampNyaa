@@ -25,7 +25,7 @@ const config = new Store({
     theme: 'blue',
     hotkey: 'CommandOrControl+Shift+A',
     runOnStartup: true,
-    resizeWidth: 200,
+    resizeWidth: 160,
   },
 });
 const stickersDataStore = new Store({
