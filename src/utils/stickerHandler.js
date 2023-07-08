@@ -4,6 +4,13 @@ const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
 const Jimp = require('jimp');
 
+let clipboardEx;
+
+// if not linux
+if (process.platform !== 'linux') {
+  clipboardEx = require('electron-clipboard-ex');
+}
+
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
  * @returns {Array} Array of sticker pack objects
@@ -119,17 +126,12 @@ async function pasteStickerFromPath(
     fs.copyFileSync(stickerPath, tempStickerPath);
   }
 
-  // write sticker file to clipboard
-  if (process.platform === 'darwin' || process.platform === 'linux') {
-    // Buffer method doesn't work on mac or linux
-    clipboard.writeImage(tempStickerPath);
+  // write sticker file to clipboard if not linux
+  if (process.platform !== 'linux') {
+    clipboardEx.writeFilePaths([tempStickerPath]);
   } else {
-    // Thanks Kastow https://stackoverflow.com/a/76242802/22187538А
-    // Only works on windows?
-    clipboard.writeBuffer(
-      'FileNameW',
-      Buffer.concat([Buffer.from(tempStickerPath, 'ucs-2'), Buffer.from([0, 0])])
-    );
+    // linux
+    clipboard.writeImage(tempStickerPath);
   }
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
