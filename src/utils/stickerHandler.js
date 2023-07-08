@@ -146,10 +146,11 @@ async function pasteStickerFromPath(
   }
 
   // paste sticker image (these are async functions but awaiting is slower)
-  keyboard.pressKey(Key.LeftControl);
+  const ctrlKey = process.platform === 'darwin' ? Key.LeftCmd : Key.LeftControl;
+  keyboard.pressKey(ctrlKey);
   keyboard.pressKey(Key.V);
   keyboard.releaseKey(Key.V);
-  await keyboard.releaseKey(Key.LeftControl);
+  await keyboard.releaseKey(ctrlKey);
 
   if (!closeWindowAfterSend) {
     window.setFocusable(true);
