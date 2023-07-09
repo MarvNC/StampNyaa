@@ -3,6 +3,7 @@ const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
+const checkUpdate = require('./utils/checkUpdate');
 
 // Auto update, but not on first run
 const args = process.argv.slice(1);
@@ -235,4 +236,12 @@ ipcMain.handle('get-resize-width', (event) => {
 
 ipcMain.on('set-resize-width', (event, width) => {
   config.set('resizeWidth', width);
+});
+
+ipcMain.handle('get-updates', async () => {
+  return await checkUpdate(config);
+});
+
+ipcMain.handle('get-version', () => {
+  return app.getVersion();
 });

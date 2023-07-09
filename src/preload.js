@@ -25,4 +25,6 @@ contextBridge.exposeInMainWorld('api', {
   setRunOnStartup: (runOnStartup) => ipcRenderer.send('set-run-on-startup', runOnStartup),
   getResizeWidth: () => ipcRenderer.invoke('get-resize-width'),
   setResizeWidth: (width) => ipcRenderer.send('set-resize-width', width),
+  getUpdates: () => ipcRenderer.invoke('get-updates'),
+  getVersion: () => ipcRenderer.invoke('get-version'),
 });

@@ -252,6 +252,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Settings modal stuff
+
   const settingsModalBackground = document.getElementById('settings-background');
   const settingsButton = document.getElementById('settings-button');
 
@@ -347,6 +348,29 @@ window.addEventListener('DOMContentLoaded', async () => {
       widthInput.blur();
     }
   });
+
+  // Version
+  const version = await api.getVersion();
+  document.getElementById('versionString').textContent = version;
+
+  // Update modal
+  const updateModalBackground = document.getElementById('update-background');
+  const updateText = document.getElementById('update-text');
+  async function checkUpdates() {
+    const needsUpdateVersion = await api.getUpdates();
+    console.log(`Needs update: ${needsUpdateVersion}`);
+    if (needsUpdateVersion) {
+      updateModalBackground.style.display = 'block';
+      updateText.textContent = `New Update ${needsUpdateVersion} Available!`;
+      const updateButton = document.getElementById('update-button');
+      updateButton.addEventListener('click', () => {
+        updateModalBackground.style.display = 'none';
+      });
+    }
+  }
+  checkUpdates();
+  // Check once per hour
+  setInterval(checkUpdates, 60 * 60 * 1000);
 
   // Sort sticker packs on drag
   const sortable = new Draggable.Sortable(stickerPackListDiv, {

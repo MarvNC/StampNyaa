@@ -368,7 +368,41 @@ body {
   max-height: 50px;
 }
 .modal-background .modal#settings-modal .settingsRow.credits {
+  justify-content: space-evenly;
+  gap: 10px;
+  font-size: small;
+}
+.modal-background .modal#version-modal {
+  gap: 10px;
+}
+.modal-background .modal#version-modal .updateIcons {
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 30px;
+}
+.modal-background .modal#version-modal .updateIcons .icon {
+  height: 80px;
+}
+.modal-background .modal#version-modal .material-symbols-outlined {
+  font-size: 50px;
+  color: var(--white-color);
+}
+.modal-background .modal#version-modal h2 {
+  color: var(--white-color);
+  font-size: 30px;
+  margin: 0px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.modal-background .modal#version-modal .greenbutton {
+  background-color: var(--green-color);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 15px;
+  cursor: pointer;
 }
 .modal-background .modal div.box {
   height: 50px;
