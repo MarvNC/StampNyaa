@@ -44,8 +44,10 @@ async function checkUpdate(config) {
   console.log(`Latest version: ${latestVersion}`);
   // Check if the latest version is newer than the current version
   if (compareVersionString(latestVersion, version)) {
+    console.log('Update available');
     return latestVersion;
   }
+  console.log('No update available');
   return null;
 }
 

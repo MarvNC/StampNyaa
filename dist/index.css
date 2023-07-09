@@ -394,6 +394,7 @@ body {
   font-size: 30px;
   margin: 0px;
   padding-bottom: 10px;
+  text-align: center;
 }
 .modal-background .modal#version-modal .greenbutton {
   background-color: var(--green-color);

@@ -368,6 +368,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       });
     }
   }
+  checkUpdates();
   // Check once per hour
   setInterval(checkUpdates, 60 * 60 * 1000);
 
@@ -407,12 +408,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     api.setStickerPackOrder(stickerPackIDsOrder);
   });
-
-  // check for updates
-  const latestVersion = await api.getUpdates();
-  if (latestVersion) {
-    // there are updates, show update modal
-  }
 });
 
 function createElementFromHTML(htmlString) {
