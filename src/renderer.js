@@ -13,165 +13,9 @@ closeButton.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // change theme
-  let theme = await api.getTheme();
-  function setTheme(theme) {
-    const colors = [
-      'primary-color',
-      'background-color',
-      'white-color',
-      'red-color',
-      'green-color',
-      'yellow-color',
-      'gray-color',
-      'text-color',
-    ];
-    const root = document.documentElement;
-    for (const color of colors) {
-      root.style.setProperty(`--${color}`, `var(--${theme}-${color})`);
-    }
-  }
-  setTheme(theme);
-  const themeSelect = document.getElementById('theme-select');
-  const themes = [...themeSelect.children];
-  for (const themeSelector of themes) {
-    const elementTheme = themeSelector.dataset.theme;
-    if (elementTheme === theme) {
-      themeSelector.classList.add('active');
-    }
-    themeSelector.style.backgroundColor = `var(--${elementTheme}-background-color)`;
+  setUpThemeSelect();
 
-    themeSelector.addEventListener('click', () => {
-      for (const themeSelector of themes) {
-        themeSelector.classList.remove('active');
-      }
-      themeSelector.classList.add('active');
-      theme = elementTheme;
-      setTheme(theme);
-      api.setTheme(theme);
-    });
-  }
-
-  const { stickerPacksMap, stickerPacksOrder } = await api.ready();
-  const stickerContainer = document.getElementById('sticker-list');
-  const stickerPackListDiv = document.getElementById('sticker-pack-list');
-  let stickerPackIDsOrder = stickerPacksOrder;
-
-  for (const stickerPackID of stickerPackIDsOrder) {
-    const stickerPack = stickerPacksMap[stickerPackID];
-    const { title, mainIcon, stickers, author, authorURL, storeURL } = stickerPack;
-
-    // Sticker main icon
-    const stickerIconDiv = document.createElement('div');
-    stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
-    stickerIconDiv.dataset.packID = stickerPackID;
-
-    const stickerIconImg = document.createElement('img');
-    stickerIconImg.src = mainIcon;
-    stickerIconDiv.appendChild(stickerIconImg);
-    stickerPackListDiv.appendChild(stickerIconDiv);
-
-    // Sticker pack
-    const stickerPackDiv = document.createElement('div');
-    stickerPackDiv.classList.add('sticker-pack');
-    stickerPackDiv.dataset.packID = stickerPackID;
-    stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
-
-    const stickerPackHeader = createElementFromHTML(/* html */ `
-<div class="sticker-pack-header">
-  <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
-  <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
-</div>
-`);
-    stickerPackDiv.appendChild(stickerPackHeader);
-
-    // loop through stickers
-    for (const stickerID of Object.keys(stickers)) {
-      const sticker = stickers[stickerID];
-      const stickerDiv = document.createElement('div');
-      stickerDiv.classList.add('sticker');
-      stickerDiv.dataset.stickerID = stickerID;
-      stickerDiv.dataset.type = sticker.type;
-      stickerDiv.dataset.packName = title;
-      stickerDiv.dataset.filepath = sticker.filepath;
-      stickerDiv.dataset.packID = stickerPackID;
-      stickerDiv.dataset.author = author;
-
-      const stickerImg = document.createElement('img');
-      stickerImg.src = sticker.filepath;
-
-      stickerDiv.appendChild(stickerImg);
-      stickerPackDiv.appendChild(stickerDiv);
-
-      // if special type
-      if (sticker.type !== 'static') {
-        stickerDiv.classList.add('special');
-        stickerDiv.dataset.specialPath = sticker.specialPath;
-        stickerDiv.addEventListener('mouseover', async (e) => {
-          const { specialPath } = e.currentTarget.dataset;
-          e.currentTarget.firstChild.src = specialPath;
-        });
-        stickerDiv.addEventListener('mouseout', async (e) => {
-          const { filepath } = e.currentTarget.dataset;
-          e.currentTarget.firstChild.src = filepath;
-        });
-      }
-
-      // on click send sticker
-      stickerDiv.addEventListener('click', async (e) => {
-        // determine whether special or not, send appropriate sticker path
-        const { type, filepath, specialPath } = e.currentTarget.dataset;
-        let stickerPath = filepath;
-        if (type !== 'static') {
-          stickerPath = specialPath;
-        }
-        api.sendSticker(stickerPath, { stickerPackID, title, author, resizeWidth });
-      });
-    }
-
-    stickerContainer.appendChild(stickerPackDiv);
-
-    // Scroll to sticker pack on hover
-    stickerIconDiv.addEventListener('mouseover', (e) => {
-      stickerPackDiv.scrollIntoView({ behavior: 'instant' });
-      // remove active from all sticker pack icons
-      document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
-      // add active to current sticker pack icon
-      if (!sorting) {
-        e.currentTarget.classList.add('active');
-      }
-    });
-  }
-
-  // Scroll sticker pack icons list when scrolling sticker packs
-  stickerContainer.addEventListener('scroll', (e) => {
-    // check if mouse is over stickerContainer
-    const stickerContainerRect = stickerContainer.getBoundingClientRect();
-    if (
-      mouseX >= stickerContainerRect.left &&
-      mouseX <= stickerContainerRect.right &&
-      mouseY >= stickerContainerRect.top &&
-      mouseY <= stickerContainerRect.bottom
-    ) {
-      const topElementOffset = stickerPackListDiv.offsetTop;
-      const scrollPos = e.currentTarget.scrollTop + topElementOffset;
-      const stickerPackDivs = document.getElementsByClassName('sticker-pack');
-      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon-wrapper');
-      for (let i = 0; i < stickerPackDivs.length; i++) {
-        const stickerPackDiv = stickerPackDivs[i];
-        const stickerPackIconDiv = stickerPackIconDivs[i];
-        const stickerPackDivTop = stickerPackDiv.offsetTop;
-        const stickerPackDivBottom = stickerPackDivTop + stickerPackDiv.offsetHeight;
-        if (scrollPos >= stickerPackDivTop && scrollPos <= stickerPackDivBottom) {
-          stickerPackIconDiv.scrollIntoView({ behavior: 'instant' });
-          stickerPackIconDiv.classList.add('active');
-        } else {
-          stickerPackIconDiv.classList.remove('active');
-        }
-      }
-      return;
-    }
-  });
+  populateStickerPacks();
 
   // Download sticker pack on add button
   const addButton = document.getElementById('add-button');
@@ -414,4 +258,168 @@ function createElementFromHTML(htmlString) {
   const div = document.createElement('div');
   div.innerHTML = htmlString.trim();
   return div.firstChild;
+}
+
+async function setUpThemeSelect() {
+  // change theme
+  let theme = await api.getTheme();
+  function setTheme(theme) {
+    const colors = [
+      'primary-color',
+      'background-color',
+      'white-color',
+      'red-color',
+      'green-color',
+      'yellow-color',
+      'gray-color',
+      'text-color',
+    ];
+    const root = document.documentElement;
+    for (const color of colors) {
+      root.style.setProperty(`--${color}`, `var(--${theme}-${color})`);
+    }
+  }
+  setTheme(theme);
+  const themeSelect = document.getElementById('theme-select');
+  const themes = [...themeSelect.children];
+  for (const themeSelector of themes) {
+    const elementTheme = themeSelector.dataset.theme;
+    if (elementTheme === theme) {
+      themeSelector.classList.add('active');
+    }
+    themeSelector.style.backgroundColor = `var(--${elementTheme}-background-color)`;
+
+    themeSelector.addEventListener('click', () => {
+      for (const themeSelector of themes) {
+        themeSelector.classList.remove('active');
+      }
+      themeSelector.classList.add('active');
+      theme = elementTheme;
+      setTheme(theme);
+      api.setTheme(theme);
+    });
+  }
+}
+
+async function populateStickerPacks() {
+  const { stickerPacksMap, stickerPacksOrder } = await api.ready();
+  const stickerContainer = document.getElementById('sticker-list');
+  const stickerPackListDiv = document.getElementById('sticker-pack-list');
+  let stickerPackIDsOrder = stickerPacksOrder;
+
+  for (const stickerPackID of stickerPackIDsOrder) {
+    const stickerPack = stickerPacksMap[stickerPackID];
+    const { title, mainIcon, stickers, author, authorURL, storeURL } = stickerPack;
+
+    // Sticker main icon
+    const stickerIconDiv = document.createElement('div');
+    stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
+    stickerIconDiv.dataset.packID = stickerPackID;
+
+    const stickerIconImg = document.createElement('img');
+    stickerIconImg.src = mainIcon;
+    stickerIconDiv.appendChild(stickerIconImg);
+    stickerPackListDiv.appendChild(stickerIconDiv);
+
+    // Sticker pack
+    const stickerPackDiv = document.createElement('div');
+    stickerPackDiv.classList.add('sticker-pack');
+    stickerPackDiv.dataset.packID = stickerPackID;
+    stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
+
+    const stickerPackHeader = createElementFromHTML(/* html */ `
+<div class="sticker-pack-header">
+  <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
+  <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
+</div>
+`);
+    stickerPackDiv.appendChild(stickerPackHeader);
+
+    // loop through stickers
+    for (const stickerID of Object.keys(stickers)) {
+      const sticker = stickers[stickerID];
+      const stickerDiv = document.createElement('div');
+      stickerDiv.classList.add('sticker');
+      stickerDiv.dataset.stickerID = stickerID;
+      stickerDiv.dataset.type = sticker.type;
+      stickerDiv.dataset.packName = title;
+      stickerDiv.dataset.filepath = sticker.filepath;
+      stickerDiv.dataset.packID = stickerPackID;
+      stickerDiv.dataset.author = author;
+
+      const stickerImg = document.createElement('img');
+      stickerImg.src = sticker.filepath;
+
+      stickerDiv.appendChild(stickerImg);
+      stickerPackDiv.appendChild(stickerDiv);
+
+      // if special type
+      if (sticker.type !== 'static') {
+        stickerDiv.classList.add('special');
+        stickerDiv.dataset.specialPath = sticker.specialPath;
+        stickerDiv.addEventListener('mouseover', async (e) => {
+          const { specialPath } = e.currentTarget.dataset;
+          e.currentTarget.firstChild.src = specialPath;
+        });
+        stickerDiv.addEventListener('mouseout', async (e) => {
+          const { filepath } = e.currentTarget.dataset;
+          e.currentTarget.firstChild.src = filepath;
+        });
+      }
+
+      // on click send sticker
+      stickerDiv.addEventListener('click', async (e) => {
+        // determine whether special or not, send appropriate sticker path
+        const { type, filepath, specialPath } = e.currentTarget.dataset;
+        let stickerPath = filepath;
+        if (type !== 'static') {
+          stickerPath = specialPath;
+        }
+        api.sendSticker(stickerPath, { stickerPackID, title, author, resizeWidth });
+      });
+    }
+
+    stickerContainer.appendChild(stickerPackDiv);
+
+    // Scroll to sticker pack on hover
+    stickerIconDiv.addEventListener('mouseover', (e) => {
+      stickerPackDiv.scrollIntoView({ behavior: 'instant' });
+      // remove active from all sticker pack icons
+      document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+      // add active to current sticker pack icon
+      if (!sorting) {
+        e.currentTarget.classList.add('active');
+      }
+    });
+  }
+
+  // Scroll sticker pack icons list when scrolling sticker packs
+  stickerContainer.addEventListener('scroll', (e) => {
+    // check if mouse is over stickerContainer
+    const stickerContainerRect = stickerContainer.getBoundingClientRect();
+    if (
+      mouseX >= stickerContainerRect.left &&
+      mouseX <= stickerContainerRect.right &&
+      mouseY >= stickerContainerRect.top &&
+      mouseY <= stickerContainerRect.bottom
+    ) {
+      const topElementOffset = stickerPackListDiv.offsetTop;
+      const scrollPos = e.currentTarget.scrollTop + topElementOffset;
+      const stickerPackDivs = document.getElementsByClassName('sticker-pack');
+      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon-wrapper');
+      for (let i = 0; i < stickerPackDivs.length; i++) {
+        const stickerPackDiv = stickerPackDivs[i];
+        const stickerPackIconDiv = stickerPackIconDivs[i];
+        const stickerPackDivTop = stickerPackDiv.offsetTop;
+        const stickerPackDivBottom = stickerPackDivTop + stickerPackDiv.offsetHeight;
+        if (scrollPos >= stickerPackDivTop && scrollPos <= stickerPackDivBottom) {
+          stickerPackIconDiv.scrollIntoView({ behavior: 'instant' });
+          stickerPackIconDiv.classList.add('active');
+        } else {
+          stickerPackIconDiv.classList.remove('active');
+        }
+      }
+      return;
+    }
+  });
 }
