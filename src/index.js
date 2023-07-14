@@ -8,7 +8,11 @@ const checkUpdate = require('./utils/checkUpdate');
 // Auto update, but not on first run
 const args = process.argv.slice(1);
 if (!args.includes('--squirrel-firstrun')) {
-  require('update-electron-app')();
+  // Only update on Windows
+  if (process.platform === 'win32') {
+    console.log('Checking for updates...');
+    require('update-electron-app')();
+  }
 }
 
 let window;
@@ -114,11 +118,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+  // Show window on clicking dock icon
+  window.show();
 });
 
 // In this file you can include the rest of your app's specific main process

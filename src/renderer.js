@@ -451,6 +451,6 @@ async function setUpUpdateModal() {
     }
   }
   checkUpdates();
-  // Check once per hour
-  setInterval(checkUpdates, 60 * 60 * 1000);
+  // Check once per day
+  setInterval(checkUpdates, 24 * 60 * 60 * 1000);
 }

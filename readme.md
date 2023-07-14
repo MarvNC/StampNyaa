@@ -33,6 +33,9 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases/latest) and download the appropriate installer for your operating system in "Assets" (MacOS users should download `darwin`).
 
+> **Warning**
+> For **MacOS users**, you must enable accessibility features for the app to automatically press Command+V to paste stickers. It should prompt you to enable this the first time you try to paste a sticker, but if it doesn't, you can [enable it manually](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac). To do this, go to `System Settings > Privacy & Security > Accessibility` and check the box next to StampNyaa.
+
 ## 📚 About
 
 ### 🔧 Usage
