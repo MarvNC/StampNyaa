@@ -1,18 +1,44 @@
+// Always updated x/y pos
 let mouseX, mouseY;
+
+// Whether the user is currently moving a sticker pack icon
 let sorting = false;
 document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
+// Size to resize stickers to
 let resizeWidth;
 
-// close on X button
-const closeButton = document.getElementById('close-button');
-closeButton.addEventListener('click', () => {
-  api.closeWindow();
+window.addEventListener('DOMContentLoaded', async () => {
+  setUpMenuBarButtons();
+
+  setUpThemeSelect();
+
+  populateStickerPacks();
+
+  setUpAddStickerModal();
+
+  setUpSettingsModal();
+
+  setUpUpdateModal();
 });
 
-window.addEventListener('DOMContentLoaded', async () => {
+function createElementFromHTML(htmlString) {
+  const div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  return div.firstChild;
+}
+
+async function setUpMenuBarButtons() {
+  // close on X button
+  const closeButton = document.getElementById('close-button');
+  closeButton.addEventListener('click', () => {
+    api.closeWindow();
+  });
+}
+
+async function setUpThemeSelect() {
   // change theme
   let theme = await api.getTheme();
   function setTheme(theme) {
@@ -51,15 +77,16 @@ window.addEventListener('DOMContentLoaded', async () => {
       api.setTheme(theme);
     });
   }
+}
 
+async function populateStickerPacks() {
   const { stickerPacksMap, stickerPacksOrder } = await api.ready();
   const stickerContainer = document.getElementById('sticker-list');
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
   let stickerPackIDsOrder = stickerPacksOrder;
 
-  for (const stickerPackID of stickerPackIDsOrder) {
-    const stickerPack = stickerPacksMap[stickerPackID];
-    const { title, mainIcon, stickers, author, authorURL, storeURL } = stickerPack;
+  function setUpStickerPack(stickerPackID, stickerPack) {
+    const { title, mainIcon, stickers, author = '', authorURL = '', storeURL = '' } = stickerPack;
 
     // Sticker main icon
     const stickerIconDiv = document.createElement('div');
@@ -79,8 +106,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const stickerPackHeader = createElementFromHTML(/* html */ `
 <div class="sticker-pack-header">
-  <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
-  <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
+<a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
+<a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
 </div>
 `);
     stickerPackDiv.appendChild(stickerPackHeader);
@@ -143,6 +170,16 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Set up favorites
+
+  // Set up most used
+
+  for (const stickerPackID of stickerPackIDsOrder) {
+    const stickerPack = stickerPacksMap[stickerPackID];
+
+    setUpStickerPack(stickerPackID, stickerPack);
+  }
+
   // Scroll sticker pack icons list when scrolling sticker packs
   stickerContainer.addEventListener('scroll', (e) => {
     // check if mouse is over stickerContainer
@@ -156,10 +193,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       const topElementOffset = stickerPackListDiv.offsetTop;
       const scrollPos = e.currentTarget.scrollTop + topElementOffset;
       const stickerPackDivs = document.getElementsByClassName('sticker-pack');
-      const stickerPackIconDivs = document.getElementsByClassName('sticker-pack-icon-wrapper');
       for (let i = 0; i < stickerPackDivs.length; i++) {
         const stickerPackDiv = stickerPackDivs[i];
-        const stickerPackIconDiv = stickerPackIconDivs[i];
+        const packID = stickerPackDiv.dataset.packID;
+        const stickerPackIconDiv = document.querySelector(
+          `.sticker-pack-icon-wrapper[data-pack-i-d="${packID}"]`
+        );
+        if (!stickerPackIconDiv) continue;
         const stickerPackDivTop = stickerPackDiv.offsetTop;
         const stickerPackDivBottom = stickerPackDivTop + stickerPackDiv.offsetHeight;
         if (scrollPos >= stickerPackDivTop && scrollPos <= stickerPackDivBottom) {
@@ -173,6 +213,46 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Sort sticker packs on drag
+  const sortable = new Draggable.Sortable(stickerPackListDiv, {
+    draggable: '.sticker-pack-icon-wrapper',
+  });
+  sortable.on('sortable:start', (event) => {
+    sorting = true;
+  });
+  sortable.on('sortable:sorted', (event) => {
+    // add active to sorted element
+    event.data.dragEvent.data.source.classList.add('active');
+  });
+  sortable.on('sortable:stop', (event) => {
+    sorting = false;
+    // rearrange sticker packs
+    const rearrangedStickerPack = event.dragEvent.data.source;
+    const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
+    const rearrangedStickerPackContainer = document.getElementById(
+      `sticker-pack-container-${rearrangedStickerPackID}`
+    );
+    stickerContainer.removeChild(rearrangedStickerPackContainer);
+    // Remove rearrangedStickerPackID from stickerPackIDsOrder and insert it at the new index
+    stickerPackIDsOrder = stickerPackIDsOrder.filter((id) => id !== rearrangedStickerPackID);
+    stickerPackIDsOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
+    // event.data.newIndex is the index of the element in the list
+    if (event.data.newIndex !== stickerPackIDsOrder.length - 1) {
+      stickerContainer.insertBefore(
+        rearrangedStickerPackContainer,
+        document.getElementById(
+          'sticker-pack-container-' + stickerPackIDsOrder[event.data.newIndex + 1]
+        )
+      );
+    } else {
+      stickerContainer.appendChild(rearrangedStickerPackContainer);
+    }
+
+    api.setStickerPackOrder(stickerPackIDsOrder);
+  });
+}
+
+async function setUpAddStickerModal() {
   // Download sticker pack on add button
   const addButton = document.getElementById('add-button');
   const addStickerModalBackground = document.getElementById('add-sticker-background');
@@ -250,9 +330,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     }
   };
+}
 
-  // Settings modal stuff
-
+async function setUpSettingsModal() {
   const settingsModalBackground = document.getElementById('settings-background');
   const settingsButton = document.getElementById('settings-button');
 
@@ -352,7 +432,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Version
   const version = await api.getVersion();
   document.getElementById('versionString').textContent = version;
+}
 
+async function setUpUpdateModal() {
   // Update modal
   const updateModalBackground = document.getElementById('update-background');
   const updateText = document.getElementById('update-text');
@@ -371,47 +453,4 @@ window.addEventListener('DOMContentLoaded', async () => {
   checkUpdates();
   // Check once per day
   setInterval(checkUpdates, 24 * 60 * 60 * 1000);
-
-  // Sort sticker packs on drag
-  const sortable = new Draggable.Sortable(stickerPackListDiv, {
-    draggable: '.sticker-pack-icon-wrapper',
-  });
-  sortable.on('sortable:start', (event) => {
-    sorting = true;
-  });
-  sortable.on('sortable:sorted', (event) => {
-    // add active to sorted element
-    event.data.dragEvent.data.source.classList.add('active');
-  });
-  sortable.on('sortable:stop', (event) => {
-    sorting = false;
-    // rearrange sticker packs
-    const rearrangedStickerPack = event.dragEvent.data.source;
-    const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
-    const rearrangedStickerPackContainer = document.getElementById(
-      `sticker-pack-container-${rearrangedStickerPackID}`
-    );
-    stickerContainer.removeChild(rearrangedStickerPackContainer);
-    stickerPackIDsOrder = stickerPackIDsOrder.filter((id) => id !== rearrangedStickerPackID);
-    stickerPackIDsOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
-    // event.data.newIndex is the index of the element in the list
-    if (event.data.newIndex !== stickerPackIDsOrder.length - 1) {
-      stickerContainer.insertBefore(
-        rearrangedStickerPackContainer,
-        document.getElementById(
-          'sticker-pack-container-' + stickerPackIDsOrder[event.data.newIndex + 1]
-        )
-      );
-    } else {
-      stickerContainer.appendChild(rearrangedStickerPackContainer);
-    }
-
-    api.setStickerPackOrder(stickerPackIDsOrder);
-  });
-});
-
-function createElementFromHTML(htmlString) {
-  const div = document.createElement('div');
-  div.innerHTML = htmlString.trim();
-  return div.firstChild;
 }
