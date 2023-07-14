@@ -1,99 +1,23 @@
+// Always updated x/y pos
 let mouseX, mouseY;
+
+// Whether the user is currently moving a sticker pack icon
 let sorting = false;
 document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
 });
+// Size to resize stickers to
 let resizeWidth;
 
-// close on X button
-const closeButton = document.getElementById('close-button');
-closeButton.addEventListener('click', () => {
-  api.closeWindow();
-});
-
 window.addEventListener('DOMContentLoaded', async () => {
+  setUpMenuBarButtons();
+
   setUpThemeSelect();
 
   populateStickerPacks();
 
-  // Download sticker pack on add button
-  const addButton = document.getElementById('add-button');
-  const addStickerModalBackground = document.getElementById('add-sticker-background');
-  const addStickerInput = document.getElementById('add-sticker-input');
-  const addStickerButton = document.getElementById('add-sticker-button');
-  const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
-
-  let downloadActive = false;
-
-  function errorButton(addStickerButton) {
-    addStickerButton.classList.add('error');
-    addStickerButton.firstElementChild.textContent = 'close';
-    setTimeout(() => {
-      addStickerButton.classList.remove('error');
-      addStickerButton.firstElementChild.textContent = 'check';
-    }, 600);
-  }
-
-  addButton.addEventListener('click', async () => {
-    addStickerModalBackground.style.display = 'block';
-    addStickerInput.focus();
-  });
-
-  addStickerModalBackground.addEventListener('click', async (e) => {
-    if (e.target === addStickerModalBackground && !downloadActive) {
-      addStickerModalBackground.style.display = 'none';
-      window.location.reload();
-    }
-  });
-
-  addStickerButton.addEventListener('click', async () => {
-    if (downloadActive) {
-      return;
-    }
-    const url = addStickerInput.value;
-    if (!lineURLRegex.test(url)) {
-      errorButton(addStickerButton);
-      return;
-    }
-
-    api.downloadStickerPack(url);
-
-    downloadActive = true;
-    addStickerButton.classList.add('loading');
-    addStickerButton.firstElementChild.textContent = 'more_horiz';
-  });
-
-  const addStickerDownloadFeedback = document.getElementById('add-sticker-download-feedback');
-  const downloadProgressBar = document.getElementById('download-progress');
-  const addStickerTitle = document.getElementById('add-sticker-title');
-  const progressText = document.getElementById('progress-text');
-
-  window.onmessage = (event) => {
-    // Updates the progress bar and button
-    function finishDownload(addStickerButton) {
-      downloadActive = false;
-      addStickerButton.classList.remove('loading');
-      addStickerButton.firstElementChild.textContent = 'check';
-    }
-    const data = event.data;
-    if (data.type === 'download-sticker-pack') {
-      if (data.error) {
-        finishDownload(addStickerButton);
-        setTimeout(() => {
-          errorButton(addStickerButton);
-        }, 100);
-        return;
-      }
-      addStickerDownloadFeedback.style.display = 'block';
-      addStickerTitle.textContent = data.title;
-      downloadProgressBar.style.width = `${(data.progress / data.stickerCount) * 100}%`;
-      progressText.textContent = `${data.progress}/${data.stickerCount}`;
-      if (data.progress === data.stickerCount) {
-        finishDownload(addStickerButton);
-      }
-    }
-  };
+  setUpAddStickerModal();
 
   // Settings modal stuff
 
@@ -215,49 +139,20 @@ window.addEventListener('DOMContentLoaded', async () => {
   checkUpdates();
   // Check once per hour
   setInterval(checkUpdates, 60 * 60 * 1000);
-
-  // Sort sticker packs on drag
-  const sortable = new Draggable.Sortable(stickerPackListDiv, {
-    draggable: '.sticker-pack-icon-wrapper',
-  });
-  sortable.on('sortable:start', (event) => {
-    sorting = true;
-  });
-  sortable.on('sortable:sorted', (event) => {
-    // add active to sorted element
-    event.data.dragEvent.data.source.classList.add('active');
-  });
-  sortable.on('sortable:stop', (event) => {
-    sorting = false;
-    // rearrange sticker packs
-    const rearrangedStickerPack = event.dragEvent.data.source;
-    const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
-    const rearrangedStickerPackContainer = document.getElementById(
-      `sticker-pack-container-${rearrangedStickerPackID}`
-    );
-    stickerContainer.removeChild(rearrangedStickerPackContainer);
-    stickerPackIDsOrder = stickerPackIDsOrder.filter((id) => id !== rearrangedStickerPackID);
-    stickerPackIDsOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
-    // event.data.newIndex is the index of the element in the list
-    if (event.data.newIndex !== stickerPackIDsOrder.length - 1) {
-      stickerContainer.insertBefore(
-        rearrangedStickerPackContainer,
-        document.getElementById(
-          'sticker-pack-container-' + stickerPackIDsOrder[event.data.newIndex + 1]
-        )
-      );
-    } else {
-      stickerContainer.appendChild(rearrangedStickerPackContainer);
-    }
-
-    api.setStickerPackOrder(stickerPackIDsOrder);
-  });
 });
 
 function createElementFromHTML(htmlString) {
   const div = document.createElement('div');
   div.innerHTML = htmlString.trim();
   return div.firstChild;
+}
+
+async function setUpMenuBarButtons() {
+  // close on X button
+  const closeButton = document.getElementById('close-button');
+  closeButton.addEventListener('click', () => {
+    api.closeWindow();
+  });
 }
 
 async function setUpThemeSelect() {
@@ -422,4 +317,121 @@ async function populateStickerPacks() {
       return;
     }
   });
+
+  // Sort sticker packs on drag
+  const sortable = new Draggable.Sortable(stickerPackListDiv, {
+    draggable: '.sticker-pack-icon-wrapper',
+  });
+  sortable.on('sortable:start', (event) => {
+    sorting = true;
+  });
+  sortable.on('sortable:sorted', (event) => {
+    // add active to sorted element
+    event.data.dragEvent.data.source.classList.add('active');
+  });
+  sortable.on('sortable:stop', (event) => {
+    sorting = false;
+    // rearrange sticker packs
+    const rearrangedStickerPack = event.dragEvent.data.source;
+    const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
+    const rearrangedStickerPackContainer = document.getElementById(
+      `sticker-pack-container-${rearrangedStickerPackID}`
+    );
+    stickerContainer.removeChild(rearrangedStickerPackContainer);
+    stickerPackIDsOrder = stickerPackIDsOrder.filter((id) => id !== rearrangedStickerPackID);
+    stickerPackIDsOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
+    // event.data.newIndex is the index of the element in the list
+    if (event.data.newIndex !== stickerPackIDsOrder.length - 1) {
+      stickerContainer.insertBefore(
+        rearrangedStickerPackContainer,
+        document.getElementById(
+          'sticker-pack-container-' + stickerPackIDsOrder[event.data.newIndex + 1]
+        )
+      );
+    } else {
+      stickerContainer.appendChild(rearrangedStickerPackContainer);
+    }
+
+    api.setStickerPackOrder(stickerPackIDsOrder);
+  });
+}
+
+async function setUpAddStickerModal() {
+  // Download sticker pack on add button
+  const addButton = document.getElementById('add-button');
+  const addStickerModalBackground = document.getElementById('add-sticker-background');
+  const addStickerInput = document.getElementById('add-sticker-input');
+  const addStickerButton = document.getElementById('add-sticker-button');
+  const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
+
+  let downloadActive = false;
+
+  function errorButton(addStickerButton) {
+    addStickerButton.classList.add('error');
+    addStickerButton.firstElementChild.textContent = 'close';
+    setTimeout(() => {
+      addStickerButton.classList.remove('error');
+      addStickerButton.firstElementChild.textContent = 'check';
+    }, 600);
+  }
+
+  addButton.addEventListener('click', async () => {
+    addStickerModalBackground.style.display = 'block';
+    addStickerInput.focus();
+  });
+
+  addStickerModalBackground.addEventListener('click', async (e) => {
+    if (e.target === addStickerModalBackground && !downloadActive) {
+      addStickerModalBackground.style.display = 'none';
+      window.location.reload();
+    }
+  });
+
+  addStickerButton.addEventListener('click', async () => {
+    if (downloadActive) {
+      return;
+    }
+    const url = addStickerInput.value;
+    if (!lineURLRegex.test(url)) {
+      errorButton(addStickerButton);
+      return;
+    }
+
+    api.downloadStickerPack(url);
+
+    downloadActive = true;
+    addStickerButton.classList.add('loading');
+    addStickerButton.firstElementChild.textContent = 'more_horiz';
+  });
+
+  const addStickerDownloadFeedback = document.getElementById('add-sticker-download-feedback');
+  const downloadProgressBar = document.getElementById('download-progress');
+  const addStickerTitle = document.getElementById('add-sticker-title');
+  const progressText = document.getElementById('progress-text');
+
+  window.onmessage = (event) => {
+    // Updates the progress bar and button
+    function finishDownload(addStickerButton) {
+      downloadActive = false;
+      addStickerButton.classList.remove('loading');
+      addStickerButton.firstElementChild.textContent = 'check';
+    }
+    const data = event.data;
+    if (data.type === 'download-sticker-pack') {
+      if (data.error) {
+        finishDownload(addStickerButton);
+        setTimeout(() => {
+          errorButton(addStickerButton);
+        }, 100);
+        return;
+      }
+      addStickerDownloadFeedback.style.display = 'block';
+      addStickerTitle.textContent = data.title;
+      downloadProgressBar.style.width = `${(data.progress / data.stickerCount) * 100}%`;
+      progressText.textContent = `${data.progress}/${data.stickerCount}`;
+      if (data.progress === data.stickerCount) {
+        finishDownload(addStickerButton);
+      }
+    }
+  };
 }
