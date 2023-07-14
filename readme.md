@@ -81,9 +81,7 @@ StampNyaa supports adding your own sticker packs to the app.
 
 - Animated stickers are not supported in certain apps like Discord because they don't support animated pngs for whatever reason 💢. I might add a workaround converting them to `gif` in the future.
 - MacOS users will need to grant the app accessibility permissions for some functions.
-- Autoupdate does not work on MacOS nor Linux. You will need to manually download the latest releases - I recommend watching the releases on GitHub by selecting the "custom" option for watching in the top right.
-
-![Watch Releases](img/WatchReleases.png)
+- Autoupdate does not work on MacOS nor Linux.
 
 ## 🤝 Acknowledgements & Contribution
 
