@@ -134,23 +134,21 @@ async function populateStickerPacks() {
     stickerPackDiv.appendChild(stickerPackHeader);
 
     // loop through stickers
-    for (const stickerID of Object.keys(stickers)) {
-      stickerPackDiv.appendChild(createSticker(stickerPackID, stickerID, stickerPack));
+    for (const sticker of stickers) {
+      stickerPackDiv.appendChild(createSticker(sticker));
     }
 
     stickerContainer.appendChild(stickerPackDiv);
   }
 
-  function createSticker(stickerPackID, stickerID, { title, author, stickers }) {
-    const sticker = stickers[stickerID];
+  function createSticker(sticker) {
+    const stickerID = sticker.stickerID;
     const stickerDiv = document.createElement('div');
     stickerDiv.classList.add('sticker');
     stickerDiv.dataset.stickerID = stickerID;
     stickerDiv.dataset.type = sticker.type;
-    stickerDiv.dataset.packName = title;
     stickerDiv.dataset.filepath = sticker.filepath;
-    stickerDiv.dataset.packID = stickerPackID;
-    stickerDiv.dataset.author = author;
+    stickerDiv.dataset.packID = sticker.stickerPackID;
 
     const stickerImg = document.createElement('img');
     stickerImg.src = sticker.filepath;
@@ -195,15 +193,14 @@ async function populateStickerPacks() {
   // Set up favorites
   const favorites = await api.getFavorites();
   setUpStickerPack('favorites', {
-    title: '<span class="material-symbols-outlined">star</span>Favorites',
+    title: '<span class="material-symbols-outlined">star</span> Favorites',
     author: '',
-    stickers: favorites.reduce((acc, { PackID, ID }) => {
-      if (!(PackID in acc)) {
-        acc[PackID] = {};
-      }
-      acc[PackID][ID] = stickerPacksMap[PackID].stickers[ID];
-      return acc;
-    }, {}),
+    stickers: favorites.map(({ PackID, StickerID }) => {
+      // find sticker pack
+      const stickerPack = stickerPacksMap[PackID];
+      const sticker = stickerPack.stickers.find((sticker) => sticker.stickerID === StickerID);
+      return sticker;
+    }),
     storeURL: 'https://store.line.me/stickershop/',
     noIcon: true,
   });
@@ -218,14 +215,24 @@ async function populateStickerPacks() {
       // remove from favorites
       stickerDiv.remove();
     } else {
-      const stickerPackDiv = createSticker(PackID, ID, stickerPacksMap[PackID]);
+      const stickerPackDiv = createSticker(
+        stickerPacksMap[PackID].stickers.find((sticker) => sticker.stickerID === ID)
+      );
       favoritesPackDiv.appendChild(stickerPackDiv);
     }
     updateFavorites();
   }
 
   function updateFavorites() {
-    const favoritesPackDiv = document.getElementById('sticker-pack-container-favorites');
+    const favoritedStickers = [
+      ...document.getElementById('sticker-pack-container-favorites').querySelectorAll('.sticker'),
+    ];
+    api.setFavorites(
+      favoritedStickers.map((stickerDiv) => ({
+        PackID: stickerDiv.dataset.packID,
+        StickerID: stickerDiv.dataset.stickerID,
+      }))
+    );
   }
 
   // Set up most used

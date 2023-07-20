@@ -10,29 +10,29 @@ const sqlHandler = {
       console.log('Connected to the stickers database.');
     });
     // Create favorites table if it doesn't exist
-    // PackID/ID key and position value
+    // PackID/StickerID key and position value
     this.db.run(
       `CREATE TABLE IF NOT EXISTS favorites (
         PackID TEXT NOT NULL,
-        ID TEXT NOT NULL,
+        StickerID TEXT NOT NULL,
         position INTEGER NOT NULL,
-        PRIMARY KEY (packID, ID)
+        PRIMARY KEY (packID, StickerID)
       )`
     );
     // Create most used table if it doesn't exist
-    // PackID/ID key and count value
+    // PackID/StickerID key and count value
     this.db.run(
       `CREATE TABLE IF NOT EXISTS stickerUses (
         PackID TEXT NOT NULL,
-        ID TEXT NOT NULL,
+        StickerID TEXT NOT NULL,
         count INTEGER NOT NULL,
-        PRIMARY KEY (packID, ID)
+        PRIMARY KEY (packID, StickerID)
       )`
     );
   },
   /**
    * Gets the favorites
-   * @returns {Promise<Array>} Array of objects of the form {PackID, ID, position}
+   * @returns {Promise<Array>} Array of objects of the form {PackID, StickerID, position}
    */
   getFavorites: function () {
     return new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@ const sqlHandler = {
   },
   /**
    * Sets the favorites
-   * @param {Object<Array>} favorites Array of objects of the form {PackID, ID}; position is the index in the array
+   * @param {Object<Array>} favorites Array of objects of the form {PackID, StickerID}; position is the index in the array
    * @returns
    */
   setFavorites: function (favorites) {
@@ -54,8 +54,8 @@ const sqlHandler = {
       this.db.serialize(() => {
         this.db.run('DELETE FROM favorites');
         const statement = this.db.prepare('INSERT INTO favorites VALUES (?, ?, ?)');
-        for (const [position, { PackID, ID }] of favorites.entries()) {
-          statement.run(PackID, ID, position);
+        for (const [position, { PackID, StickerID }] of favorites.entries()) {
+          statement.run(PackID, StickerID, position);
         }
         statement.finalize();
 
@@ -79,14 +79,14 @@ const sqlHandler = {
   },
   /**
    * Increments the count of the given sticker
-   * @param {Object} sticker Object of the form {PackID, ID}
+   * @param {Object} sticker Object of the form {PackID, StickerID}
    */
   useSticker: function (sticker) {
     return new Promise((resolve, reject) => {
       this.db.run(
-        `INSERT INTO stickerUses (PackID, ID, count) VALUES (?, ?, 1)
-        ON CONFLICT(PackID, ID) DO UPDATE SET count = count + 1`,
-        [sticker.PackID, sticker.ID],
+        `INSERT INTO stickerUses (PackID, StickerID, count) VALUES (?, ?, 1)
+        ON CONFLICT(PackID, StickerID) DO UPDATE SET count = count + 1`,
+        [sticker.PackID, sticker.StickerID],
         (err) => {
           if (err) {
             reject(err);
