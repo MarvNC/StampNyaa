@@ -65,7 +65,7 @@ function getAllStickerPacks(stickerPacksDir) {
         const stickerID = path.parse(sticker).name;
         const filepath = path.join(stickerPacksDir, pack, sticker);
         const type = 'static';
-        stickerPackData.stickers[stickerID] = { filepath, type };
+        stickerPackData.stickers[stickerID] = { filepath, type, stickerPackID: pack };
       }
     }
     for (const sticker of specialStickers) {
@@ -75,6 +75,12 @@ function getAllStickerPacks(stickerPacksDir) {
       const type = path.parse(sticker).name.split('_')[1];
       stickerPackData.stickers[stickerID].type = type;
     }
+    // convert stickers object to array
+    stickerPackData.stickers = Object.entries(stickerPackData.stickers).map(
+      ([stickerID, sticker]) => {
+        return { stickerID, ...sticker };
+      }
+    );
     stickerPacksMap[pack] = stickerPackData;
   }
   return stickerPacksMap;

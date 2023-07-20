@@ -4,6 +4,7 @@ const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
 const downloadPack = require('./utils/lineDownloader');
 const checkUpdate = require('./utils/checkUpdate');
+const sqlHandler = require('./utils/sqlHandler');
 
 // Auto update, but not on first run
 const args = process.argv.slice(1);
@@ -33,10 +34,7 @@ const config = new Store({
     resizeWidth: 160,
   },
 });
-const stickersDataStore = new Store({
-  name: 'stickers',
-  cwd: store.get('stickersPath'),
-});
+sqlHandler.init(path.join(store.get('stickersPath'), 'stickers.db'));
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -173,6 +171,7 @@ ipcMain.handle('ready', () => {
 
 ipcMain.on('send-sticker', (event, stickerPath, settings) => {
   stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
+  sqlHandler.useSticker({ PackID: settings.stickerPackID, StickerID: settings.stickerID });
 });
 
 ipcMain.on('download-sticker-pack', (event, url) => {
@@ -245,4 +244,14 @@ ipcMain.handle('get-updates', async () => {
 
 ipcMain.handle('get-version', () => {
   return app.getVersion();
+});
+
+ipcMain.on('set-favorites', (event, favorites) => {
+  sqlHandler.setFavorites(favorites);
+});
+ipcMain.handle('get-favorites', () => {
+  return sqlHandler.getFavorites();
+});
+ipcMain.handle('get-most-used', () => {
+  return sqlHandler.getMostUsed(8);
 });

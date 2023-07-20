@@ -85,18 +85,39 @@ async function populateStickerPacks() {
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
   let stickerPackIDsOrder = stickerPacksOrder;
 
-  function setUpStickerPack(stickerPackID, stickerPack) {
-    const { title, mainIcon, stickers, author = '', authorURL = '', storeURL = '' } = stickerPack;
+  function makeAndSetUpStickerPack(stickerPackID, stickerPack) {
+    const {
+      title,
+      mainIcon,
+      stickers,
+      author = '',
+      authorURL = '',
+      storeURL = '',
+      noIcon = false,
+    } = stickerPack;
 
     // Sticker main icon
-    const stickerIconDiv = document.createElement('div');
-    stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
-    stickerIconDiv.dataset.packID = stickerPackID;
+    if (!noIcon) {
+      const stickerIconDiv = document.createElement('div');
+      stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
+      stickerIconDiv.dataset.packID = stickerPackID;
 
-    const stickerIconImg = document.createElement('img');
-    stickerIconImg.src = mainIcon;
-    stickerIconDiv.appendChild(stickerIconImg);
-    stickerPackListDiv.appendChild(stickerIconDiv);
+      const stickerIconImg = document.createElement('img');
+      stickerIconImg.src = mainIcon;
+      stickerIconDiv.appendChild(stickerIconImg);
+      stickerPackListDiv.appendChild(stickerIconDiv);
+
+      // Scroll to sticker pack on hover
+      stickerIconDiv.addEventListener('mouseover', (e) => {
+        stickerPackDiv.scrollIntoView({ behavior: 'instant' });
+        // remove active from all sticker pack icons
+        document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+        // add active to current sticker pack icon
+        if (!sorting) {
+          e.currentTarget.classList.add('active');
+        }
+      });
+    }
 
     // Sticker pack
     const stickerPackDiv = document.createElement('div');
@@ -113,71 +134,156 @@ async function populateStickerPacks() {
     stickerPackDiv.appendChild(stickerPackHeader);
 
     // loop through stickers
-    for (const stickerID of Object.keys(stickers)) {
-      const sticker = stickers[stickerID];
-      const stickerDiv = document.createElement('div');
-      stickerDiv.classList.add('sticker');
-      stickerDiv.dataset.stickerID = stickerID;
-      stickerDiv.dataset.type = sticker.type;
-      stickerDiv.dataset.packName = title;
-      stickerDiv.dataset.filepath = sticker.filepath;
-      stickerDiv.dataset.packID = stickerPackID;
-      stickerDiv.dataset.author = author;
+    for (const sticker of stickers) {
+      stickerPackDiv.appendChild(createSticker(sticker));
+    }
 
-      const stickerImg = document.createElement('img');
-      stickerImg.src = sticker.filepath;
+    return stickerPackDiv;
+  }
 
-      stickerDiv.appendChild(stickerImg);
-      stickerPackDiv.appendChild(stickerDiv);
+  function createSticker(sticker) {
+    const stickerID = sticker.stickerID;
+    const stickerDiv = document.createElement('div');
+    stickerDiv.classList.add('sticker');
+    stickerDiv.dataset.stickerID = stickerID;
+    stickerDiv.dataset.type = sticker.type;
+    stickerDiv.dataset.filepath = sticker.filepath;
+    stickerDiv.dataset.packID = sticker.stickerPackID;
 
-      // if special type
-      if (sticker.type !== 'static') {
-        stickerDiv.classList.add('special');
-        stickerDiv.dataset.specialPath = sticker.specialPath;
-        stickerDiv.addEventListener('mouseover', async (e) => {
-          const { specialPath } = e.currentTarget.dataset;
-          e.currentTarget.firstChild.src = specialPath;
-        });
-        stickerDiv.addEventListener('mouseout', async (e) => {
-          const { filepath } = e.currentTarget.dataset;
-          e.currentTarget.firstChild.src = filepath;
-        });
-      }
+    const stickerImg = document.createElement('img');
+    stickerImg.src = sticker.filepath;
 
-      // on click send sticker
-      stickerDiv.addEventListener('click', async (e) => {
-        // determine whether special or not, send appropriate sticker path
-        const { type, filepath, specialPath } = e.currentTarget.dataset;
-        let stickerPath = filepath;
-        if (type !== 'static') {
-          stickerPath = specialPath;
-        }
-        api.sendSticker(stickerPath, { stickerPackID, title, author, resizeWidth });
+    stickerDiv.appendChild(stickerImg);
+
+    // if special type
+    if (sticker.type !== 'static') {
+      stickerDiv.classList.add('special');
+      stickerDiv.dataset.specialPath = sticker.specialPath;
+      stickerDiv.addEventListener('mouseover', async (e) => {
+        const { specialPath } = e.currentTarget.dataset;
+        e.currentTarget.firstChild.src = specialPath;
+      });
+      stickerDiv.addEventListener('mouseout', async (e) => {
+        const { filepath } = e.currentTarget.dataset;
+        e.currentTarget.firstChild.src = filepath;
       });
     }
 
-    stickerContainer.appendChild(stickerPackDiv);
-
-    // Scroll to sticker pack on hover
-    stickerIconDiv.addEventListener('mouseover', (e) => {
-      stickerPackDiv.scrollIntoView({ behavior: 'instant' });
-      // remove active from all sticker pack icons
-      document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
-      // add active to current sticker pack icon
-      if (!sorting) {
-        e.currentTarget.classList.add('active');
+    // on click send sticker
+    stickerDiv.addEventListener('click', async (e) => {
+      // determine whether special or not, send appropriate sticker path
+      const { type, filepath, specialPath } = e.currentTarget.dataset;
+      let stickerPath = filepath;
+      if (type !== 'static') {
+        stickerPath = specialPath;
       }
+      api
+        .sendSticker(stickerPath, {
+          stickerID: sticker.stickerID,
+          stickerPackID: sticker.stickerPackID,
+          title: stickerPacksMap[sticker.stickerPackID].title,
+          author: stickerPacksMap[sticker.stickerPackID].author,
+          resizeWidth,
+        })
+        .then(() => {
+          updateMostUsed();
+        });
     });
+
+    // on right click add to favorites
+    stickerDiv.addEventListener('contextmenu', async (e) => {
+      e.preventDefault();
+      const { packID, stickerID } = e.currentTarget.dataset;
+      toggleFavorite(packID, stickerID);
+    });
+
+    return stickerDiv;
   }
 
-  // Set up favorites
-
   // Set up most used
+  function updateMostUsed() {
+    let mostUsedDiv = document.getElementById('sticker-pack-container-most-used');
+    if (!mostUsedDiv) {
+      mostUsedDiv = document.createElement('div');
+      mostUsedDiv.classList.add('sticker-pack');
+      mostUsedDiv.id = 'sticker-pack-container-most-used';
+      stickerContainer.appendChild(mostUsedDiv);
+    }
+    // reset most used contents
+    mostUsedDiv.innerHTML = '';
+
+    api.getMostUsed().then((mostUsed) => {
+      const newDiv = makeAndSetUpStickerPack('most-used', {
+        title: '<span class="material-symbols-outlined">history</span> Most Used',
+        author: '',
+        stickers: mostUsed.map(({ PackID, StickerID }) => {
+          // find sticker pack
+          const stickerPack = stickerPacksMap[PackID];
+          const sticker = stickerPack.stickers.find((sticker) => sticker.stickerID === StickerID);
+          return sticker;
+        }),
+        storeURL: 'https://store.line.me/stickershop/',
+        noIcon: true,
+      });
+      // reinsert most used at the top
+      stickerContainer.insertBefore(newDiv, mostUsedDiv);
+      // delete old most used
+      stickerContainer.removeChild(mostUsedDiv);
+    });
+  }
+  updateMostUsed();
+
+  // Set up favorites
+  const favorites = await api.getFavorites();
+  const favoritesDiv = makeAndSetUpStickerPack('favorites', {
+    title: '<span class="material-symbols-outlined">star</span> Favorites',
+    author: '',
+    stickers: favorites.map(({ PackID, StickerID }) => {
+      // find sticker pack
+      const stickerPack = stickerPacksMap[PackID];
+      const sticker = stickerPack.stickers.find((sticker) => sticker.stickerID === StickerID);
+      return sticker;
+    }),
+    storeURL: 'https://store.line.me/stickershop/',
+    noIcon: true,
+  });
+  stickerContainer.appendChild(favoritesDiv);
+
+  function toggleFavorite(PackID, ID) {
+    const favoritesPackDiv = document.getElementById('sticker-pack-container-favorites');
+    // check if sticker already favorited
+    const stickerDiv = favoritesPackDiv.querySelector(
+      `.sticker[data-pack-i-d="${PackID}"][data-sticker-i-d="${ID}"]`
+    );
+    if (stickerDiv) {
+      // remove from favorites
+      stickerDiv.remove();
+    } else {
+      const stickerPackDiv = createSticker(
+        stickerPacksMap[PackID].stickers.find((sticker) => sticker.stickerID === ID)
+      );
+      favoritesPackDiv.appendChild(stickerPackDiv);
+    }
+    updateFavorites();
+  }
+
+  function updateFavorites() {
+    const favoritedStickers = [
+      ...document.getElementById('sticker-pack-container-favorites').querySelectorAll('.sticker'),
+    ];
+    api.setFavorites(
+      favoritedStickers.map((stickerDiv) => ({
+        PackID: stickerDiv.dataset.packID,
+        StickerID: stickerDiv.dataset.stickerID,
+      }))
+    );
+  }
 
   for (const stickerPackID of stickerPackIDsOrder) {
     const stickerPack = stickerPacksMap[stickerPackID];
 
-    setUpStickerPack(stickerPackID, stickerPack);
+    const stickerPackDiv = makeAndSetUpStickerPack(stickerPackID, stickerPack);
+    stickerContainer.appendChild(stickerPackDiv);
   }
 
   // Scroll sticker pack icons list when scrolling sticker packs
@@ -199,6 +305,7 @@ async function populateStickerPacks() {
         const stickerPackIconDiv = document.querySelector(
           `.sticker-pack-icon-wrapper[data-pack-i-d="${packID}"]`
         );
+        // Check if sticker pack icon exists
         if (!stickerPackIconDiv) continue;
         const stickerPackDivTop = stickerPackDiv.offsetTop;
         const stickerPackDivBottom = stickerPackDivTop + stickerPackDiv.offsetHeight;
