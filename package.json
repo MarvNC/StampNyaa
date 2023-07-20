@@ -25,12 +25,12 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@nut-tree/nut-js": "^3.1.2",
+    "@vscode/sqlite3": "^5.1.6-vscode",
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "jimp": "^0.22.8",
     "jsdom": "^22.1.0",
-    "sqlite3": "^5.1.6",
     "update-electron-app": "^2.0.1"
   },
   "optionalDependencies": {
