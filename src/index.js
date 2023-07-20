@@ -171,6 +171,7 @@ ipcMain.handle('ready', () => {
 
 ipcMain.on('send-sticker', (event, stickerPath, settings) => {
   stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
+  sqlHandler.useSticker({ PackID: settings.stickerPackID, StickerID: settings.stickerID });
 });
 
 ipcMain.on('download-sticker-pack', (event, url) => {
@@ -252,5 +253,5 @@ ipcMain.handle('get-favorites', () => {
   return sqlHandler.getFavorites();
 });
 ipcMain.handle('get-most-used', () => {
-  return sqlHandler.getMostUsed(24);
+  return sqlHandler.getMostUsed(8);
 });

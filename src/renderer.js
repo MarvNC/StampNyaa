@@ -85,7 +85,7 @@ async function populateStickerPacks() {
   const stickerPackListDiv = document.getElementById('sticker-pack-list');
   let stickerPackIDsOrder = stickerPacksOrder;
 
-  function setUpStickerPack(stickerPackID, stickerPack) {
+  function makeAndSetUpStickerPack(stickerPackID, stickerPack) {
     const {
       title,
       mainIcon,
@@ -138,7 +138,7 @@ async function populateStickerPacks() {
       stickerPackDiv.appendChild(createSticker(sticker));
     }
 
-    stickerContainer.appendChild(stickerPackDiv);
+    return stickerPackDiv;
   }
 
   function createSticker(sticker) {
@@ -177,7 +177,17 @@ async function populateStickerPacks() {
       if (type !== 'static') {
         stickerPath = specialPath;
       }
-      api.sendSticker(stickerPath, { stickerPackID, title, author, resizeWidth });
+      api
+        .sendSticker(stickerPath, {
+          stickerID: sticker.stickerID,
+          stickerPackID: sticker.stickerPackID,
+          title: stickerPacksMap[sticker.stickerPackID].title,
+          author: stickerPacksMap[sticker.stickerPackID].author,
+          resizeWidth,
+        })
+        .then(() => {
+          updateMostUsed();
+        });
     });
 
     // on right click add to favorites
@@ -190,9 +200,42 @@ async function populateStickerPacks() {
     return stickerDiv;
   }
 
+  // Set up most used
+  function updateMostUsed() {
+    let mostUsedDiv = document.getElementById('sticker-pack-container-most-used');
+    if (!mostUsedDiv) {
+      mostUsedDiv = document.createElement('div');
+      mostUsedDiv.classList.add('sticker-pack');
+      mostUsedDiv.id = 'sticker-pack-container-most-used';
+      stickerContainer.appendChild(mostUsedDiv);
+    }
+    // reset most used contents
+    mostUsedDiv.innerHTML = '';
+
+    api.getMostUsed().then((mostUsed) => {
+      const newDiv = makeAndSetUpStickerPack('most-used', {
+        title: '<span class="material-symbols-outlined">history</span> Most Used',
+        author: '',
+        stickers: mostUsed.map(({ PackID, StickerID }) => {
+          // find sticker pack
+          const stickerPack = stickerPacksMap[PackID];
+          const sticker = stickerPack.stickers.find((sticker) => sticker.stickerID === StickerID);
+          return sticker;
+        }),
+        storeURL: 'https://store.line.me/stickershop/',
+        noIcon: true,
+      });
+      // reinsert most used at the top
+      stickerContainer.insertBefore(newDiv, mostUsedDiv);
+      // delete old most used
+      stickerContainer.removeChild(mostUsedDiv);
+    });
+  }
+  updateMostUsed();
+
   // Set up favorites
   const favorites = await api.getFavorites();
-  setUpStickerPack('favorites', {
+  const favoritesDiv = makeAndSetUpStickerPack('favorites', {
     title: '<span class="material-symbols-outlined">star</span> Favorites',
     author: '',
     stickers: favorites.map(({ PackID, StickerID }) => {
@@ -204,6 +247,7 @@ async function populateStickerPacks() {
     storeURL: 'https://store.line.me/stickershop/',
     noIcon: true,
   });
+  stickerContainer.appendChild(favoritesDiv);
 
   function toggleFavorite(PackID, ID) {
     const favoritesPackDiv = document.getElementById('sticker-pack-container-favorites');
@@ -235,12 +279,11 @@ async function populateStickerPacks() {
     );
   }
 
-  // Set up most used
-
   for (const stickerPackID of stickerPackIDsOrder) {
     const stickerPack = stickerPacksMap[stickerPackID];
 
-    setUpStickerPack(stickerPackID, stickerPack);
+    const stickerPackDiv = makeAndSetUpStickerPack(stickerPackID, stickerPack);
+    stickerContainer.appendChild(stickerPackDiv);
   }
 
   // Scroll sticker pack icons list when scrolling sticker packs

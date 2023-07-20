@@ -5,7 +5,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('api', {
   closeWindow: () => ipcRenderer.send('close-window'),
   ready: () => ipcRenderer.invoke('ready'),
-  sendSticker: (stickerPath, settings) => ipcRenderer.send('send-sticker', stickerPath, settings),
+  sendSticker: async (stickerPath, settings) =>
+    ipcRenderer.send('send-sticker', stickerPath, settings),
   downloadStickerPack: (url) => {
     const { port1, port2 } = new MessageChannel();
     ipcRenderer.postMessage('download-sticker-pack', url, [port2]);
