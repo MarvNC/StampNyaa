@@ -30,6 +30,10 @@ const sqlHandler = {
       )`
     );
   },
+  /**
+   * Gets the favorites
+   * @returns {Promise<Array>} Array of objects of the form {PackID, ID, position}
+   */
   getFavorites: function () {
     return new Promise((resolve, reject) => {
       this.db.all('SELECT * FROM favorites ORDER BY position', (err, rows) => {
@@ -41,7 +45,7 @@ const sqlHandler = {
     });
   },
   /**
-   *
+   * Sets the favorites
    * @param {Object<Array>} favorites Array of objects of the form {PackID, ID}; position is the index in the array
    * @returns
    */

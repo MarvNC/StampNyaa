@@ -27,4 +27,7 @@ contextBridge.exposeInMainWorld('api', {
   setResizeWidth: (width) => ipcRenderer.send('set-resize-width', width),
   getUpdates: () => ipcRenderer.invoke('get-updates'),
   getVersion: () => ipcRenderer.invoke('get-version'),
+  setFavorites: (favorites) => ipcRenderer.send('set-favorites', favorites),
+  getFavorites: () => ipcRenderer.invoke('get-favorites'),
+  getMostUsed: () => ipcRenderer.invoke('get-most-used'),
 });
