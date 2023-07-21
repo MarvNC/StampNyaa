@@ -511,6 +511,52 @@ body {
   font-weight: 500;
 }
 
+.feedback-modal {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%, -200px);
+  background-color: var(--primary-color);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 10px 70px;
+}
+@keyframes slide-in {
+  from {
+    transform: translate(-50%, -200px);
+  }
+  to {
+    transform: translate(-50%, 0px);
+  }
+}
+@keyframes slide-out {
+  from {
+    transform: translate(-50%, 0px);
+  }
+  to {
+    transform: translate(-50%, -200px);
+  }
+}
+.feedback-modal.active {
+  animation: slide-in 0.3s ease-in-out forwards;
+}
+.feedback-modal.inactive {
+  animation: slide-out 0.3s ease-in-out forwards;
+}
+.feedback-modal#add-favorite-feedback {
+  background-color: var(--green-color);
+}
+.feedback-modal#remove-favorite-feedback {
+  background-color: var(--red-color);
+}
+.feedback-modal .material-symbols-outlined {
+  font-size: 50px;
+  color: var(--white-color);
+}
+
 .material-symbols-outlined {
   font-variation-settings: "FILL" 1, "wght" 600, "GRAD" 0, "opsz" 48;
 }

@@ -258,13 +258,34 @@ async function populateStickerPacks() {
     if (stickerDiv) {
       // remove from favorites
       stickerDiv.remove();
+      popupRemoveFavoriteFeedback();
     } else {
       const stickerPackDiv = createSticker(
         stickerPacksMap[PackID].stickers.find((sticker) => sticker.stickerID === ID)
       );
       favoritesPackDiv.appendChild(stickerPackDiv);
+      popupAddFavoriteFeedback();
     }
     updateFavorites();
+  }
+
+  function animateFeedbackModal(modal) {
+    modal.classList.add('active');
+    setTimeout(() => {
+      modal.classList.remove('active');
+      modal.classList.add('inactive');
+      setTimeout(() => {
+        modal.classList.remove('inactive');
+      }, 500);
+    }, 500);
+  }
+  function popupAddFavoriteFeedback() {
+    const addFavoriteFeedbackModal = document.querySelector('#add-favorite-feedback');
+    animateFeedbackModal(addFavoriteFeedbackModal);
+  }
+  function popupRemoveFavoriteFeedback() {
+    const deleteFavoriteFeedbackModal = document.querySelector('#remove-favorite-feedback');
+    animateFeedbackModal(deleteFavoriteFeedbackModal);
   }
 
   function updateFavorites() {
