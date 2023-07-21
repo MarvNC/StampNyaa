@@ -169,6 +169,7 @@ ipcMain.handle('ready', () => {
 });
 
 ipcMain.on('send-sticker', (event, stickerPath, settings) => {
+  settings.resizeWidth = config.get('resizeWidth');
   stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
   sqlHandler.useSticker({ PackID: settings.stickerPackID, StickerID: settings.stickerID });
 });
