@@ -51,14 +51,45 @@ const sqlHandler = {
    */
   setFavorites: function (favorites) {
     return new Promise((resolve, reject) => {
+      // Create a map of PackID/StickerID key and index value
+      favorites = favorites.reduce((acc, curr, index) => {
+        acc[curr.PackID + ';' + curr.StickerID] = index;
+        return acc;
+      }, {});
       this.db.serialize(() => {
-        this.db.run('DELETE FROM favorites');
-        const statement = this.db.prepare('INSERT INTO favorites VALUES (?, ?, ?)');
-        for (const [position, { PackID, StickerID }] of favorites.entries()) {
-          statement.run(PackID, StickerID, position);
-        }
-        statement.finalize();
-
+        // Iterate through rows of db and update index accordingly, delete row if not in favorites
+        this.db.all('SELECT * FROM favorites', (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+          rows.forEach((row) => {
+            const key = row.PackID + ';' + row.StickerID;
+            if (favorites[key] === undefined) {
+              // Delete row
+              this.db.run('DELETE FROM favorites WHERE PackID = ? AND StickerID = ?', [
+                row.PackID,
+                row.StickerID,
+              ]);
+            } else {
+              // Update row
+              this.db.run('UPDATE favorites SET position = ? WHERE PackID = ? AND StickerID = ?', [
+                favorites[key],
+                row.PackID,
+                row.StickerID,
+              ]);
+              delete favorites[key];
+            }
+          });
+          // Insert new rows
+          Object.keys(favorites).forEach((key) => {
+            const [PackID, StickerID] = key.split(';');
+            this.db.run('INSERT INTO favorites (PackID, StickerID, position) VALUES (?, ?, ?)', [
+              PackID,
+              StickerID,
+              favorites[key],
+            ]);
+          });
+        });
         resolve();
       });
     });

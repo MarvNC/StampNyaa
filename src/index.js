@@ -130,7 +130,6 @@ if (store.has('stickerPacksOrder')) {
 }
 
 // Register hotkey
-
 function registerHotkey(hotkey) {
   try {
     globalShortcut.register(hotkey, () => {
