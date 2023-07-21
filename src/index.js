@@ -1,4 +1,13 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, shell } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  ipcMain,
+  Menu,
+  Tray,
+  shell,
+  screen,
+} = require('electron');
 const path = require('path');
 const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
@@ -16,6 +25,9 @@ if (!args.includes('--squirrel-firstrun')) {
   }
 }
 
+/**
+ * @type {Electron.BrowserWindow}
+ */
 let window;
 
 // Initialize config
@@ -95,11 +107,7 @@ app.on('ready', async () => {
 
   appIcon.setContextMenu(contextMenu);
   appIcon.on('click', () => {
-    if (window.isVisible()) {
-      window.hide();
-    } else {
-      window.show();
-    }
+    toggleWindow();
   });
 
   registerHotkey(config.get('hotkey'));
@@ -129,11 +137,29 @@ if (store.has('stickerPacksOrder')) {
   store.delete('stickerPacksOrder');
 }
 
+/**
+ * Toggles the window's visibility
+ */
+function toggleWindow() {
+  if (window.isFocused()) {
+    window.hide();
+  } else {
+    const currentScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+    const windowSize = window.getSize();
+    let moveToX = currentScreen.bounds.x + currentScreen.bounds.width / 2 - windowSize[0] / 2;
+    let moveToY = currentScreen.bounds.y + currentScreen.bounds.height / 2 - windowSize[1] / 2;
+    moveToX = Math.floor(moveToX);
+    moveToY = Math.floor(moveToY);
+    window.setPosition(moveToX, moveToY);
+    window.show();
+  }
+}
+
 // Register hotkey
 function registerHotkey(hotkey) {
   try {
     globalShortcut.register(hotkey, () => {
-      window.isFocused() ? window.hide() : window.show();
+      toggleWindow();
     });
   } catch (error) {
     config.reset('hotkey');
