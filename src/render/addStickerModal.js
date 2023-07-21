@@ -26,7 +26,7 @@ const addStickerModal = {
     addStickerModalBackground.addEventListener('click', async (e) => {
       if (e.target === addStickerModalBackground && !downloadActive) {
         addStickerModalBackground.style.display = 'none';
-        window.location.reload();
+        stickerRenderer.refreshStickerPacks();
       }
     });
 
