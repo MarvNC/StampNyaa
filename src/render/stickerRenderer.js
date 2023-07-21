@@ -21,6 +21,10 @@ class StickerRenderer {
     this.stickerContainer = document.getElementById('sticker-list');
     this.stickerPackListDiv = document.getElementById('sticker-pack-list');
   }
+  /**
+   * Sets up sticker packs
+   * @returns {Promise<void>}
+   */
   async populateStickerPacks() {
     ({ stickerPacksMap: this.stickerPacksMap, stickerPacksOrder: this.stickerPacksOrder } =
       await api.ready());
@@ -127,6 +131,12 @@ class StickerRenderer {
       api.setStickerPackOrder(this.stickerPacksOrder);
     });
   }
+  /**
+   * Creates a sticker pack and sets up the sticker pack icon
+   * @param {string} stickerPackID
+   * @param {Object} stickerPack
+   * @returns {HTMLDivElement}
+   */
   makeAndSetUpStickerPack(stickerPackID, stickerPack) {
     const {
       title,
@@ -182,7 +192,9 @@ class StickerRenderer {
 
     return stickerPackDiv;
   }
-  // Set up most used
+  /**
+   * Fetches and updates the most used sticker pack section
+   */
   updateMostUsed() {
     let mostUsedDiv = document.getElementById('sticker-pack-container-most-used');
     if (!mostUsedDiv) {
@@ -213,6 +225,11 @@ class StickerRenderer {
       this.stickerContainer.removeChild(mostUsedDiv);
     });
   }
+  /**
+   * Creates a sticker div and sets up the sticker
+   * @param {Object} sticker
+   * @returns {HTMLDivElement}
+   */
   createSticker(sticker) {
     const stickerID = sticker.stickerID;
     const stickerDiv = document.createElement('div');
@@ -270,7 +287,11 @@ class StickerRenderer {
 
     return stickerDiv;
   }
-
+  /**
+   * Toggles a sticker as a favorite
+   * @param {string} PackID
+   * @param {string} ID
+   */
   toggleFavorite(PackID, ID) {
     const favoritesPackDiv = document.getElementById('sticker-pack-container-favorites');
     // check if sticker already favorited
@@ -290,7 +311,11 @@ class StickerRenderer {
     }
     this.updateFavorites();
   }
-
+  /**
+   * Animates a feedback modal
+   * @param {HTMLElement} modal
+   * @returns {Promise<void>}
+   */
   animateFeedbackModal(modal) {
     modal.classList.add('active');
     setTimeout(() => {
@@ -301,17 +326,17 @@ class StickerRenderer {
       }, 500);
     }, 500);
   }
-
   popupAddFavoriteFeedback() {
     const addFavoriteFeedbackModal = document.querySelector('#add-favorite-feedback');
     this.animateFeedbackModal(addFavoriteFeedbackModal);
   }
-
   popupRemoveFavoriteFeedback() {
     const deleteFavoriteFeedbackModal = document.querySelector('#remove-favorite-feedback');
     this.animateFeedbackModal(deleteFavoriteFeedbackModal);
   }
-
+  /**
+   * Updates favorites in the database
+   */
   updateFavorites() {
     const favoritedStickers = [
       ...document.getElementById('sticker-pack-container-favorites').querySelectorAll('.sticker'),
@@ -322,6 +347,13 @@ class StickerRenderer {
         StickerID: stickerDiv.dataset.stickerID,
       }))
     );
+  }
+  /**
+   * Gets and refreshes all sticker packs
+   */
+  refreshStickerPacks() {
+    this.stickerContainer.innerHTML = '';
+    this.populateStickerPacks();
   }
 }
 
