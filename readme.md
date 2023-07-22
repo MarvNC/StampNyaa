@@ -104,17 +104,19 @@ Then clone the repository and install dependencies with npm or yarn:
 ```bash
 git clone https://github.com/MarvNC/StampNyaa.git
 cd StampNyaa
-npm install
+yarn install
 ```
 
 To build an installer for your operating system, run:
 
 ```bash
-npm run build
+yarn make
 ```
 
 To run:
 
 ```bash
-npm start
+yarn start
 ```
+
+You will also need something to compile the `.scss` file if you edit any styling. I use [Live Sass Compiler](https://github.com/glenn2223/vscode-live-sass-compiler) for this.
