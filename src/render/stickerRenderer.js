@@ -46,6 +46,7 @@ class StickerRenderer {
       noIcon: true,
     });
     this.stickerContainer.appendChild(favoritesDiv);
+    this.setUpDraggableFavorites(favoritesDiv);
 
     for (const stickerPackID of this.stickerPacksOrder) {
       const stickerPack = this.stickerPacksMap[stickerPackID];
@@ -87,8 +88,12 @@ class StickerRenderer {
         return;
       }
     });
-
-    // Sort sticker packs on drag
+    this.setUpDraggableIcons();
+  }
+  /**
+   * Sets up draggable sticker pack icons and updates sticker pack order
+   */
+  setUpDraggableIcons() {
     /**
      * @type {SortableEvent}
      */
@@ -129,6 +134,25 @@ class StickerRenderer {
       }
 
       api.setStickerPackOrder(this.stickerPacksOrder);
+    });
+  }
+  /**
+   * Allows for dragging icons in the favorites pack section
+   * @param {HTMLDivElement} favoritesPackDiv
+   */
+  setUpDraggableFavorites(favoritesPackDiv) {
+    /**
+     * @type {SortableEvent}
+     */
+    const sortable = new Draggable.Sortable(favoritesPackDiv, {
+      draggable: '.sticker',
+    });
+    sortable.on('sortable:sorted', (event) => {});
+    sortable.on('sortable:stop', (event) => {
+      setTimeout(() => {
+        // wait for the temporary sortable to disappear
+        this.updateFavorites();
+      }, 100);
     });
   }
   /**
