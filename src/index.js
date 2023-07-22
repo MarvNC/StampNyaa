@@ -145,12 +145,19 @@ function toggleWindow() {
     window.hide();
   } else {
     const currentScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-    const windowSize = window.getSize();
-    let moveToX = currentScreen.bounds.x + currentScreen.bounds.width / 2 - windowSize[0] / 2;
-    let moveToY = currentScreen.bounds.y + currentScreen.bounds.height / 2 - windowSize[1] / 2;
-    moveToX = Math.floor(moveToX);
-    moveToY = Math.floor(moveToY);
-    window.setPosition(moveToX, moveToY);
+    const isWindowOnCurrentScreen =
+      currentScreen.bounds.x <= window.getPosition()[0] &&
+      window.getPosition()[0] <= currentScreen.bounds.x + currentScreen.bounds.width &&
+      currentScreen.bounds.y <= window.getPosition()[1] &&
+      window.getPosition()[1] <= currentScreen.bounds.y + currentScreen.bounds.height;
+    if (!isWindowOnCurrentScreen) {
+      const windowSize = window.getSize();
+      let moveToX = currentScreen.bounds.x + currentScreen.bounds.width / 2 - windowSize[0] / 2;
+      let moveToY = currentScreen.bounds.y + currentScreen.bounds.height / 2 - windowSize[1] / 2;
+      moveToX = Math.floor(moveToX);
+      moveToY = Math.floor(moveToY);
+      window.setPosition(moveToX, moveToY);
+    }
     window.show();
   }
 }
