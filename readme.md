@@ -11,7 +11,13 @@
   </a>
   <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
     <img
-      src="https://img.shields.io/github/downloads/MarvNC/StampNyaa/total.svg?style=for-the-badge&color=26C2FF&labelColor=A0A0A0"
+      src="https://img.shields.io/github/downloads/MarvNC/StampNyaa/total?style=for-the-badge&color=26C2FF&labelColor=A0A0A0"
+      alt="Total Downloads"
+    />
+  </a>
+  <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
+    <img
+      src="https://img.shields.io/github/actions/workflow/status/MarvNC/StampNyaa/build.yml?style=for-the-badge&color=26C2FF&labelColor=A0A0A0"
       alt="Total Downloads"
     />
   </a>
