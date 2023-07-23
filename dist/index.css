@@ -140,9 +140,14 @@ body {
   overflow: scroll;
 }
 #app #main-content #leftbar #top-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   justify-content: space-evenly;
-  margin: 5px;
+  justify-items: center;
+  align-content: space-evenly;
+  align-items: center;
+  margin: 10px;
+  gap: 10px 0;
 }
 #app #main-content #leftbar #top-buttons .circle {
   height: 40px;
