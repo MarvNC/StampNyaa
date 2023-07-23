@@ -15,7 +15,7 @@
       alt="Total Downloads"
     />
   </a>
-  <a href="https://github.com/MarvNC/StampNyaa">
+  <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
     <img
       src="https://img.shields.io/badge/スタンプ-nyaa-blue?style=for-the-badge&&color=26C2FF&labelColor=A0A0A0"
       alt="StampNyaa"
