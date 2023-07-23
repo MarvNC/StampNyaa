@@ -45,14 +45,28 @@ class StickerRenderer {
       storeURL: 'https://store.line.me/stickershop/',
       noIcon: true,
     });
-    this.stickerContainer.appendChild(favoritesDiv);
-    this.setUpDraggableFavorites(favoritesDiv);
+    if (favoritesDiv) {
+      this.stickerContainer.appendChild(favoritesDiv);
+      this.setUpDraggableFavorites(favoritesDiv);
+    }
+
+    // set up scroll to pack on icon for most-used and favorite
+    const icons = ['most-used', 'favorites'];
+    for (const icon of icons) {
+      const iconDiv = document.getElementById(`${icon}-icon`);
+      iconDiv.addEventListener('mouseover', (e) => {
+        const stickerPackDiv = document.getElementById(`sticker-pack-container-${icon}`);
+        stickerPackDiv.scrollIntoView({ behavior: 'instant' });
+      });
+    }
 
     for (const stickerPackID of this.stickerPacksOrder) {
       const stickerPack = this.stickerPacksMap[stickerPackID];
 
       const stickerPackDiv = this.makeAndSetUpStickerPack(stickerPackID, stickerPack);
-      this.stickerContainer.appendChild(stickerPackDiv);
+      if (stickerPackDiv) {
+        this.stickerContainer.appendChild(stickerPackDiv);
+      }
     }
 
     // Scroll sticker pack icons list when scrolling sticker packs
@@ -174,47 +188,54 @@ class StickerRenderer {
 
     // Sticker main icon
     if (!noIcon) {
-      const stickerIconDiv = document.createElement('div');
-      stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
-      stickerIconDiv.dataset.packID = stickerPackID;
+      // Don't add icon if it already exists
+      if (!document.getElementById(`sticker-pack-icon-${stickerPackID}`)) {
+        const stickerIconDiv = document.createElement('div');
+        stickerIconDiv.classList.add('sticker-pack-icon-wrapper');
+        stickerIconDiv.dataset.packID = stickerPackID;
+        stickerIconDiv.id = `sticker-pack-icon-${stickerPackID}`;
 
-      const stickerIconImg = document.createElement('img');
-      stickerIconImg.src = mainIcon;
-      stickerIconDiv.appendChild(stickerIconImg);
-      this.stickerPackListDiv.appendChild(stickerIconDiv);
+        const stickerIconImg = document.createElement('img');
+        stickerIconImg.src = mainIcon;
+        stickerIconDiv.appendChild(stickerIconImg);
+        this.stickerPackListDiv.appendChild(stickerIconDiv);
 
-      // Scroll to sticker pack on hover
-      stickerIconDiv.addEventListener('mouseover', (e) => {
-        stickerPackDiv.scrollIntoView({ behavior: 'instant' });
-        // remove active from all sticker pack icons
-        document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
-        // add active to current sticker pack icon
-        if (!this.sorting) {
-          e.currentTarget.classList.add('active');
-        }
-      });
+        // Scroll to sticker pack on hover
+        stickerIconDiv.addEventListener('mouseover', (e) => {
+          const stickerPackDiv = document.getElementById(`sticker-pack-container-${stickerPackID}`);
+          stickerPackDiv.scrollIntoView({ behavior: 'instant' });
+          // remove active from all sticker pack icons
+          document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+          // add active to current sticker pack icon
+          if (!this.sorting) {
+            e.currentTarget.classList.add('active');
+          }
+        });
+      }
     }
 
-    // Sticker pack
-    const stickerPackDiv = document.createElement('div');
-    stickerPackDiv.classList.add('sticker-pack');
-    stickerPackDiv.dataset.packID = stickerPackID;
-    stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
+    // Make sticker pack if it doesn't exist
+    if (!document.getElementById(`sticker-pack-container-${stickerPackID}`)) {
+      const stickerPackDiv = document.createElement('div');
+      stickerPackDiv.classList.add('sticker-pack');
+      stickerPackDiv.dataset.packID = stickerPackID;
+      stickerPackDiv.id = `sticker-pack-container-${stickerPackID}`;
 
-    const stickerPackHeader = createElementFromHTML(/* html */ `
+      const stickerPackHeader = createElementFromHTML(/* html */ `
 <div class="sticker-pack-header">
 <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
 <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
 </div>
 `);
-    stickerPackDiv.appendChild(stickerPackHeader);
+      stickerPackDiv.appendChild(stickerPackHeader);
 
-    // loop through stickers
-    for (const sticker of stickers) {
-      stickerPackDiv.appendChild(this.createSticker(sticker));
+      // loop through stickers
+      for (const sticker of stickers) {
+        stickerPackDiv.appendChild(this.createSticker(sticker));
+      }
+
+      return stickerPackDiv;
     }
-
-    return stickerPackDiv;
   }
   /**
    * Fetches and updates the most used sticker pack section
@@ -231,7 +252,11 @@ class StickerRenderer {
     mostUsedDiv.innerHTML = '';
 
     api.getMostUsed().then((mostUsed) => {
-      const newDiv = this.makeAndSetUpStickerPack('most-used', {
+      // delete old most used
+      this.stickerContainer.removeChild(
+        document.getElementById('sticker-pack-container-most-used')
+      );
+      const mostUsedDiv = this.makeAndSetUpStickerPack('most-used', {
         title: '<span class="material-symbols-outlined">history</span> Most Used',
         author: '',
         stickers: mostUsed.map(({ PackID, StickerID }) => {
@@ -243,10 +268,11 @@ class StickerRenderer {
         storeURL: 'https://store.line.me/stickershop/',
         noIcon: true,
       });
-      // reinsert most used at the top
-      this.stickerContainer.insertBefore(newDiv, mostUsedDiv);
-      // delete old most used
-      this.stickerContainer.removeChild(mostUsedDiv);
+      // reinsert most used before favorites div
+      this.stickerContainer.insertBefore(
+        mostUsedDiv,
+        document.getElementById('sticker-pack-container-favorites')
+      );
     });
   }
   /**
@@ -376,7 +402,6 @@ class StickerRenderer {
    * Gets and refreshes all sticker packs
    */
   refreshStickerPacks() {
-    this.stickerContainer.innerHTML = '';
     this.populateStickerPacks();
   }
 }
