@@ -286,5 +286,5 @@ ipcMain.handle('get-favorites', () => {
   return sqlHandler.getFavorites();
 });
 ipcMain.handle('get-most-used', () => {
-  return sqlHandler.getMostUsed(8);
+  return sqlHandler.getMostUsed(15);
 });
