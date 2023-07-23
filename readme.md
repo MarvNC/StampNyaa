@@ -49,6 +49,7 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 - **Use the hotkey** `Ctrl/Command+Shift+A` by default to open the app at any time, or click the icon in your system tray. You can change this hotkey from the settings menu at any time.
 - **Find your favorite sticker packs** on the [LINE Sticker Shop](https://store.line.me/stickershop/).
 - **Download LINE sticker packs** for use with StampNyaa by pressing the + icon in the sidebar and pasting in the sticker pack's URL. Or you can **[add your own stickers](#-add-your-own-stickers)**.
+- **Favorite stickers for easy access** by right-clicking on them to add them to your favorites list.
 - **Send stickers** by clicking on them in the app, and they will be automatically pasted to the app you're currently using.
 
 Keep in mind that sticker packs from LINE are created by skilled artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to **support the creators** by purchasing the sticker packs you use! LINE supports PayPal and various other payment methods, so purchasing shouldn't be an issue outside of region locks.
