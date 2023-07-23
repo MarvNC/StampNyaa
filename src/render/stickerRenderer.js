@@ -50,11 +50,11 @@ class StickerRenderer {
       this.setUpDraggableFavorites(favoritesDiv);
     }
 
-    // set up scroll to pack on icon for most-used and favorite
+    // set click to scroll to pack on icon for most-used and favorite
     const icons = ['most-used', 'favorites'];
     for (const icon of icons) {
       const iconDiv = document.getElementById(`${icon}-icon`);
-      iconDiv.addEventListener('mouseover', (e) => {
+      iconDiv.addEventListener('click', (e) => {
         const stickerPackDiv = document.getElementById(`sticker-pack-container-${icon}`);
         stickerPackDiv.scrollIntoView({ behavior: 'instant' });
       });
