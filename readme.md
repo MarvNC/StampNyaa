@@ -48,7 +48,7 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 Keep in mind that sticker packs from LINE are created by skilled artists and are sold for use in the LINE app; this application simply aims to let you to use them in other apps. Make sure to **support the creators** by purchasing the sticker packs you use! LINE supports PayPal and various other payment methods, so purchasing shouldn't be an issue outside of region locks.
 
-> **Warning**
+> [!WARNING]\
 > Some stickers are region locked and cannot be downloaded in certain countries. If you are unable to download a sticker pack, try using a VPN to change your location. You can check if the sticker pack works in a country by opening the store page in incognito with a VPN set to that country.
 
 ### 🎞️ Showcase
@@ -64,8 +64,8 @@ Here are the creators whose stickers are shown in the above images:
 - [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
 - [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nyaa stamps
 - [万丈梓](https://store.line.me/stickershop/author/3253391/ja) - Mangaka of 恋する(おとめ)の作り方
-- [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous SD chibi artist
 - [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
+- [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous SD chibi artist
 - [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft
 - [Navel](https://store.line.me/stickershop/author/79657/ja) - Navel, featuring 小倉朝日
 - [clear_blue](https://store.line.me/stickershop/author/552857/ja) - Publisher of stickers for Yuzusoft
