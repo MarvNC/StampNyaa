@@ -200,6 +200,10 @@ body {
   grid-gap: 10px;
   padding: 5px 0px;
 }
+#app #main-content #sticker-list .sticker-pack#sticker-pack-container-most-used {
+  max-height: 202px;
+  overflow: hidden;
+}
 #app #main-content #sticker-list .sticker-pack .sticker-pack-header {
   grid-column: 1/-1;
   gap: 10px;

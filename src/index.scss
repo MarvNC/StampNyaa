@@ -226,6 +226,17 @@ body {
       overflow: scroll;
 
       .sticker-pack {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-gap: 10px;
+        padding: 5px 0px;
+
+        &#sticker-pack-container-most-used {
+          // dumb hack to make it only one row
+          max-height: 202px;
+          overflow: hidden;
+        }
+
         .sticker-pack-header {
           grid-column: 1 / -1;
           gap: 10px;
@@ -247,10 +258,6 @@ body {
             font-size: 28px;
           }
         }
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        grid-gap: 10px;
-        padding: 5px 0px;
 
         .sticker {
           height: 150px;
