@@ -33,7 +33,7 @@ StampNyaa is a simple cross-platform desktop app for downloading and using LINE 
 
 [Click here to go to the releases page](https://github.com/MarvNC/StampNyaa/releases/latest) and download the appropriate installer for your operating system in "Assets" (MacOS users should download `darwin`).
 
-> **Warning**
+> [!WARNING]\
 > For **MacOS users**, you must enable accessibility features for the app to automatically press Command+V to paste stickers. It should prompt you to enable this the first time you try to paste a sticker, but if it doesn't, you can [enable it manually](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac). To do this, go to `System Settings > Privacy & Security > Accessibility` and check the box next to StampNyaa.
 
 ## 📚 About
@@ -63,6 +63,7 @@ Here are the creators whose stickers are shown in the above images:
 
 - [雪子](https://store.line.me/stickershop/author/1719182/ja) - Futaribeya mangaka
 - [甘城なつき](https://store.line.me/stickershop/author/95033/ja) - Nyaa stamps
+- [万丈梓](https://store.line.me/stickershop/author/3253391/ja) - Mangaka of 恋する(おとめ)の作り方
 - [こもわた遙華](https://store.line.me/stickershop/author/674845/ja) - Famous SD chibi artist
 - [ななひら](https://store.line.me/stickershop/author/283446/ja) - Nanahira
 - [まどそふと](https://store.line.me/stickershop/author/106050/ja) - Madosoft
