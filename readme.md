@@ -59,11 +59,11 @@ Keep in mind that sticker packs from LINE are created by skilled artists and are
 
 ### 🎞️ Showcase
 
-|            **Send Stickers on Discord**             |       **Download Sticker Packs from LINE**        |
-| :-------------------------------------------------: | :-----------------------------------------------: |
-| ![Discord Send Sticker](img/DiscordSendSticker.gif) | ![Download Line Packs](img/DownloadLinePacks.gif) |
-|                 **Choose a Theme**                  |         **Manage and Sort Your Stickers**         |
-|       ![Choose A Theme](img/ChooseATheme.gif)       |     ![Manage and Sort](img/ManageAndSort.gif)     |
+|             **Send Stickers on Discord**             |            **Choose a Theme**             |
+| :--------------------------------------------------: | :---------------------------------------: |
+| ![Discord Send Sticker](img/DiscordSendSticker.gif)  |  ![Choose A Theme](img/ChooseATheme.gif)  |
+|          **Choose Your Favorite Stickers**           |     **Manage and Sort Your Stickers**     |
+| ![Select Favorite Stickers](img/ChooseFavorites.gif) | ![Manage and Sort](img/ManageAndSort.gif) |
 
 Here are the creators whose stickers are shown in the above images:
 
