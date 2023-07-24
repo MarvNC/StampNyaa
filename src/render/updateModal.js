@@ -20,3 +20,5 @@ const updateModal = {
     setInterval(checkUpdates, 24 * 60 * 60 * 1000);
   },
 };
+
+export default updateModal;

@@ -79,3 +79,5 @@ const addStickerModal = {
     };
   },
 };
+
+export default addStickerModal;

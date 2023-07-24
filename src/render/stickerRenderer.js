@@ -411,3 +411,5 @@ function createElementFromHTML(htmlString) {
   div.innerHTML = htmlString.trim();
   return div.firstChild;
 }
+
+export default StickerRenderer;

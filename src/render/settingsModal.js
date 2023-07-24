@@ -141,3 +141,5 @@ const settingsModal = {
     document.getElementById('versionString').textContent = version;
   },
 };
+
+export default settingsModal;

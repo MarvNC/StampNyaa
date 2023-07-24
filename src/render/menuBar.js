@@ -7,3 +7,5 @@ const menuBar = {
     });
   },
 };
+
+export default menuBar;
