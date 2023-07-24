@@ -17,10 +17,6 @@ import downloadPack from './utils/lineDownloader';
 import checkUpdate from './utils/checkUpdate';
 import sqlHandler from './utils/sqlHandler';
 
-// Vite URL imports
-import ICON_ICO from '../assets/icon.ico';
-import ICON_16X16 from '../assets/icon-16x16.png';
-
 // Auto update, but not on first run
 const args = process.argv.slice(1);
 if (!args.includes('--squirrel-firstrun')) {
@@ -60,16 +56,9 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
-  // Create image from ICO buffer
-  const buffer = Buffer.from(ICON_ICO, 'base64');
-  const icon = nativeImage.createFromBuffer(buffer);
-  console.log(icon);
-  // const icon = nativeImage.createFromBuffer(ICON_ICO);
-
   // Create the browser window.
   window = new BrowserWindow({
-    icon: icon,
-    // icon: path.join(__dirname, '../assets/icon.ico'),
+    icon: path.join(__dirname, './icon.ico'),
     width: 930,
     height: 900,
     webPreferences: {
@@ -113,10 +102,7 @@ app.on('ready', async () => {
     globalShortcut.unregisterAll();
   });
 
-  // const appIcon = new Tray(path.join(__dirname, '../assets/icon-16x16.png'));
-  const buffer = Buffer.from(ICON_16X16, 'base64');
-  const appIconImage = nativeImage.createFromBuffer(buffer);
-  const appIcon = new Tray(appIconImage);
+  const appIcon = new Tray(path.join(__dirname, './icon-16x16.png'));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',
