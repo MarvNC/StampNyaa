@@ -129,4 +129,4 @@ const sqlHandler = {
   },
 };
 
-module.exports = sqlHandler;
+export default sqlHandler;

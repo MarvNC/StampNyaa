@@ -186,4 +186,4 @@ async function checkImageValidity(imagePath) {
   }
 }
 
-module.exports = downloadPack;
+export default downloadPack;

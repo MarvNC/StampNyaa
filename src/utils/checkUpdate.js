@@ -71,4 +71,4 @@ function compareVersionString(v1, v2) {
   return false;
 }
 
-module.exports = checkUpdate;
+export default checkUpdate;

@@ -177,7 +177,7 @@ function stripIllegalCharacters(string) {
   return string.replace(/[/\\?%*:|"<>]/g, '');
 }
 
-module.exports = {
+export default {
   pasteStickerFromPath,
   getAllStickerPacks,
 };

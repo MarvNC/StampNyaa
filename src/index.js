@@ -4,16 +4,22 @@ const {
   globalShortcut,
   ipcMain,
   Menu,
+  nativeImage,
   Tray,
   shell,
   screen,
 } = require('electron');
 const path = require('path');
-const stickerHandler = require('./utils/stickerHandler');
 const Store = require('electron-store');
-const downloadPack = require('./utils/lineDownloader');
-const checkUpdate = require('./utils/checkUpdate');
-const sqlHandler = require('./utils/sqlHandler');
+
+import stickerHandler from './utils/stickerHandler';
+import downloadPack from './utils/lineDownloader';
+import checkUpdate from './utils/checkUpdate';
+import sqlHandler from './utils/sqlHandler';
+
+// Vite URL imports
+import ICON_ICO from '../assets/icon.ico';
+import ICON_16X16 from '../assets/icon-16x16.png';
 
 // Auto update, but not on first run
 const args = process.argv.slice(1);
@@ -54,12 +60,20 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  // Create image from ICO buffer
+  const buffer = Buffer.from(ICON_ICO, 'base64');
+  const icon = nativeImage.createFromBuffer(buffer);
+  console.log(icon);
+  // const icon = nativeImage.createFromBuffer(ICON_ICO);
+
   // Create the browser window.
   window = new BrowserWindow({
-    icon: path.join(__dirname, '../assets/icon.ico'),
+    icon: icon,
+    // icon: path.join(__dirname, '../assets/icon.ico'),
     width: 930,
     height: 900,
     webPreferences: {
+      webSecurity: false,
       preload: path.join(__dirname, 'preload.js'),
     },
     transparent: true,
@@ -70,7 +84,11 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  window.loadFile(path.join(__dirname, 'index.html'));
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    window.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  } else {
+    window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+  }
 
   // open links in default browser
   window.webContents.setWindowOpenHandler(({ url }) => {
@@ -95,7 +113,10 @@ app.on('ready', async () => {
     globalShortcut.unregisterAll();
   });
 
-  const appIcon = new Tray(path.join(__dirname, '../assets/icon-16x16.png'));
+  // const appIcon = new Tray(path.join(__dirname, '../assets/icon-16x16.png'));
+  const buffer = Buffer.from(ICON_16X16, 'base64');
+  const appIconImage = nativeImage.createFromBuffer(buffer);
+  const appIcon = new Tray(appIconImage);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Quit',
