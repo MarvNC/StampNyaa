@@ -6,7 +6,6 @@ import path from 'path';
 import Jimp from 'jimp';
 import { MessagePortMain } from 'electron';
 
-
 const cdnURL = 'https://stickershop.line-scdn.net';
 const mainImageURL = (packID: string) =>
   `${cdnURL}/stickershop/v1/product/${packID}/LINEStorePC/main.png?v=1`;

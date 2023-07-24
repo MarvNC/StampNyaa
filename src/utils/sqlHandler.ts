@@ -1,4 +1,4 @@
-import { sqlite3, Database } from "sqlite3";
+import { sqlite3, Database } from 'sqlite3';
 
 const sqlite3 = require('sqlite3').verbose();
 

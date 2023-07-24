@@ -4,7 +4,7 @@ const path = require('path');
 const { keyboard, Key } = require('@nut-tree/nut-js');
 const Jimp = require('jimp');
 
-type clipboard = typeof import('electron-clipboard-ex')
+type clipboard = typeof import('electron-clipboard-ex');
 let clipboardEx: clipboard | null = null;
 
 // if not linux
@@ -91,8 +91,18 @@ function getAllStickerPacks(stickerPacksDir: string) {
  */
 async function pasteStickerFromPath(
   stickerPath: any,
-  window: { minimize: () => void; setAlwaysOnTop: (arg0: boolean) => void; setFocusable: (arg0: boolean) => void; },
-  { closeWindowAfterSend = true, resizeWidth = 160, title = '', author = '', stickerPackID = '' } = {}
+  window: {
+    minimize: () => void;
+    setAlwaysOnTop: (arg0: boolean) => void;
+    setFocusable: (arg0: boolean) => void;
+  },
+  {
+    closeWindowAfterSend = true,
+    resizeWidth = 160,
+    title = '',
+    author = '',
+    stickerPackID = '',
+  } = {}
 ) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
