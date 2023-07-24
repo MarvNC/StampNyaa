@@ -1,6 +1,6 @@
 const { app } = require('electron');
 const axios = require('axios');
-const Store = require('electron-store');
+import ElectronStore from 'electron-store';
 
 const version = app.getVersion();
 const platform = process.platform;
@@ -12,14 +12,15 @@ const platform = process.platform;
  * @param {Store} config
  * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns null.
  */
-async function checkUpdate(config) {
+
+async function checkUpdate(config: ElectronStore) {
   // Do not check if Windows
   if (platform === 'win32') {
     return null;
   }
 
   // Get last check update time
-  const lastCheckUpdateTime = config.get('lastCheckUpdateTime', new Date(0).valueOf());
+  const lastCheckUpdateTime = config.get('lastCheckUpdateTime', new Date(0).valueOf()) as number;
   console.log(
     `Last check update time: ${new Date(lastCheckUpdateTime).toLocaleString()} which was ${(
       (Date.now() - lastCheckUpdateTime) /
@@ -56,7 +57,7 @@ async function checkUpdate(config) {
  * @param {string} v1
  * @param {string} v2
  */
-function compareVersionString(v1, v2) {
+function compareVersionString(v1: string, v2: string) {
   const v1Parts = v1.split('.');
   const v2Parts = v2.split('.');
 
