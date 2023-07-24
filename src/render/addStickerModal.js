@@ -61,6 +61,7 @@ const addStickerModal = {
         downloadActive = false;
         addStickerButton.classList.remove('loading');
         addStickerButton.firstElementChild.textContent = 'check';
+        addStickerModal.stickerRenderer.refreshStickerPacks();
       }
       const data = event.data;
       if (data.type === 'download-sticker-pack') {

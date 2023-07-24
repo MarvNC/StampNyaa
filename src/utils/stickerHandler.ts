@@ -133,7 +133,7 @@ async function pasteStickerFromPath(
 
   // write sticker file to clipboard if not linux
   if (process.platform !== 'linux') {
-    clipboardEx?.writeFilePaths([tempStickerPath]);
+    clipboardEx!.writeFilePaths([tempStickerPath]);
   } else {
     // linux
     clipboard.writeImage(tempStickerPath);

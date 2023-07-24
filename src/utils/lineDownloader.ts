@@ -47,7 +47,7 @@ async function downloadPack(storeURL: string, port: MessagePort, directory: stri
   const document = dom.window.document;
 
   const packIDMatch = storeURL.match(packIDRegex);
-  const packID = packIDMatch?.[1];
+  const packID = packIDMatch![1];
   if (!packID) {
     port.postMessage({
       type: 'download-sticker-pack',
