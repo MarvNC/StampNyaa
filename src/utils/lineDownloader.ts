@@ -1,24 +1,25 @@
-const axios = require('axios');
+import axios from 'axios';
 const { JSDOM } = require('jsdom');
-const fs = require('fs');
-const { finished } = require('node:stream/promises');
-const path = require('path');
-const Jimp = require('jimp');
+import fs from 'fs';
+import { finished } from 'node:stream/promises';
+import path from 'path';
+import Jimp from 'jimp';
+
 
 const cdnURL = 'https://stickershop.line-scdn.net';
-const mainImageURL = (packID) =>
+const mainImageURL = (packID: string) =>
   `${cdnURL}/stickershop/v1/product/${packID}/LINEStorePC/main.png?v=1`;
-const stickerURL = (stickerId) =>
+const stickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/IOS/sticker@2x.png`;
-const fallbackStickerURL = (stickerId) =>
+const fallbackStickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker.png`;
-const animatedStickerURL = (stickerId) =>
+const animatedStickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/iPhone/sticker_animation@2x.png`;
-const fallbackAnimatedStickerURL = (stickerId) =>
+const fallbackAnimatedStickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker_animation.png`;
-const popupStickerURL = (stickerId) =>
+const popupStickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/IOS/sticker_popup.png`;
-const fallbackPopupStickerURL = (stickerId) =>
+const fallbackPopupStickerURL = (stickerId: string) =>
   `${cdnURL}/stickershop/v1/sticker/${stickerId}/android/sticker_popup.png`;
 
 const packIDRegex = /stickershop\/product\/(\d+)/;
@@ -30,7 +31,7 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
  * @param {string} directory
  * @returns {Promise<string>} The title of the sticker pack.
  */
-async function downloadPack(storeURL, port, directory) {
+async function downloadPack(storeURL: string, port: MessagePort, directory: string) {
   // Check URL first for valid pack
   let response;
   try {
@@ -45,7 +46,15 @@ async function downloadPack(storeURL, port, directory) {
   const dom = new JSDOM(response.data);
   const document = dom.window.document;
 
-  const packID = storeURL.match(packIDRegex)[1];
+  const packIDMatch = storeURL.match(packIDRegex);
+  const packID = packIDMatch?.[1];
+  if (!packID) {
+    port.postMessage({
+      type: 'download-sticker-pack',
+      error: 'Invalid store page',
+    });
+    return;
+  }
   const packDir = path.join(directory, '/', packID);
 
   if (!fs.existsSync(directory)) {
@@ -157,7 +166,7 @@ async function downloadPack(storeURL, port, directory) {
  * @param {string} filename
  * @returns {Promise<boolean>} Whether the image was downloaded.
  */
-async function downloadImage(url, dir, filename) {
+async function downloadImage(url: string, dir: string, filename: string) {
   console.log(`Downloading ${url} to ${filename}...`);
   return new Promise(async (resolve, reject) => {
     const filePath = path.join(dir, filename);
@@ -175,7 +184,7 @@ async function downloadImage(url, dir, filename) {
  * Checks if an image is valid.
  * @param {string} imagePath
  */
-async function checkImageValidity(imagePath) {
+async function checkImageValidity(imagePath: string) {
   try {
     await Jimp.read(imagePath);
     console.log('Image is valid.');

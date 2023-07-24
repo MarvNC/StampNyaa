@@ -397,6 +397,7 @@ class StickerRenderer {
    * Gets and refreshes all sticker packs
    */
   refreshStickerPacks() {
+    console.log('Refreshing sticker packs');
     this.populateStickerPacks();
   }
 }

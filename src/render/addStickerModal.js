@@ -1,4 +1,8 @@
 const addStickerModal = {
+  stickerRenderer: null,
+  setRenderer: (renderer) => {
+    addStickerModal.stickerRenderer = renderer;
+  },
   setUpAddStickerModal: async () => {
     // Download sticker pack on add button
     const addButton = document.getElementById('add-button');
@@ -26,7 +30,6 @@ const addStickerModal = {
     addStickerModalBackground.addEventListener('click', async (e) => {
       if (e.target === addStickerModalBackground && !downloadActive) {
         addStickerModalBackground.style.display = 'none';
-        stickerRenderer.refreshStickerPacks();
       }
     });
 

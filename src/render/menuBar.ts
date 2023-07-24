@@ -2,7 +2,7 @@ const menuBar = {
   setUpMenuBarButtons: async () => {
     // close on X button
     const closeButton = document.getElementById('close-button');
-    closeButton.addEventListener('click', () => {
+    closeButton?.addEventListener('click', () => {
       api.closeWindow();
     });
   },
