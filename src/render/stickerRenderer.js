@@ -1,6 +1,4 @@
-/**
- * @typedef {import('../../libs/draggable@1.0.0-beta.11_lib_draggable.bundle').SortableEvent} SortableEvent
- */
+import { Sortable } from '@shopify/draggable';
 
 class StickerRenderer {
   // Whether the user is currently moving a sticker pack icon
@@ -108,10 +106,7 @@ class StickerRenderer {
    * Sets up draggable sticker pack icons and updates sticker pack order
    */
   setUpDraggableIcons() {
-    /**
-     * @type {SortableEvent}
-     */
-    const sortable = new Draggable.Sortable(this.stickerPackListDiv, {
+    const sortable = new Sortable(this.stickerPackListDiv, {
       draggable: '.sticker-pack-icon-wrapper',
     });
     sortable.on('sortable:start', (event) => {
@@ -158,7 +153,7 @@ class StickerRenderer {
     /**
      * @type {SortableEvent}
      */
-    const sortable = new Draggable.Sortable(favoritesPackDiv, {
+    const sortable = new Sortable(favoritesPackDiv, {
       draggable: '.sticker',
     });
     sortable.on('sortable:sorted', (event) => {});
