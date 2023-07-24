@@ -4,6 +4,7 @@ import fs from 'fs';
 import { finished } from 'node:stream/promises';
 import path from 'path';
 import Jimp from 'jimp';
+import { MessagePortMain } from 'electron';
 
 
 const cdnURL = 'https://stickershop.line-scdn.net';
@@ -31,7 +32,7 @@ const packIDRegex = /stickershop\/product\/(\d+)/;
  * @param {string} directory
  * @returns {Promise<string>} The title of the sticker pack.
  */
-async function downloadPack(storeURL: string, port: MessagePort, directory: string) {
+async function downloadPack(storeURL: string, port: MessagePortMain, directory: string) {
   // Check URL first for valid pack
   let response;
   try {

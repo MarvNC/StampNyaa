@@ -10,13 +10,13 @@ const platform = process.platform;
  * Returns the version number of the latest release if there are updates available. Otherwise, returns null.
  * Also does not check for updates if the last update check was less than five minutes ago.
  * @param {Store} config
- * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns null.
+ * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns false.
  */
 
 async function checkUpdate(config: ElectronStore) {
   // Do not check if Windows
   if (platform === 'win32') {
-    return null;
+    return false;
   }
 
   // Get last check update time
@@ -31,7 +31,7 @@ async function checkUpdate(config: ElectronStore) {
   // Set last check update time to now
   // Check if the last check update time was less than five minutes ago
   if (Date.now() - lastCheckUpdateTime < 5 * 60 * 1000) {
-    return null;
+    return false;
   }
 
   config.set('lastCheckUpdateTime', Date.now().valueOf());
@@ -49,7 +49,7 @@ async function checkUpdate(config: ElectronStore) {
     return latestVersion;
   }
   console.log('No update available');
-  return null;
+  return false;
 }
 
 /**

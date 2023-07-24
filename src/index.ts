@@ -1,20 +1,14 @@
-const {
-  app,
-  BrowserWindow,
-  globalShortcut,
-  ipcMain,
-  Menu,
-  screen,
-  shell,
-  Tray,
-} = require('electron');
-const path = require('path');
-const Store = require('electron-store');
+import { app, BrowserWindow, globalShortcut, ipcMain, Menu, screen, shell, Tray } from 'electron';
+import path from 'path';
+import Store from 'electron-store';
 
 import stickerHandler from './utils/stickerHandler';
 import downloadPack from './utils/lineDownloader';
 import checkUpdate from './utils/checkUpdate';
 import sqlHandler from './utils/sqlHandler';
+
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+declare const MAIN_WINDOW_VITE_NAME: string;
 
 // Auto update, but not on first run
 const args = process.argv.slice(1);
@@ -26,10 +20,7 @@ if (!args.includes('--squirrel-firstrun')) {
   }
 }
 
-/**
- * @type {Electron.BrowserWindow}
- */
-let window;
+let window: BrowserWindow | null = null;
 
 // Initialize config
 const store = new Store({
@@ -38,13 +29,13 @@ const store = new Store({
   },
 });
 const config = new Store({
-  cwd: store.get('stickersPath'),
   defaults: {
     stickerPacksOrder: [],
     theme: 'blue',
     hotkey: 'CommandOrControl+Shift+A',
     runOnStartup: true,
     resizeWidth: 160,
+    lastCheckUpdateTime: 0,
   },
 });
 sqlHandler.init(path.join(store.get('stickersPath'), 'stickers.db'));
@@ -131,7 +122,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   // Show window on clicking dock icon
-  window.show();
+  window!.show();
 });
 
 // In this file you can include the rest of your app's specific main process
@@ -140,6 +131,7 @@ app.on('activate', () => {
 // Migrate stickerPacksOrder to config in stickers folder
 if (store.has('stickerPacksOrder')) {
   config.set('stickerPacksOrder', store.get('stickerPacksOrder'));
+  // @ts-ignore
   store.delete('stickerPacksOrder');
 }
 
@@ -147,29 +139,29 @@ if (store.has('stickerPacksOrder')) {
  * Toggles the window's visibility
  */
 function toggleWindow() {
-  if (window.isFocused()) {
-    window.hide();
+  if (window!.isFocused()) {
+    window!.hide();
   } else {
     const currentScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
     const isWindowOnCurrentScreen =
-      currentScreen.bounds.x <= window.getPosition()[0] &&
-      window.getPosition()[0] <= currentScreen.bounds.x + currentScreen.bounds.width &&
-      currentScreen.bounds.y <= window.getPosition()[1] &&
-      window.getPosition()[1] <= currentScreen.bounds.y + currentScreen.bounds.height;
+      currentScreen.bounds.x <= window!.getPosition()[0] &&
+      window!.getPosition()[0] <= currentScreen.bounds.x + currentScreen.bounds.width &&
+      currentScreen.bounds.y <= window!.getPosition()[1] &&
+      window!.getPosition()[1] <= currentScreen.bounds.y + currentScreen.bounds.height;
     if (!isWindowOnCurrentScreen) {
-      const windowSize = window.getSize();
+      const windowSize = window!.getSize();
       let moveToX = currentScreen.bounds.x + currentScreen.bounds.width / 2 - windowSize[0] / 2;
       let moveToY = currentScreen.bounds.y + currentScreen.bounds.height / 2 - windowSize[1] / 2;
       moveToX = Math.floor(moveToX);
       moveToY = Math.floor(moveToY);
-      window.setPosition(moveToX, moveToY);
+      window!.setPosition(moveToX, moveToY);
     }
-    window.show();
+    window!.show();
   }
 }
 
 // Register hotkey
-function registerHotkey(hotkey) {
+function registerHotkey(hotkey: string) {
   try {
     globalShortcut.register(hotkey, () => {
       toggleWindow();
@@ -182,14 +174,14 @@ function registerHotkey(hotkey) {
 // IPC handlers
 
 ipcMain.on('close-window', () => {
-  window.hide();
+  window!.hide();
 });
 
 ipcMain.handle('ready', () => {
   const stickerPacksMap = stickerHandler.getAllStickerPacks(store.get('stickersPath'));
   let stickerPacksOrder = [...new Set(config.get('stickerPacksOrder'))].filter(
     (pack) => pack in stickerPacksMap
-  );
+  ) as string[];
   // check if there are any new sticker packs not in StickerPacksOrder
   const newStickerPacks = Object.keys(stickerPacksMap).filter(
     (pack) => !stickerPacksOrder.includes(pack)
@@ -209,7 +201,7 @@ ipcMain.handle('ready', () => {
 
 ipcMain.on('send-sticker', (event, stickerPath, settings) => {
   settings.resizeWidth = config.get('resizeWidth');
-  stickerHandler.pasteStickerFromPath(stickerPath, window, settings);
+  stickerHandler.pasteStickerFromPath(stickerPath, window!, settings);
   sqlHandler.useSticker({ PackID: settings.stickerPackID, StickerID: settings.stickerID });
 });
 
@@ -246,7 +238,7 @@ ipcMain.on('enable-hotkey', () => {
   registerHotkey(config.get('hotkey'));
 });
 
-function setRunOnStartup(runOnStartup) {
+function setRunOnStartup(runOnStartup: boolean) {
   // https://www.electronjs.org/docs/latest/api/app#appsetloginitemsettingssettings-macos-windows
   const appFolder = path.dirname(process.execPath);
   const updateExe = path.resolve(appFolder, '..', 'Update.exe');
@@ -278,6 +270,7 @@ ipcMain.on('set-resize-width', (event, width) => {
 });
 
 ipcMain.handle('get-updates', async () => {
+  // @ts-ignore
   return await checkUpdate(config);
 });
 
