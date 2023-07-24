@@ -4,10 +4,9 @@ const {
   globalShortcut,
   ipcMain,
   Menu,
-  nativeImage,
-  Tray,
-  shell,
   screen,
+  shell,
+  Tray,
 } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
