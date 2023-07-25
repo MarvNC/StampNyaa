@@ -29,6 +29,7 @@ const store = new Store({
   },
 });
 const config = new Store({
+  cwd: store.get('stickersPath'),
   defaults: {
     stickerPacksOrder: [],
     theme: 'blue',
