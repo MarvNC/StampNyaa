@@ -1,20 +1,28 @@
+import StickerRenderer from './stickerRenderer';
+
 const addStickerModal = {
+  stickerRenderer: null as StickerRenderer | null,
+  setRenderer: (renderer: StickerRenderer) => {
+    addStickerModal.stickerRenderer = renderer;
+  },
   setUpAddStickerModal: async () => {
     // Download sticker pack on add button
-    const addButton = document.getElementById('add-button');
-    const addStickerModalBackground = document.getElementById('add-sticker-background');
-    const addStickerInput = document.getElementById('add-sticker-input');
-    const addStickerButton = document.getElementById('add-sticker-button');
+    const addButton = document.getElementById('add-button') as HTMLDivElement;
+    const addStickerModalBackground = document.getElementById(
+      'add-sticker-background'
+    ) as HTMLDivElement;
+    const addStickerInput = document.getElementById('add-sticker-input') as HTMLInputElement;
+    const addStickerButton = document.getElementById('add-sticker-button') as HTMLDivElement;
     const lineURLRegex = /^https?:\/\/store\.line\.me\/stickershop\/product\/\d+(\/\w{2})?$/;
 
     let downloadActive = false;
 
-    function errorButton(addStickerButton) {
+    function errorButton(addStickerButton: HTMLDivElement) {
       addStickerButton.classList.add('error');
-      addStickerButton.firstElementChild.textContent = 'close';
+      addStickerButton.firstElementChild!.textContent = 'close';
       setTimeout(() => {
         addStickerButton.classList.remove('error');
-        addStickerButton.firstElementChild.textContent = 'check';
+        addStickerButton.firstElementChild!.textContent = 'check';
       }, 600);
     }
 
@@ -26,7 +34,6 @@ const addStickerModal = {
     addStickerModalBackground.addEventListener('click', async (e) => {
       if (e.target === addStickerModalBackground && !downloadActive) {
         addStickerModalBackground.style.display = 'none';
-        stickerRenderer.refreshStickerPacks();
       }
     });
 
@@ -44,20 +51,23 @@ const addStickerModal = {
 
       downloadActive = true;
       addStickerButton.classList.add('loading');
-      addStickerButton.firstElementChild.textContent = 'more_horiz';
+      addStickerButton.firstElementChild!.textContent = 'more_horiz';
     });
 
-    const addStickerDownloadFeedback = document.getElementById('add-sticker-download-feedback');
-    const downloadProgressBar = document.getElementById('download-progress');
-    const addStickerTitle = document.getElementById('add-sticker-title');
-    const progressText = document.getElementById('progress-text');
+    const addStickerDownloadFeedback = document.getElementById(
+      'add-sticker-download-feedback'
+    ) as HTMLDivElement;
+    const downloadProgressBar = document.getElementById('download-progress') as HTMLDivElement;
+    const addStickerTitle = document.getElementById('add-sticker-title') as HTMLHeadingElement;
+    const progressText = document.getElementById('progress-text') as HTMLSpanElement;
 
     window.onmessage = (event) => {
       // Updates the progress bar and button
-      function finishDownload(addStickerButton) {
+      function finishDownload(addStickerButton: HTMLDivElement) {
         downloadActive = false;
         addStickerButton.classList.remove('loading');
-        addStickerButton.firstElementChild.textContent = 'check';
+        addStickerButton.firstElementChild!.textContent = 'check';
+        addStickerModal.stickerRenderer!.refreshStickerPacks();
       }
       const data = event.data;
       if (data.type === 'download-sticker-pack') {
@@ -79,3 +89,5 @@ const addStickerModal = {
     };
   },
 };
+
+export default addStickerModal;

@@ -1,8 +1,9 @@
 const settingsModal = {
   setUpThemeSelect: async () => {
     // change theme
-    let theme = await api.getTheme();
-    function setTheme(theme) {
+    let theme = (await api.getTheme()) as Theme;
+    type Theme = 'blue' | 'pink' | 'dracula' | 'night-pink';
+    function setTheme(theme: Theme) {
       const colors = [
         'primary-color',
         'background-color',
@@ -19,10 +20,10 @@ const settingsModal = {
       }
     }
     setTheme(theme);
-    const themeSelect = document.getElementById('theme-select');
-    const themes = [...themeSelect.children];
+    const themeSelect = document.getElementById('theme-select') as HTMLDivElement;
+    const themes = [...(themeSelect.children as HTMLCollectionOf<HTMLDivElement>)];
     for (const themeSelector of themes) {
-      const elementTheme = themeSelector.dataset.theme;
+      const elementTheme = themeSelector.dataset.theme as Theme;
       if (elementTheme === theme) {
         themeSelector.classList.add('active');
       }
@@ -40,8 +41,10 @@ const settingsModal = {
     }
   },
   setUpSettingsModal: async () => {
-    const settingsModalBackground = document.getElementById('settings-background');
-    const settingsButton = document.getElementById('settings-button');
+    const settingsModalBackground = document.getElementById(
+      'settings-background'
+    ) as HTMLDivElement;
+    const settingsButton = document.getElementById('settings-button') as HTMLDivElement;
 
     settingsButton.addEventListener('click', () => {
       settingsModalBackground.style.display = 'block';
@@ -54,14 +57,16 @@ const settingsModal = {
     });
 
     // Set hotkey
-    const hotkeyInputContainer = document.getElementById('hotkey-input-container');
-    const hotkeyInput = document.getElementById('hotkey-input');
+    const hotkeyInputContainer = document.getElementById(
+      'hotkey-input-container'
+    ) as HTMLDivElement;
+    const hotkeyInput = document.getElementById('hotkey-input') as HTMLInputElement;
     const pressedkeys = new Set();
     let hotkeyString = await api.getHotkey();
     hotkeyInput.value = hotkeyString;
     let newHotkey = '';
 
-    function keyToUpper(key) {
+    function keyToUpper(key: string) {
       if (key.length === 1) {
         key = key.toUpperCase();
       }
@@ -102,8 +107,8 @@ const settingsModal = {
     });
 
     // Run on startup
-    const runOnStartup = document.getElementById('run-on-startup');
-    const runOnStartupCheck = document.getElementById('run-on-startup-check');
+    const runOnStartup = document.getElementById('run-on-startup') as HTMLDivElement;
+    const runOnStartupCheck = document.getElementById('run-on-startup-check') as HTMLSpanElement;
     const runOnStartupEnabled = await api.getRunOnStartup();
     runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
     runOnStartup.addEventListener('click', () => {
@@ -117,7 +122,7 @@ const settingsModal = {
     });
 
     // Width setting
-    const widthInput = document.getElementById('fit-to-width-input');
+    const widthInput = document.getElementById('fit-to-width-input') as HTMLInputElement;
     let resizeWidth = await api.getResizeWidth();
     widthInput.value = resizeWidth;
     widthInput.addEventListener('change', () => {
@@ -138,6 +143,9 @@ const settingsModal = {
 
     // Version
     const version = await api.getVersion();
-    document.getElementById('versionString').textContent = version;
+    const headerElement = document.getElementById('version-string') as HTMLHeadingElement;
+    headerElement.textContent = version;
   },
 };
+
+export default settingsModal;

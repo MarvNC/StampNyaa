@@ -1,6 +1,6 @@
-const { app } = require('electron');
-const axios = require('axios');
-const Store = require('electron-store');
+import { app } from 'electron';
+import axios from 'axios';
+import ElectronStore from 'electron-store';
 
 const version = app.getVersion();
 const platform = process.platform;
@@ -9,17 +9,16 @@ const platform = process.platform;
  * Checks if the operating system is MacOS or Linux and if there are updates available.
  * Returns the version number of the latest release if there are updates available. Otherwise, returns null.
  * Also does not check for updates if the last update check was less than five minutes ago.
- * @param {Store} config
- * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns null.
+ * @returns The version number of the latest release if there are updates available. Otherwise, returns false.
  */
-async function checkUpdate(config) {
+async function checkUpdate(config: ElectronStore): Promise<string | false> {
   // Do not check if Windows
   if (platform === 'win32') {
-    return null;
+    return false;
   }
 
   // Get last check update time
-  const lastCheckUpdateTime = config.get('lastCheckUpdateTime', new Date(0).valueOf());
+  const lastCheckUpdateTime = config.get('lastCheckUpdateTime', new Date(0).valueOf()) as number;
   console.log(
     `Last check update time: ${new Date(lastCheckUpdateTime).toLocaleString()} which was ${(
       (Date.now() - lastCheckUpdateTime) /
@@ -30,7 +29,7 @@ async function checkUpdate(config) {
   // Set last check update time to now
   // Check if the last check update time was less than five minutes ago
   if (Date.now() - lastCheckUpdateTime < 5 * 60 * 1000) {
-    return null;
+    return false;
   }
 
   config.set('lastCheckUpdateTime', Date.now().valueOf());
@@ -48,7 +47,7 @@ async function checkUpdate(config) {
     return latestVersion;
   }
   console.log('No update available');
-  return null;
+  return false;
 }
 
 /**
@@ -56,7 +55,7 @@ async function checkUpdate(config) {
  * @param {string} v1
  * @param {string} v2
  */
-function compareVersionString(v1, v2) {
+function compareVersionString(v1: string, v2: string) {
   const v1Parts = v1.split('.');
   const v2Parts = v2.split('.');
 
@@ -71,4 +70,4 @@ function compareVersionString(v1, v2) {
   return false;
 }
 
-module.exports = checkUpdate;
+export default checkUpdate;

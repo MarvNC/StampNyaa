@@ -1,25 +1,23 @@
-/**
- * @typedef {import('../../libs/draggable@1.0.0-beta.11_lib_draggable.bundle').SortableEvent} SortableEvent
- */
+import { Sortable, SortableSortedEvent } from '@shopify/draggable';
 
 class StickerRenderer {
   // Whether the user is currently moving a sticker pack icon
   sorting;
   // The current mouse x/y position
-  mouseX;
-  mouseY;
-  stickerPacksMap;
-  stickerPacksOrder;
-  stickerContainer;
-  stickerPackListDiv;
+  mouseX = 0;
+  mouseY = 0;
+  stickerPacksMap = {} as Record<string, StickerPack>;
+  stickerPacksOrder = [] as string[];
+  stickerContainer: HTMLDivElement;
+  stickerPackListDiv: HTMLDivElement;
   constructor() {
     document.addEventListener('mousemove', (e) => {
       this.mouseX = e.clientX;
       this.mouseY = e.clientY;
     });
     this.sorting = false;
-    this.stickerContainer = document.getElementById('sticker-list');
-    this.stickerPackListDiv = document.getElementById('sticker-pack-list');
+    this.stickerContainer = document.getElementById('sticker-list') as HTMLDivElement;
+    this.stickerPackListDiv = document.getElementById('sticker-pack-list') as HTMLDivElement;
   }
   /**
    * Sets up sticker packs
@@ -32,7 +30,7 @@ class StickerRenderer {
     this.updateMostUsed();
 
     // Set up favorites
-    const favorites = await api.getFavorites();
+    const favorites = (await api.getFavorites()) as { PackID: string; StickerID: string }[];
     const favoritesDiv = this.makeAndSetUpStickerPack('favorites', {
       title: '<span class="material-symbols-outlined">star</span> Favorites',
       author: '',
@@ -53,9 +51,11 @@ class StickerRenderer {
     // set click to scroll to pack on icon for most-used and favorite
     const icons = ['most-used', 'favorites'];
     for (const icon of icons) {
-      const iconDiv = document.getElementById(`${icon}-icon`);
+      const iconDiv = document.getElementById(`${icon}-icon`) as HTMLDivElement;
       iconDiv.addEventListener('click', (e) => {
-        const stickerPackDiv = document.getElementById(`sticker-pack-container-${icon}`);
+        const stickerPackDiv = document.getElementById(
+          `sticker-pack-container-${icon}`
+        ) as HTMLDivElement;
         stickerPackDiv.scrollIntoView({ behavior: 'instant' });
       });
     }
@@ -80,8 +80,10 @@ class StickerRenderer {
         this.mouseY <= stickerContainerRect.bottom
       ) {
         const topElementOffset = this.stickerPackListDiv.offsetTop;
-        const scrollPos = e.currentTarget.scrollTop + topElementOffset;
-        const stickerPackDivs = document.getElementsByClassName('sticker-pack');
+        const scrollPos = (e.currentTarget as HTMLDivElement).scrollTop + topElementOffset;
+        const stickerPackDivs = document.getElementsByClassName(
+          'sticker-pack'
+        ) as HTMLCollectionOf<HTMLDivElement>;
         for (let i = 0; i < stickerPackDivs.length; i++) {
           const stickerPackDiv = stickerPackDivs[i];
           const packID = stickerPackDiv.dataset.packID;
@@ -108,39 +110,36 @@ class StickerRenderer {
    * Sets up draggable sticker pack icons and updates sticker pack order
    */
   setUpDraggableIcons() {
-    /**
-     * @type {SortableEvent}
-     */
-    const sortable = new Draggable.Sortable(this.stickerPackListDiv, {
+    const sortable = new Sortable(this.stickerPackListDiv, {
       draggable: '.sticker-pack-icon-wrapper',
     });
     sortable.on('sortable:start', (event) => {
       this.sorting = true;
     });
-    sortable.on('sortable:sorted', (event) => {
+    sortable.on('sortable:sorted', (event: SortableSortedEvent) => {
       // add active to sorted element
-      event.data.dragEvent.data.source.classList.add('active');
+      event.dragEvent.source.classList.add('active');
     });
     sortable.on('sortable:stop', (event) => {
       this.sorting = false;
       // rearrange sticker packs
-      const rearrangedStickerPack = event.dragEvent.data.source;
-      const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID;
+      const rearrangedStickerPack = event.dragEvent.source;
+      const rearrangedStickerPackID = rearrangedStickerPack.dataset.packID as string;
       const rearrangedStickerPackContainer = document.getElementById(
         `sticker-pack-container-${rearrangedStickerPackID}`
-      );
+      ) as HTMLDivElement;
       this.stickerContainer.removeChild(rearrangedStickerPackContainer);
       // Remove rearrangedStickerPackID from this.stickerPacksOrder and insert it at the new index
       this.stickerPacksOrder = this.stickerPacksOrder.filter(
         (id) => id !== rearrangedStickerPackID
       );
-      this.stickerPacksOrder.splice(event.data.newIndex, 0, rearrangedStickerPackID);
+      this.stickerPacksOrder.splice(event.newIndex, 0, rearrangedStickerPackID);
       // event.data.newIndex is the index of the element in the list
-      if (event.data.newIndex !== this.stickerPacksOrder.length - 1) {
+      if (event.newIndex !== this.stickerPacksOrder.length - 1) {
         this.stickerContainer.insertBefore(
           rearrangedStickerPackContainer,
           document.getElementById(
-            'sticker-pack-container-' + this.stickerPacksOrder[event.data.newIndex + 1]
+            'sticker-pack-container-' + this.stickerPacksOrder[event.newIndex + 1]
           )
         );
       } else {
@@ -154,11 +153,8 @@ class StickerRenderer {
    * Allows for dragging icons in the favorites pack section
    * @param {HTMLDivElement} favoritesPackDiv
    */
-  setUpDraggableFavorites(favoritesPackDiv) {
-    /**
-     * @type {SortableEvent}
-     */
-    const sortable = new Draggable.Sortable(favoritesPackDiv, {
+  setUpDraggableFavorites(favoritesPackDiv: HTMLDivElement) {
+    const sortable = new Sortable(favoritesPackDiv, {
       draggable: '.sticker',
     });
     sortable.on('sortable:sorted', (event) => {});
@@ -175,7 +171,7 @@ class StickerRenderer {
    * @param {Object} stickerPack
    * @returns {HTMLDivElement}
    */
-  makeAndSetUpStickerPack(stickerPackID, stickerPack) {
+  makeAndSetUpStickerPack(stickerPackID: string, stickerPack: any) {
     const {
       title,
       mainIcon,
@@ -202,13 +198,15 @@ class StickerRenderer {
 
         // Scroll to sticker pack on hover
         stickerIconDiv.addEventListener('mouseover', (e) => {
-          const stickerPackDiv = document.getElementById(`sticker-pack-container-${stickerPackID}`);
+          const stickerPackDiv = document.getElementById(
+            `sticker-pack-container-${stickerPackID}`
+          ) as HTMLDivElement;
           stickerPackDiv.scrollIntoView({ behavior: 'instant' });
           // remove active from all sticker pack icons
           document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
           // add active to current sticker pack icon
           if (!this.sorting) {
-            e.currentTarget.classList.add('active');
+            (e!.currentTarget as HTMLDivElement).classList.add('active');
           }
         });
       }
@@ -226,7 +224,7 @@ class StickerRenderer {
 <a class="sticker-pack-title" href="${storeURL}" target="_blank">${title}</a>
 <a class="sticker-pack-author" href="${authorURL}" target="_blank">${author}</a>
 </div>
-`);
+`) as HTMLDivElement;
       stickerPackDiv.appendChild(stickerPackHeader);
 
       // loop through stickers
@@ -251,10 +249,10 @@ class StickerRenderer {
     // reset most used contents
     mostUsedDiv.innerHTML = '';
 
-    api.getMostUsed().then((mostUsed) => {
+    api.getMostUsed().then((mostUsed: { PackID: string; StickerID: string }[]) => {
       // delete old most used
       this.stickerContainer.removeChild(
-        document.getElementById('sticker-pack-container-most-used')
+        document.getElementById('sticker-pack-container-most-used') as HTMLDivElement
       );
       const mostUsedDiv = this.makeAndSetUpStickerPack('most-used', {
         title: '<span class="material-symbols-outlined">history</span> Most Used',
@@ -267,7 +265,7 @@ class StickerRenderer {
         }),
         storeURL: 'https://store.line.me/stickershop/',
         noIcon: true,
-      });
+      }) as HTMLDivElement;
       // reinsert most used before favorites div
       this.stickerContainer.insertBefore(
         mostUsedDiv,
@@ -280,7 +278,7 @@ class StickerRenderer {
    * @param {Object} sticker
    * @returns {HTMLDivElement}
    */
-  createSticker(sticker) {
+  createSticker(sticker: any) {
     const stickerID = sticker.stickerID;
     const stickerDiv = document.createElement('div');
     stickerDiv.classList.add('sticker');
@@ -298,20 +296,25 @@ class StickerRenderer {
     if (sticker.type !== 'static') {
       stickerDiv.classList.add('special');
       stickerDiv.dataset.specialPath = sticker.specialPath;
+      // on hover change image to special
       stickerDiv.addEventListener('mouseover', async (e) => {
-        const { specialPath } = e.currentTarget.dataset;
-        e.currentTarget.firstChild.src = specialPath;
+        const target = e.currentTarget as HTMLDivElement;
+        const specialPath = target.dataset.specialPath as string;
+        const img = target.firstChild as HTMLImageElement;
+        img.src = specialPath;
       });
       stickerDiv.addEventListener('mouseout', async (e) => {
-        const { filepath } = e.currentTarget.dataset;
-        e.currentTarget.firstChild.src = filepath;
+        const target = e.currentTarget as HTMLDivElement;
+        const filepath = target.dataset.filepath as string;
+        const img = target.firstChild as HTMLImageElement;
+        img.src = filepath;
       });
     }
 
     // on click send sticker
     stickerDiv.addEventListener('click', async (e) => {
       // determine whether special or not, send appropriate sticker path
-      const { type, filepath, specialPath } = e.currentTarget.dataset;
+      const { type, filepath, specialPath } = (e.currentTarget as HTMLElement).dataset;
       let stickerPath = filepath;
       if (type !== 'static') {
         stickerPath = specialPath;
@@ -331,7 +334,8 @@ class StickerRenderer {
     // on right click add to favorites
     stickerDiv.addEventListener('contextmenu', async (e) => {
       e.preventDefault();
-      const { packID, stickerID } = e.currentTarget.dataset;
+      const target = e.currentTarget as HTMLElement;
+      const { packID, stickerID } = target.dataset as { packID: string; stickerID: string };
       this.toggleFavorite(packID, stickerID);
     });
 
@@ -342,8 +346,10 @@ class StickerRenderer {
    * @param {string} PackID
    * @param {string} ID
    */
-  toggleFavorite(PackID, ID) {
-    const favoritesPackDiv = document.getElementById('sticker-pack-container-favorites');
+  toggleFavorite(PackID: string, ID: string) {
+    const favoritesPackDiv = document.getElementById(
+      'sticker-pack-container-favorites'
+    ) as HTMLDivElement;
     // check if sticker already favorited
     const stickerDiv = favoritesPackDiv.querySelector(
       `.sticker[data-pack-i-d="${PackID}"][data-sticker-i-d="${ID}"]`
@@ -366,7 +372,7 @@ class StickerRenderer {
    * @param {HTMLElement} modal
    * @returns {Promise<void>}
    */
-  animateFeedbackModal(modal) {
+  animateFeedbackModal(modal: HTMLElement) {
     modal.classList.add('active');
     setTimeout(() => {
       modal.classList.remove('active');
@@ -377,11 +383,15 @@ class StickerRenderer {
     }, 500);
   }
   popupAddFavoriteFeedback() {
-    const addFavoriteFeedbackModal = document.querySelector('#add-favorite-feedback');
+    const addFavoriteFeedbackModal = document.querySelector(
+      '#add-favorite-feedback'
+    ) as HTMLElement;
     this.animateFeedbackModal(addFavoriteFeedbackModal);
   }
   popupRemoveFavoriteFeedback() {
-    const deleteFavoriteFeedbackModal = document.querySelector('#remove-favorite-feedback');
+    const deleteFavoriteFeedbackModal = document.querySelector(
+      '#remove-favorite-feedback'
+    ) as HTMLElement;
     this.animateFeedbackModal(deleteFavoriteFeedbackModal);
   }
   /**
@@ -389,8 +399,8 @@ class StickerRenderer {
    */
   updateFavorites() {
     const favoritedStickers = [
-      ...document.getElementById('sticker-pack-container-favorites').querySelectorAll('.sticker'),
-    ];
+      ...document.getElementById('sticker-pack-container-favorites')!.querySelectorAll('.sticker'),
+    ] as HTMLDivElement[];
     api.setFavorites(
       favoritedStickers.map((stickerDiv) => ({
         PackID: stickerDiv.dataset.packID,
@@ -402,12 +412,15 @@ class StickerRenderer {
    * Gets and refreshes all sticker packs
    */
   refreshStickerPacks() {
+    console.log('Refreshing sticker packs');
     this.populateStickerPacks();
   }
 }
 
-function createElementFromHTML(htmlString) {
+function createElementFromHTML(htmlString: string) {
   const div = document.createElement('div');
   div.innerHTML = htmlString.trim();
   return div.firstChild;
 }
+
+export default StickerRenderer;

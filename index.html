@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>スタンプにゃあ～ | StampNyaa</title>
-    <link rel="stylesheet" href="../dist/index.css" />
+    <link rel="stylesheet" href="./dist/index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -128,10 +128,10 @@
 
         <a href="https://github.com/MarvNC/StampNyaa" target="_blank" class="settingsRow credits">
           <div>
-            <img src="../assets/icon.ico" alt="StampNyaa Icon" />
+            <img src="./icon.ico" alt="StampNyaa Icon" />
           </div>
           <div>
-            <h2 id="versionString"></h2>
+            <h2 id="version-string"></h2>
           </div>
           <div class="icons">
             <span class="material-symbols-outlined heart"> favorite </span>
@@ -140,7 +140,7 @@
             <h2>by MarvNC</h2>
           </div>
           <div>
-            <img src="../assets/github-mark/github-mark-white.svg" alt="GitHub icon" />
+            <img src="./github-mark-white.svg" alt="GitHub icon" />
           </div>
         </a>
       </div>
@@ -151,7 +151,7 @@
       <div id="version-modal" class="modal">
         <div class="updateIcons">
           <span class="material-symbols-outlined"> update </span>
-          <img src="../assets/icon.ico" alt="StampNyaa Icon" class="icon" />
+          <img src="./icon.ico" alt="StampNyaa Icon" class="icon" />
           <span class="material-symbols-outlined"> celebration </span>
         </div>
         <div><h2 id="update-text"></h2></div>
@@ -173,12 +173,6 @@
       <span class="material-symbols-outlined"> image </span>
       <span class="material-symbols-outlined"> delete </span>
     </div>
-    <script src="../libs/draggable@1.0.0-beta.11_lib_draggable.bundle.js"></script>
-    <script src="./render/addStickerModal.js"></script>
-    <script src="./render/menuBar.js"></script>
-    <script src="./render/settingsModal.js"></script>
-    <script src="./render/stickerRenderer.js"></script>
-    <script src="./render/updateModal.js"></script>
-    <script src="renderer.js"></script>
+    <script type="module" src="./src/renderer.ts"></script>
   </body>
 </html>

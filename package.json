@@ -7,14 +7,14 @@
     "type": "git",
     "url": "https://github.com/MarvNC/StampNyaa"
   },
-  "main": "src/index.js",
+  "main": ".vite/build/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "format": "prettier --write \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.{js,ts}\"",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -25,6 +25,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@nut-tree/nut-js": "^3.1.2",
+    "@shopify/draggable": "1.0.0-beta.11",
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
@@ -43,15 +44,18 @@
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@electron-forge/plugin-vite": "^6.2.1",
     "@electron-forge/publisher-github": "^6.2.1",
+    "@types/node": "^20.4.4",
     "electron": "25.2.0",
     "electron-builder": "^24.4.0",
     "electronmon": "^2.0.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "prettier": "3.0.0"
+    "prettier": "3.0.0",
+    "typescript": "^5.1.6"
   },
   "lint-staged": {
-    "*.js": "prettier --write"
+    "*.{js,ts}": "prettier --write"
   }
 }

@@ -1,17 +1,14 @@
-/**
- * @typedef {import('./render/addStickerModal')} addStickerModal
- * @typedef {import('./render/menuBar')} menuBar
- * @typedef {import('./render/settingsModal')} settingsModal
- * @typedef {import('./render/updateModal')} updateModal
- * @typedef {import('./render/stickerRenderer')} StickerRenderer
- */
-/**
- * @type {StickerRenderer}
- */
+import addStickerModal from './render/addStickerModal';
+import menuBar from './render/menuBar';
+import settingsModal from './render/settingsModal';
+import updateModal from './render/updateModal';
+import StickerRenderer from './render/stickerRenderer';
+
 const stickerRenderer = new StickerRenderer();
 
 window.addEventListener('DOMContentLoaded', async () => {
   addStickerModal.setUpAddStickerModal();
+  addStickerModal.setRenderer(stickerRenderer);
 
   menuBar.setUpMenuBarButtons();
 

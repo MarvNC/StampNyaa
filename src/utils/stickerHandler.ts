@@ -1,10 +1,11 @@
-const { app, clipboard } = require('electron');
-const fs = require('fs');
-const path = require('path');
-const { keyboard, Key } = require('@nut-tree/nut-js');
-const Jimp = require('jimp');
+import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import { keyboard, Key } from '@nut-tree/nut-js';
+import Jimp from 'jimp';
 
-let clipboardEx;
+type clipboard = typeof import('electron-clipboard-ex');
+let clipboardEx: clipboard | null = null;
 
 // if not linux
 if (process.platform !== 'linux') {
@@ -13,10 +14,10 @@ if (process.platform !== 'linux') {
 
 /**
  * Reads the sticker packs directory and returns a map of sticker pack objects.
- * @returns {Array} Array of sticker pack objects
  */
-function getAllStickerPacks(stickerPacksDir) {
-  const stickerPacksMap = {};
+function getAllStickerPacks(stickerPacksDir: string) {
+  const stickerPacksMap: Record<string, StickerPack> = {};
+
   // check if sticker packs directory exists, if not create it
   if (!fs.existsSync(stickerPacksDir)) {
     fs.mkdirSync(stickerPacksDir);
@@ -31,8 +32,8 @@ function getAllStickerPacks(stickerPacksDir) {
     if (!fs.existsSync(path.join(stickerPacksDir, pack, 'info.json'))) {
       fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), '{}');
     }
-    const stickerPackData = JSON.parse(
-      fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
+    const stickerPackData: StickerPack = JSON.parse(
+      fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json')).toString()
     );
 
     if (!stickerPackData.title) {
@@ -52,9 +53,9 @@ function getAllStickerPacks(stickerPacksDir) {
     // read the rest of the stickers
     const stickers = fs
       .readdirSync(path.join(stickerPacksDir, pack))
-      .filter((file) => file !== 'info.json' && file !== 'main.png');
+      .filter((file: string) => file !== 'info.json' && file !== 'main.png');
 
-    stickerPackData.stickers = {};
+    const stickersMap: Record<string, Sticker> = {};
 
     // handle animated/popup stickers (dumbly assume a static version exists)
     const specialStickers = [];
@@ -62,25 +63,21 @@ function getAllStickerPacks(stickerPacksDir) {
       if (sticker.endsWith('_animation.png') || sticker.endsWith('_popup.png')) {
         specialStickers.push(sticker);
       } else {
-        const stickerID = path.parse(sticker).name;
+        const stickerID: string = path.parse(sticker).name;
         const filepath = path.join(stickerPacksDir, pack, sticker);
         const type = 'static';
-        stickerPackData.stickers[stickerID] = { filepath, type, stickerPackID: pack };
+        stickersMap[stickerID] = { filepath, type, stickerPackID: pack, stickerID };
       }
     }
     for (const sticker of specialStickers) {
       const stickerID = sticker.split('_')[0];
       const filepath = path.join(stickerPacksDir, pack, sticker);
-      stickerPackData.stickers[stickerID].specialPath = filepath;
-      const type = path.parse(sticker).name.split('_')[1];
-      stickerPackData.stickers[stickerID].type = type;
+      stickersMap[stickerID].specialPath = filepath;
+      const type = path.parse(sticker).name.split('_')[1] as StickerType;
+      stickersMap[stickerID].type = type;
     }
-    // convert stickers object to array
-    stickerPackData.stickers = Object.entries(stickerPackData.stickers).map(
-      ([stickerID, sticker]) => {
-        return { stickerID, ...sticker };
-      }
-    );
+    // convert stickersMap object to array
+    stickerPackData.stickers = Object.values(stickersMap);
     stickerPacksMap[pack] = stickerPackData;
   }
   return stickerPacksMap;
@@ -93,9 +90,15 @@ function getAllStickerPacks(stickerPacksDir) {
  * @param {*} closeWindowAfterSend
  */
 async function pasteStickerFromPath(
-  stickerPath,
-  window,
-  { closeWindowAfterSend = true, resizeWidth, title = '', author = '', stickerPackID = '' } = {}
+  stickerPath: any,
+  window: BrowserWindow,
+  {
+    closeWindowAfterSend = true,
+    resizeWidth = 160,
+    title = '',
+    author = '',
+    stickerPackID = '',
+  } = {}
 ) {
   // check valid file path
   if (!fs.existsSync(stickerPath)) {
@@ -136,10 +139,11 @@ async function pasteStickerFromPath(
 
   // write sticker file to clipboard if not linux
   if (process.platform !== 'linux') {
-    clipboardEx.writeFilePaths([tempStickerPath]);
+    clipboardEx!.writeFilePaths([tempStickerPath]);
   } else {
     // linux
-    clipboard.writeImage(tempStickerPath);
+    const image = nativeImage.createFromPath(tempStickerPath);
+    clipboard.writeImage(image);
   }
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
@@ -173,11 +177,11 @@ async function pasteStickerFromPath(
  * @param {string} string
  * @returns {string} String with illegal characters removed
  */
-function stripIllegalCharacters(string) {
+function stripIllegalCharacters(string: string) {
   return string.replace(/[/\\?%*:|"<>]/g, '');
 }
 
-module.exports = {
+export default {
   pasteStickerFromPath,
   getAllStickerPacks,
 };
