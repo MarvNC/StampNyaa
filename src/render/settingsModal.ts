@@ -1,8 +1,9 @@
 const settingsModal = {
   setUpThemeSelect: async () => {
     // change theme
-    let theme = await api.getTheme();
-    function setTheme(theme) {
+    let theme = (await api.getTheme()) as Theme;
+    type Theme = 'blue' | 'pink' | 'dracula' | 'night-pink';
+    function setTheme(theme: Theme) {
       const colors = [
         'primary-color',
         'background-color',
@@ -20,9 +21,9 @@ const settingsModal = {
     }
     setTheme(theme);
     const themeSelect = document.getElementById('theme-select');
-    const themes = [...themeSelect.children];
+    const themes = [...(themeSelect!.children as HTMLCollectionOf<HTMLDivElement>)];
     for (const themeSelector of themes) {
-      const elementTheme = themeSelector.dataset.theme;
+      const elementTheme = themeSelector.dataset.theme as Theme;
       if (elementTheme === theme) {
         themeSelector.classList.add('active');
       }
@@ -40,8 +41,10 @@ const settingsModal = {
     }
   },
   setUpSettingsModal: async () => {
-    const settingsModalBackground = document.getElementById('settings-background');
-    const settingsButton = document.getElementById('settings-button');
+    const settingsModalBackground = document.getElementById(
+      'settings-background'
+    ) as HTMLDivElement;
+    const settingsButton = document.getElementById('settings-button') as HTMLDivElement;
 
     settingsButton.addEventListener('click', () => {
       settingsModalBackground.style.display = 'block';
@@ -55,13 +58,13 @@ const settingsModal = {
 
     // Set hotkey
     const hotkeyInputContainer = document.getElementById('hotkey-input-container');
-    const hotkeyInput = document.getElementById('hotkey-input');
+    const hotkeyInput = document.getElementById('hotkey-input') as HTMLInputElement;
     const pressedkeys = new Set();
     let hotkeyString = await api.getHotkey();
-    hotkeyInput.value = hotkeyString;
+    hotkeyInput!.value = hotkeyString;
     let newHotkey = '';
 
-    function keyToUpper(key) {
+    function keyToUpper(key: string) {
       if (key.length === 1) {
         key = key.toUpperCase();
       }
@@ -76,7 +79,7 @@ const settingsModal = {
 
       api.disableHotkey();
       e.preventDefault();
-      hotkeyInputContainer.classList.add('active');
+      hotkeyInputContainer!.classList.add('active');
       if (key === 'Escape') {
         hotkeyInput.value = hotkeyString;
         pressedkeys.clear();
@@ -92,7 +95,7 @@ const settingsModal = {
       e.preventDefault();
       pressedkeys.delete(key);
       if (pressedkeys.size === 0) {
-        hotkeyInputContainer.classList.remove('active');
+        hotkeyInputContainer!.classList.remove('active');
         // save hotkey
         hotkeyString = newHotkey;
         api.setHotkey(hotkeyString);
@@ -105,26 +108,26 @@ const settingsModal = {
     const runOnStartup = document.getElementById('run-on-startup');
     const runOnStartupCheck = document.getElementById('run-on-startup-check');
     const runOnStartupEnabled = await api.getRunOnStartup();
-    runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
-    runOnStartup.addEventListener('click', () => {
-      if (runOnStartupCheck.style.display === 'none') {
-        runOnStartupCheck.style.display = 'block';
+    runOnStartupCheck!.style.display = runOnStartupEnabled ? 'block' : 'none';
+    runOnStartup!.addEventListener('click', () => {
+      if (runOnStartupCheck!.style.display === 'none') {
+        runOnStartupCheck!.style.display = 'block';
         api.setRunOnStartup(true);
       } else {
-        runOnStartupCheck.style.display = 'none';
+        runOnStartupCheck!.style.display = 'none';
         api.setRunOnStartup(false);
       }
     });
 
     // Width setting
-    const widthInput = document.getElementById('fit-to-width-input');
+    const widthInput = document.getElementById('fit-to-width-input') as HTMLInputElement;
     let resizeWidth = await api.getResizeWidth();
-    widthInput.value = resizeWidth;
-    widthInput.addEventListener('change', () => {
+    widthInput!.value = resizeWidth;
+    widthInput!.addEventListener('change', () => {
       // validate
-      const inputWidth = parseInt(widthInput.value);
+      const inputWidth = parseInt(widthInput!.value);
       if (isNaN(inputWidth) || inputWidth <= 0) {
-        widthInput.value = resizeWidth;
+        widthInput!.value = resizeWidth;
         return;
       }
       resizeWidth = inputWidth;
@@ -138,7 +141,7 @@ const settingsModal = {
 
     // Version
     const version = await api.getVersion();
-    document.getElementById('versionString').textContent = version;
+    document.getElementById('versionString')!.textContent = version;
   },
 };
 
