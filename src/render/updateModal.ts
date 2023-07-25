@@ -7,11 +7,11 @@ const updateModal = {
       const needsUpdateVersion = await api.getUpdates();
       console.log(`Needs update: ${needsUpdateVersion}`);
       if (needsUpdateVersion) {
-        updateModalBackground.style.display = 'block';
-        updateText.textContent = `New Update ${needsUpdateVersion} Available!`;
+        updateModalBackground!.style.display = 'block';
+        updateText!.textContent = `New Update ${needsUpdateVersion} Available!`;
         const updateButton = document.getElementById('update-button');
-        updateButton.addEventListener('click', () => {
-          updateModalBackground.style.display = 'none';
+        updateButton!.addEventListener('click', () => {
+          updateModalBackground!.style.display = 'none';
         });
       }
     }
