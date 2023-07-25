@@ -20,8 +20,8 @@ const settingsModal = {
       }
     }
     setTheme(theme);
-    const themeSelect = document.getElementById('theme-select');
-    const themes = [...(themeSelect!.children as HTMLCollectionOf<HTMLDivElement>)];
+    const themeSelect = document.getElementById('theme-select') as HTMLDivElement;
+    const themes = [...(themeSelect.children as HTMLCollectionOf<HTMLDivElement>)];
     for (const themeSelector of themes) {
       const elementTheme = themeSelector.dataset.theme as Theme;
       if (elementTheme === theme) {
@@ -57,11 +57,13 @@ const settingsModal = {
     });
 
     // Set hotkey
-    const hotkeyInputContainer = document.getElementById('hotkey-input-container');
+    const hotkeyInputContainer = document.getElementById(
+      'hotkey-input-container'
+    ) as HTMLDivElement;
     const hotkeyInput = document.getElementById('hotkey-input') as HTMLInputElement;
     const pressedkeys = new Set();
     let hotkeyString = await api.getHotkey();
-    hotkeyInput!.value = hotkeyString;
+    hotkeyInput.value = hotkeyString;
     let newHotkey = '';
 
     function keyToUpper(key: string) {
@@ -79,7 +81,7 @@ const settingsModal = {
 
       api.disableHotkey();
       e.preventDefault();
-      hotkeyInputContainer!.classList.add('active');
+      hotkeyInputContainer.classList.add('active');
       if (key === 'Escape') {
         hotkeyInput.value = hotkeyString;
         pressedkeys.clear();
@@ -95,7 +97,7 @@ const settingsModal = {
       e.preventDefault();
       pressedkeys.delete(key);
       if (pressedkeys.size === 0) {
-        hotkeyInputContainer!.classList.remove('active');
+        hotkeyInputContainer.classList.remove('active');
         // save hotkey
         hotkeyString = newHotkey;
         api.setHotkey(hotkeyString);
@@ -105,16 +107,16 @@ const settingsModal = {
     });
 
     // Run on startup
-    const runOnStartup = document.getElementById('run-on-startup');
-    const runOnStartupCheck = document.getElementById('run-on-startup-check');
+    const runOnStartup = document.getElementById('run-on-startup') as HTMLDivElement;
+    const runOnStartupCheck = document.getElementById('run-on-startup-check') as HTMLSpanElement;
     const runOnStartupEnabled = await api.getRunOnStartup();
-    runOnStartupCheck!.style.display = runOnStartupEnabled ? 'block' : 'none';
-    runOnStartup!.addEventListener('click', () => {
-      if (runOnStartupCheck!.style.display === 'none') {
-        runOnStartupCheck!.style.display = 'block';
+    runOnStartupCheck.style.display = runOnStartupEnabled ? 'block' : 'none';
+    runOnStartup.addEventListener('click', () => {
+      if (runOnStartupCheck.style.display === 'none') {
+        runOnStartupCheck.style.display = 'block';
         api.setRunOnStartup(true);
       } else {
-        runOnStartupCheck!.style.display = 'none';
+        runOnStartupCheck.style.display = 'none';
         api.setRunOnStartup(false);
       }
     });
@@ -122,12 +124,12 @@ const settingsModal = {
     // Width setting
     const widthInput = document.getElementById('fit-to-width-input') as HTMLInputElement;
     let resizeWidth = await api.getResizeWidth();
-    widthInput!.value = resizeWidth;
-    widthInput!.addEventListener('change', () => {
+    widthInput.value = resizeWidth;
+    widthInput.addEventListener('change', () => {
       // validate
-      const inputWidth = parseInt(widthInput!.value);
+      const inputWidth = parseInt(widthInput.value);
       if (isNaN(inputWidth) || inputWidth <= 0) {
-        widthInput!.value = resizeWidth;
+        widthInput.value = resizeWidth;
         return;
       }
       resizeWidth = inputWidth;
@@ -141,7 +143,8 @@ const settingsModal = {
 
     // Version
     const version = await api.getVersion();
-    document.getElementById('versionString')!.textContent = version;
+    const headerElement = document.getElementById('version-string') as HTMLHeadingElement;
+    headerElement.textContent = version;
   },
 };
 
