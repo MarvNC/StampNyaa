@@ -1,5 +1,5 @@
-const { app } = require('electron');
-const axios = require('axios');
+import { app } from 'electron';
+import axios from 'axios';
 import ElectronStore from 'electron-store';
 
 const version = app.getVersion();

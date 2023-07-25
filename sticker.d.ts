@@ -1,5 +1,7 @@
+type StickerType = 'static' | 'animation' | 'popup';
+
 /**
- * Interface for a sticker in a sticker pack.F
+ * Interface for a sticker in a sticker pack.
  */
 interface Sticker {
   stickerID: string;
@@ -8,7 +10,7 @@ interface Sticker {
    * The optional special path for the sticker if it is a popup or animation sticker.
    */
   specialPath?: string;
-  type: "static" | "animation" | "popup";
+  type: StickerType;
   stickerPackID: string;
 }
 

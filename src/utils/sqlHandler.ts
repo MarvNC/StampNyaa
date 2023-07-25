@@ -1,11 +1,9 @@
-import { sqlite3, Database } from 'sqlite3';
-
-const sqlite3 = require('sqlite3').verbose();
+import sqlite3 from 'sqlite3';
 
 const sqlHandler = {
-  db: null as Database | null,
+  db: null as sqlite3.Database | null,
   init: function (path: string) {
-    this.db = new sqlite3.Database(path, (err: Error) => {
+    this.db = new sqlite3.Database(path, (err: Error | null) => {
       if (err) {
         console.error(err.message);
       }

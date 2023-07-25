@@ -1,8 +1,8 @@
-const { app, clipboard } = require('electron');
-const fs = require('fs');
-const path = require('path');
-const { keyboard, Key } = require('@nut-tree/nut-js');
-const Jimp = require('jimp');
+import { app, clipboard, nativeImage } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import { keyboard, Key } from '@nut-tree/nut-js';
+import Jimp from 'jimp';
 
 type clipboard = typeof import('electron-clipboard-ex');
 let clipboardEx: clipboard | null = null;
@@ -33,7 +33,7 @@ function getAllStickerPacks(stickerPacksDir: string) {
       fs.writeFileSync(path.join(stickerPacksDir, pack, 'info.json'), '{}');
     }
     const stickerPackData: StickerPack = JSON.parse(
-      fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json'))
+      fs.readFileSync(path.join(stickerPacksDir, pack, 'info.json')).toString()
     );
 
     if (!stickerPackData.title) {
@@ -73,7 +73,7 @@ function getAllStickerPacks(stickerPacksDir: string) {
       const stickerID = sticker.split('_')[0];
       const filepath = path.join(stickerPacksDir, pack, sticker);
       stickersMap[stickerID].specialPath = filepath;
-      const type = path.parse(sticker).name.split('_')[1];
+      const type = path.parse(sticker).name.split('_')[1] as StickerType;
       stickersMap[stickerID].type = type;
     }
     // convert stickersMap object to array
@@ -146,7 +146,8 @@ async function pasteStickerFromPath(
     clipboardEx!.writeFilePaths([tempStickerPath]);
   } else {
     // linux
-    clipboard.writeImage(tempStickerPath);
+    const image = nativeImage.createFromPath(tempStickerPath);
+    clipboard.writeImage(image);
   }
   console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
 
