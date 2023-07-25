@@ -1,4 +1,4 @@
-import { app, clipboard, nativeImage } from 'electron';
+import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import { keyboard, Key } from '@nut-tree/nut-js';
@@ -91,11 +91,7 @@ function getAllStickerPacks(stickerPacksDir: string) {
  */
 async function pasteStickerFromPath(
   stickerPath: any,
-  window: {
-    minimize: () => void;
-    setAlwaysOnTop: (arg0: boolean) => void;
-    setFocusable: (arg0: boolean) => void;
-  },
+  window: BrowserWindow,
   {
     closeWindowAfterSend = true,
     resizeWidth = 160,

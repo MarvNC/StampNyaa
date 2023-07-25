@@ -3,7 +3,7 @@ import sqlite3 from 'sqlite3';
 const sqlHandler = {
   db: null as sqlite3.Database | null,
   init: function (path: string) {
-    this.db = new sqlite3.Database(path, (err: Error | null) => {
+    this.db = new sqlite3.Database(path, (err) => {
       if (err) {
         console.error(err.message);
       }

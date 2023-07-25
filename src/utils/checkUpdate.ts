@@ -9,11 +9,9 @@ const platform = process.platform;
  * Checks if the operating system is MacOS or Linux and if there are updates available.
  * Returns the version number of the latest release if there are updates available. Otherwise, returns null.
  * Also does not check for updates if the last update check was less than five minutes ago.
- * @param {Store} config
- * @returns {Promise<string|null>} The version number of the latest release if there are updates available. Otherwise, returns false.
+ * @returns The version number of the latest release if there are updates available. Otherwise, returns false.
  */
-
-async function checkUpdate(config: ElectronStore) {
+async function checkUpdate(config: ElectronStore): Promise<string | false> {
   // Do not check if Windows
   if (platform === 'win32') {
     return false;
