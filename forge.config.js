@@ -12,6 +12,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
+        iconUrl: 'https://github.com/MarvNC/StampNyaa/raw/master/assets/icon.ico',
         setupIcon: './assets/icon.ico',
       },
     },
