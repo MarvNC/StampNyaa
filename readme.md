@@ -1,6 +1,9 @@
 <p align="center">
   <img src="./assets/banner_transparent.png" alt="StampNyaa Banner" max-height="300" />
 </p>
+<p align="center">
+  <img src="./img/Main.png" alt="StampNyaa Demo" max-height="300" />
+</p>
 <h1 align="center">StampNyaa | スタンプにゃあ～</h1>
 <p align="center">
   <a href="https://github.com/MarvNC/StampNyaa/releases/latest">
