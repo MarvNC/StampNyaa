@@ -9,14 +9,14 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 18.15.0
-      - name: install dependencies
+      - name: Install Dependencies
         run: yarn install
-      - name: build
+      - name: Build
         run: yarn make
-      - name: upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: artifacts
+          name: Linux
           path: out/make
 
   build_on_mac:
@@ -26,14 +26,14 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 18.15.0
-      - name: install dependencies
+      - name: Install Dependencies
         run: yarn install
-      - name: build
+      - name: Build
         run: yarn make
-      - name: upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: artifacts
+          name: MacOS
           path: out/make
 
   build_on_win:
@@ -43,12 +43,12 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 18.15.0
-      - name: install dependencies
+      - name: Install Dependencies
         run: yarn install
-      - name: build
+      - name: Build
         run: yarn make
-      - name: upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: artifacts
+          name: Windows
           path: out/make
