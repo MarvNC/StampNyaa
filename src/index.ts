@@ -143,13 +143,6 @@ function toggleWindow() {
   if (window!.isFocused()) {
     window!.hide();
   } else {
-    // show on active workspace for mac
-    if (process.platform === 'darwin') {
-      window!.setVisibleOnAllWorkspaces(true);
-      window!.show();
-      window!.setVisibleOnAllWorkspaces(false);
-    }
-    // show on current monitor
     const currentScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
     const isWindowOnCurrentScreen =
       currentScreen.bounds.x <= window!.getPosition()[0] &&
