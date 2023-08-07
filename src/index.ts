@@ -78,6 +78,7 @@ const createWindow = () => {
 
   // for mac workspaces
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  app.dock.hide();
 
   // Open the DevTools if in development mode.
   if (process.env.NODE_ENV === 'development') {
