@@ -76,6 +76,9 @@ const createWindow = () => {
     return { action: 'deny' };
   });
 
+  // for mac workspaces
+  window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+
   // Open the DevTools if in development mode.
   if (process.env.NODE_ENV === 'development') {
     window.webContents.openDevTools();
