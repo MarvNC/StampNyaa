@@ -47,7 +47,7 @@
     "@electron-forge/plugin-vite": "^6.2.1",
     "@electron-forge/publisher-github": "^6.2.1",
     "@types/node": "^20.4.4",
-    "electron": "25.2.0",
+    "electron": "25.8.4",
     "electron-builder": "^24.4.0",
     "electronmon": "^2.0.2",
     "husky": "^8.0.3",
