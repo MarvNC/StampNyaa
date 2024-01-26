@@ -78,6 +78,7 @@ StampNyaa supports adding your own sticker packs to the app.
 - The folder name will be used as the sticker pack name by default, and the images inside will be used as the stickers.
 - You will also need to add a sticker named `main.png` to be used as the icon representing the sticker pack in the sidebar.
 - Note that only `.png` images are currently supported.
+- After adding new stickers to your `stickers` directory, press `ctrl + r` in the app to refresh and your newly added stickers should show up.
 
 ## ⚠️ Known Limitations
 
