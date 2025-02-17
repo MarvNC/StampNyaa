@@ -15,7 +15,8 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "format": "prettier --write \"src/**/*.{js,ts}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "rebuild": "electron-rebuild -w -A"
   },
   "keywords": [],
   "author": {
@@ -24,13 +25,15 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
-    "@nut-tree/nut-js": "^3.1.2",
+    "@nut-tree-fork/nut-js": "^4.2.4",
     "@shopify/draggable": "1.0.0-beta.11",
     "axios": "^1.4.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "jimp": "^0.22.8",
     "jsdom": "^22.1.0",
+    "sharp": "^0.33.5",
+    "sharp-apng": "^0.1.5",
     "sqlite3": "^5.1.6",
     "update-electron-app": "^2.0.1"
   },
@@ -49,6 +52,7 @@
     "@types/node": "^20.4.4",
     "electron": "25.2.0",
     "electron-builder": "^24.4.0",
+    "electron-rebuild": "^3.2.9",
     "electronmon": "^2.0.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",

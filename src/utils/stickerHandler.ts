@@ -1,8 +1,9 @@
 import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import { keyboard, Key } from '@nut-tree/nut-js';
+import { keyboard, Key } from '@nut-tree-fork/nut-js';
 import Jimp from 'jimp';
+import { convertApngToGif } from './apngToGifConverter'; // Import the helper
 
 type clipboard = typeof import('electron-clipboard-ex');
 let clipboardEx: clipboard | null = null;
@@ -116,10 +117,31 @@ async function pasteStickerFromPath(
   author = stripIllegalCharacters(author);
   title = stripIllegalCharacters(title);
   stickerPackID = stripIllegalCharacters(stickerPackID);
-  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.png`);
+  let tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.png`); // Default png path
+  let isAPNG = false;
+
+  try {
+    await Jimp.read(stickerPath); // Try reading as a regular image
+  } catch (jimpError) {
+    if (jimpError.message.includes('Unsupported MIME type: image/apng')) {
+      console.log('Animated APNG detected.');
+      isAPNG = true;
+      try {
+        tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.gif`); // Change to gif path
+        const gifPath = await convertApngToGif(stickerPath, resizeWidth); // Convert to GIF
+        stickerPath = gifPath; // Use the GIF path for further processing
+      } catch (conversionError) {
+        console.error('Error converting APNG to GIF:', conversionError);
+        return;
+      }
+    } else {
+      console.error('Error reading image:', jimpError);
+      return;
+    }
+  }
 
   // if resizeImageWidth is set, resize the image to the given width
-  if (resizeWidth) {
+  if (resizeWidth && !isAPNG) {
     try {
       const image = await Jimp.read(stickerPath);
       // check if width is bigger than resizeImageWidth
@@ -128,13 +150,12 @@ async function pasteStickerFromPath(
       }
       // save in temp path
       await image.writeAsync(tempStickerPath);
-    } catch (error) {
-      console.log('Unsupported image format, could not resize');
-      fs.copyFileSync(stickerPath, tempStickerPath);
+    } catch (resizeError) {
+      console.error('Error resizing image:', resizeError); // Log the error
+      fs.copyFileSync(stickerPath, tempStickerPath); // Fallback to copying
     }
   } else {
-    // copy sticker to temp path
-    fs.copyFileSync(stickerPath, tempStickerPath);
+    fs.copyFileSync(stickerPath, tempStickerPath); // Copy if not resizing, or if it's APNG (already converted).
   }
 
   // write sticker file to clipboard if not linux
