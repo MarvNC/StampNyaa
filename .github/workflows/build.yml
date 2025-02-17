@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: git@github.com:MichaelDavidGK/StampNyaa.git  # Replace with your repo URL
+          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: git@github.com:MichaelDavidGK/StampNyaa.git  # Replace with your repo URL
+          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: git@github.com:MichaelDavidGK/StampNyaa.git  # Replace with your repo URL
+          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
