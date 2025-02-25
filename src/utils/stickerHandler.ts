@@ -1,4 +1,3 @@
-// stickerHandler.ts
 import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
 import fs from 'fs';
 import path from 'path';
