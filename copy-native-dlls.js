@@ -2,14 +2,13 @@ const fse = require('fs-extra');
 const path = require('path');
 
 async function copyDlls() {
-  // No need for buildPath argument
   const sourceDir = path.join(__dirname, 'node_modules', '@img', 'sharp-win32-x64', 'lib');
 
   // Construct the destination path directly:
   const destDir = path.join(
-    __dirname, // Project root
-    'out', // Electron Forge output directory
-    'StampNyaa-win32-x64', // Your app name and platform
+    __dirname,
+    'out',
+    'StampNyaa-win32-x64',
     'resources',
     'app.asar.unpacked',
     'node_modules',
