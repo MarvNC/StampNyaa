@@ -92,7 +92,16 @@ module.exports = {
       if (platform === 'darwin' || platform === 'linux') {
         console.log('We need to remove the problematic link file on macOS/Linux');
         console.log(`Build path ${buildPath}`);
-        fs.unlinkSync(path.join(buildPath, 'node_modules/sqlite3/build/node_gyp_bins/python3'));
+        const python3Path = path.join(buildPath, 'node_modules/sqlite3/build/node_gyp_bins/python3');
+        if (fs.existsSync(python3Path)) {
+          try {
+            fs.unlinkSync(python3Path);
+          } catch (error) {
+            console.error(`Error deleting python3: ${error.message}`);
+          }
+        } else {
+          console.log(`python3 not found at: ${python3Path}`);
+        }
       }
     },
   },
