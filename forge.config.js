@@ -75,7 +75,7 @@ module.exports = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'MarvNC',
+          owner: 'MichaeDavidGK',
           name: 'StampNyaa',
         },
         draft: true,
