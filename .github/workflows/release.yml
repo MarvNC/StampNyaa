@@ -6,6 +6,10 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+  
+permissions:
+  contents: write
+  packages: write
 
 jobs:
   publish_on_linux:
