@@ -35,12 +35,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install Python 3
-        run: brew install python3
-      - name: Install or Upgrade setuptools and packaging (user-level)
-        run: |
-          pip3 install --upgrade setuptools --user
-          pip3 install --upgrade packaging --user
       - name: Set Python Path (macOS)
         run: |
           echo "PYTHON=$(which python3)" >> $GITHUB_ENV
@@ -48,6 +42,8 @@ jobs:
         run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
+      - name: Install Electron Rebuild
+        run: yarn add --dev electron-rebuild
       - name: Electron Rebuild
         run: ./node_modules/.bin/electron-rebuild
       - name: Build
