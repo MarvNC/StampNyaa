@@ -35,26 +35,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Set Python Path (macOS)
-        run: |
-          echo "PYTHON=$(which python3)" >> $GITHUB_ENV
-      - name: Create Virtual Environment
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-      - name: Install Python setuptools
-        run: |
-          source venv/bin/activate
-          python3 -m pip install --upgrade pip
-          python3 -m pip install setuptools
       - name: Clean node_modules
         run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
-      - name: Install Electron Rebuild
-        run: yarn add --dev electron-rebuild
-      - name: Electron Rebuild
-        run: ./node_modules/.bin/electron-rebuild
       - name: Build
         run: yarn make
       - name: Upload Artifacts
