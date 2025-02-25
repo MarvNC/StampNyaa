@@ -49,7 +49,6 @@ jobs:
       - name: Clean node_modules and node-gyp
         run: |
           rm -rf node_modules
-          yarn global remove node-gyp
           yarn global add node-gyp
       - name: Install Dependencies
         run: yarn install
