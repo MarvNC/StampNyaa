@@ -5,7 +5,7 @@
   "description": "A simple app for using LINE stickers in your favorite messaging applications.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MarvNC/StampNyaa"
+    "url": "https://github.com/MichaeDavidGK/StampNyaa"
   },
   "main": ".vite/build/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "keywords": [],
   "author": {
-    "name": "MarvNC",
+    "name": "MichaeDavidGK",
     "email": "rotrobmin@gmail.com"
   },
   "license": "GPL-3.0",
