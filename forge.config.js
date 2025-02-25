@@ -83,7 +83,7 @@ module.exports = {
     },
   ],
   hooks: {
-    postPackage: async (platform) => {
+    postPackage: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
       if (platform === 'win32') {
         // No arguments needed
         await copyDlls();
