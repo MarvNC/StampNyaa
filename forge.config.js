@@ -84,8 +84,10 @@ module.exports = {
   ],
   hooks: {
     postPackage: async () => {
-      // No arguments needed
-      await copyDlls();
+      if (platform === 'win32') {
+        // No arguments needed
+        await copyDlls();
+      }
     },
     // Fix sqlite links out of the package https://www.update.rocks/blog/fixing-the-python3/
     packageAfterPrune: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
