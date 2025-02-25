@@ -37,10 +37,10 @@ jobs:
           node-version: 22
       - name: Install Python 3
         run: brew install python3
-      - name: Install or Upgrade setuptools and packaging
+      - name: Install or Upgrade setuptools and packaging (user-level)
         run: |
-          pip3 install --upgrade setuptools
-          pip3 install --upgrade packaging
+          pip3 install --upgrade setuptools --user
+          pip3 install --upgrade packaging --user
       - name: Set Python Path (macOS)
         run: |
           echo "PYTHON=$(which python3)" >> $GITHUB_ENV
