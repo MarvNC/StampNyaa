@@ -83,7 +83,7 @@ module.exports = {
     },
   ],
   hooks: {
-    postPackage: async () => {
+    postPackage: async (platform) => {
       if (platform === 'win32') {
         // No arguments needed
         await copyDlls();
