@@ -148,15 +148,14 @@ async function pasteStickerFromPath(
     await image.toFile(tempStickerPath);
 
     // Write to clipboard (platform-specific)
-    if (process.platform !== 'linux') {
-      const clipboardEx = require('electron-clipboard-ex');
+    if (process.platform !== 'linux' && clipboardEx) {
       clipboardEx.writeFilePaths([tempStickerPath]);
     } else {
       const img = nativeImage.createFromPath(tempStickerPath);
       clipboard.writeImage(img);
     }
     console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
-
+  
     // Window handling and pasting
     if (closeWindowAfterSend) {
       window.minimize();
