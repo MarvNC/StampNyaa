@@ -9,17 +9,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Set Python Path (Linux)
-        run: |
-          echo "PYTHON=$(which python3)" >> $GITHUB_ENV
-      - name: Clean node_modules
-        run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
-      - name: Install Electron Rebuild
-        run: yarn add --dev electron-rebuild
-      - name: Electron Rebuild
-        run: ./node_modules/.bin/electron-rebuild
       - name: Build
         run: yarn make
       - name: Upload Artifacts
@@ -35,8 +26,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Clean node_modules
-        run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
       - name: Build
