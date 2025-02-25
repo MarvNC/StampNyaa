@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const copyDlls = require('./copy-native-dlls'); // Path to your script
-
+const copyDlls = require('./copy-native-dlls');
 module.exports = {
   packagerConfig: {
     asar: true,
