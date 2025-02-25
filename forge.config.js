@@ -1,9 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const copyDlls = require('./copy-native-dlls'); // Path to your script
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    asarOptions: {
+      unpackDir: 'node_modules/@img/sharp-win32-x64/lib',
+    },
+    asarUnpack: ['**/node_modules/sharp/**/*', '**/node_modules/@img/**/*'],
     executableName: 'stampnyaa',
     icon: './assets/icon',
   },
@@ -78,12 +83,27 @@ module.exports = {
     },
   ],
   hooks: {
+    postPackage: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
+      if (platform === 'win32') {
+        // No arguments needed
+        await copyDlls();
+      }
+    },
     // Fix sqlite links out of the package https://www.update.rocks/blog/fixing-the-python3/
     packageAfterPrune: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
       if (platform === 'darwin' || platform === 'linux') {
         console.log('We need to remove the problematic link file on macOS/Linux');
         console.log(`Build path ${buildPath}`);
-        fs.unlinkSync(path.join(buildPath, 'node_modules/sqlite3/build/node_gyp_bins/python3'));
+        const python3Path = path.join(buildPath, 'node_modules/sqlite3/build/node_gyp_bins/python3');
+        if (fs.existsSync(python3Path)) {
+          try {
+            fs.unlinkSync(python3Path);
+          } catch (error) {
+            console.error(`Error deleting python3: ${error.message}`);
+          }
+        } else {
+          console.log(`python3 not found at: ${python3Path}`);
+        }
       }
     },
   },
