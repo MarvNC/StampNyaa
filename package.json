@@ -1,11 +1,11 @@
 {
   "name": "stampnyaa",
   "productName": "StampNyaa",
-  "version": "1.6.2",
+  "version": "1.6.1",
   "description": "A simple app for using LINE stickers in your favorite messaging applications.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MichaeDavidGK/StampNyaa"
+    "url": "https://github.com/MarvNC/StampNyaa"
   },
   "main": ".vite/build/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "keywords": [],
   "author": {
-    "name": "MichaeDavidGK",
+    "name": "MarvNC",
     "email": "rotrobmin@gmail.com"
   },
   "license": "GPL-3.0",
