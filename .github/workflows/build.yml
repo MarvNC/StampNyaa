@@ -6,9 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -26,9 +23,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -46,9 +40,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: MichaelDavidGK/StampNyaa  # Replace with your repo URL
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22

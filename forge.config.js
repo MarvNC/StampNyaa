@@ -1,9 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const copyDlls = require('./copy-native-dlls'); // Path to your script
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    asarOptions: {
+      unpackDir: 'node_modules/@img/sharp-win32-x64/lib',
+    },
+    asarUnpack: ['**/node_modules/sharp/**/*', '**/node_modules/@img/**/*'],
     executableName: 'stampnyaa',
     icon: './assets/icon',
   },
@@ -70,7 +75,7 @@ module.exports = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'MichaelDGK',
+          owner: 'MarvNC',
           name: 'StampNyaa',
         },
         draft: true,
@@ -78,6 +83,10 @@ module.exports = {
     },
   ],
   hooks: {
+    postPackage: async () => {
+      // No arguments needed
+      await copyDlls();
+    },
     // Fix sqlite links out of the package https://www.update.rocks/blog/fixing-the-python3/
     packageAfterPrune: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
       if (platform === 'darwin' || platform === 'linux') {

@@ -1,9 +1,11 @@
+// stickerHandler.ts
 import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import { keyboard, Key } from '@nut-tree-fork/nut-js';
-import Jimp from 'jimp';
-import { convertApngToGif } from './apngToGifConverter'; // Import the helper
+import FileType from 'file-type';
+import sharp from 'sharp';
+import sharpApng from 'sharp-apng';
 
 type clipboard = typeof import('electron-clipboard-ex');
 let clipboardEx: clipboard | null = null;
@@ -101,95 +103,84 @@ async function pasteStickerFromPath(
     stickerPackID = '',
   } = {}
 ) {
-  // check valid file path
   if (!fs.existsSync(stickerPath)) {
     throw new Error('Invalid file path');
   }
 
   const tempStickerFolder = path.join(app.getPath('appData'), 'temp');
 
-  // create temp folder if it doesn't exist
   if (!fs.existsSync(tempStickerFolder)) {
     fs.mkdirSync(tempStickerFolder);
   }
 
-  // strip illegal characters from author and title and ID
   author = stripIllegalCharacters(author);
   title = stripIllegalCharacters(title);
   stickerPackID = stripIllegalCharacters(stickerPackID);
-  let tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.png`); // Default png path
-  let isAPNG = false;
+  let tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}`);
 
   try {
-    await Jimp.read(stickerPath); // Try reading as a regular image
-  } catch (jimpError) {
-    if (jimpError.message.includes('Unsupported MIME type: image/apng')) {
-      console.log('Animated APNG detected.');
-      isAPNG = true;
-      try {
-        tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.gif`); // Change to gif path
-        const gifPath = await convertApngToGif(stickerPath, resizeWidth); // Convert to GIF
-        stickerPath = gifPath; // Use the GIF path for further processing
-      } catch (conversionError) {
-        console.error('Error converting APNG to GIF:', conversionError);
-        return;
+    // Use fileType.fromFile for APNG detection
+    const { mime } = await FileType.fromFile(stickerPath);
+    const isAPNG = mime === 'image/apng';
+    let image;
+
+    if (isAPNG) {
+      tempStickerPath += '.gif';
+      // APNG to GIF conversion using sharpApng
+      image = await sharpApng.sharpFromApng(stickerPath, {
+        delay: 0,
+        repeat: 0,
+        transparent: true,
+      });
+    } else {
+      tempStickerPath += '.png';
+      // Use sharp for PNG processing
+      image = sharp(stickerPath);
+    }
+
+    if (resizeWidth) {
+      image.resize(resizeWidth, null, {
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      });
+    }
+
+    await image.toFile(tempStickerPath);
+
+    // Write to clipboard (platform-specific)
+    if (process.platform !== 'linux') {
+      const clipboardEx = require('electron-clipboard-ex');
+      clipboardEx.writeFilePaths([tempStickerPath]);
+    } else {
+      const img = nativeImage.createFromPath(tempStickerPath);
+      clipboard.writeImage(img);
+    }
+    console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
+
+    // Window handling and pasting
+    if (closeWindowAfterSend) {
+      window.minimize();
+      if (process.platform === 'darwin') {
+        app.hide();
       }
     } else {
-      console.error('Error reading image:', jimpError);
-      return;
+      window.setAlwaysOnTop(true);
+      window.setFocusable(false);
     }
-  }
 
-  // if resizeImageWidth is set, resize the image to the given width
-  if (resizeWidth && !isAPNG) {
-    try {
-      const image = await Jimp.read(stickerPath);
-      // check if width is bigger than resizeImageWidth
-      if (image.getWidth() > resizeWidth) {
-        await image.resize(resizeWidth, Jimp.AUTO);
-      }
-      // save in temp path
-      await image.writeAsync(tempStickerPath);
-    } catch (resizeError) {
-      console.error('Error resizing image:', resizeError); // Log the error
-      fs.copyFileSync(stickerPath, tempStickerPath); // Fallback to copying
+    const ctrlKey = process.platform === 'darwin' ? Key.LeftCmd : Key.LeftControl;
+    keyboard.pressKey(ctrlKey);
+    keyboard.pressKey(Key.V);
+    keyboard.releaseKey(Key.V);
+    await keyboard.releaseKey(ctrlKey);
+
+    if (!closeWindowAfterSend) {
+      window.setFocusable(true);
+      window.setAlwaysOnTop(false);
     }
-  } else {
-    fs.copyFileSync(stickerPath, tempStickerPath); // Copy if not resizing, or if it's APNG (already converted).
-  }
-
-  // write sticker file to clipboard if not linux
-  if (process.platform !== 'linux') {
-    clipboardEx!.writeFilePaths([tempStickerPath]);
-  } else {
-    // linux
-    const image = nativeImage.createFromPath(tempStickerPath);
-    clipboard.writeImage(image);
-  }
-  console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
-
-  if (closeWindowAfterSend) {
-    // windows / linux
-    window.minimize();
-    // mac
-    if (process.platform === 'darwin') {
-      app.hide();
-    }
-  } else {
-    window.setAlwaysOnTop(true);
-    window.setFocusable(false);
-  }
-
-  // paste sticker image (these are async functions but awaiting is slower)
-  const ctrlKey = process.platform === 'darwin' ? Key.LeftCmd : Key.LeftControl;
-  keyboard.pressKey(ctrlKey);
-  keyboard.pressKey(Key.V);
-  keyboard.releaseKey(Key.V);
-  await keyboard.releaseKey(ctrlKey);
-
-  if (!closeWindowAfterSend) {
-    window.setFocusable(true);
-    window.setAlwaysOnTop(false);
+  } catch (error) {
+    console.error('Error processing image:', error);
+    return;
   }
 }
 

@@ -3,7 +3,7 @@ const { JSDOM } = require('jsdom');
 import fs from 'fs';
 import { finished } from 'node:stream/promises';
 import path from 'path';
-import Jimp from 'jimp';
+import sharp from 'sharp';
 import { MessagePortMain } from 'electron';
 
 const cdnURL = 'https://stickershop.line-scdn.net';
@@ -186,7 +186,7 @@ async function downloadImage(url: string, dir: string, filename: string) {
  */
 async function checkImageValidity(imagePath: string) {
   try {
-    await Jimp.read(imagePath);
+    await sharp(imagePath);
     console.log('Image is valid.');
     return true;
   } catch (error) {

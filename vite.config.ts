@@ -19,7 +19,4 @@ export default defineConfig({
     browserField: false,
     mainFields: ['module', 'jsnext:main', 'jsnext'],
   },
-  optimizeDeps: {
-    exclude: ['sharp', 'sharp-apng'], // Exclude sharp and sharp-apng from optimization
-  },
 });
