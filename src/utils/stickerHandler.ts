@@ -102,16 +102,19 @@ async function pasteStickerFromPath(
     stickerPackID = '',
   } = {}
 ) {
+  // check valid file path
   if (!fs.existsSync(stickerPath)) {
     throw new Error('Invalid file path');
   }
 
   const tempStickerFolder = path.join(app.getPath('appData'), 'temp');
 
+  // create temp folder if it doesn't exist
   if (!fs.existsSync(tempStickerFolder)) {
     fs.mkdirSync(tempStickerFolder);
   }
 
+  // strip illegal characters from author and title and ID
   author = stripIllegalCharacters(author);
   title = stripIllegalCharacters(title);
   stickerPackID = stripIllegalCharacters(stickerPackID);
@@ -133,7 +136,7 @@ async function pasteStickerFromPath(
       });
     } else {
       tempStickerPath += '.png';
-      // Use sharp for PNG processing
+      // Use sharp for resize
       image = sharp(stickerPath);
     }
 
