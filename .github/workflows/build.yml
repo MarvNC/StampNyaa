@@ -38,12 +38,14 @@ jobs:
       - name: Set Python Path (macOS)
         run: |
           echo "PYTHON=$(which python3)" >> $GITHUB_ENV
+      - name: Install Python setuptools
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install setuptools
       - name: Clean node_modules
         run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
-      - name: Install distutils
-        run: yarn add --dev distutils
       - name: Install Electron Rebuild
         run: yarn add --dev electron-rebuild
       - name: Electron Rebuild
