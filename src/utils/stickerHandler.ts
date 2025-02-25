@@ -139,7 +139,7 @@ async function pasteStickerFromPath(
       // Use sharp for resize
       image = sharp(stickerPath);
     }
-
+    // if resizeImageWidth is set, resize the image to the given width
     if (resizeWidth) {
       image.resize(resizeWidth, null, {
         fit: 'contain',
