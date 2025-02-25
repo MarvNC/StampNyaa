@@ -37,23 +37,17 @@ jobs:
           node-version: 22
       - name: Install Python 3
         run: brew install python3
+      - name: Install or Upgrade setuptools and packaging
+        run: |
+          pip3 install --upgrade setuptools
+          pip3 install --upgrade packaging
       - name: Set Python Path (macOS)
         run: |
           echo "PYTHON=$(which python3)" >> $GITHUB_ENV
-      - name: Debug Python Path
-        run: |
-          echo "Python Path: $PYTHON"
-          python3 --version
-      - name: Check Xcode Command Line Tools
-        run: xcode-select -p
-      - name: Clean node_modules and node-gyp
-        run: |
-          rm -rf node_modules
-          yarn global add node-gyp
+      - name: Clean node_modules
+        run: rm -rf node_modules
       - name: Install Dependencies
         run: yarn install
-      - name: Update electron-rebuild
-        run: yarn global upgrade electron-rebuild
       - name: Electron Rebuild
         run: ./node_modules/.bin/electron-rebuild
       - name: Build
