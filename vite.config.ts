@@ -4,7 +4,14 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     rollupOptions: {
-      external: ['electron-clipboard-ex', 'sqlite3', 'jimp', '@nut-tree/nut-js'],
+      external: [
+        'electron-clipboard-ex',
+        'sqlite3',
+        'jimp',
+        '@nut-tree-fork/nut-js',
+        'sharp',
+        'sharp-apng',
+      ], // Add sharp and sharp-apng
     },
   },
   resolve: {

@@ -1,8 +1,10 @@
 import { BrowserWindow, app, clipboard, nativeImage } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import { keyboard, Key } from '@nut-tree/nut-js';
-import Jimp from 'jimp';
+import { keyboard, Key } from '@nut-tree-fork/nut-js';
+import FileType from 'file-type';
+import sharp from 'sharp';
+import sharpApng from 'sharp-apng';
 
 type clipboard = typeof import('electron-clipboard-ex');
 let clipboardEx: clipboard | null = null;
@@ -116,59 +118,70 @@ async function pasteStickerFromPath(
   author = stripIllegalCharacters(author);
   title = stripIllegalCharacters(title);
   stickerPackID = stripIllegalCharacters(stickerPackID);
-  const tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}.png`);
+  let tempStickerPath = path.join(tempStickerFolder, `StampNyaa_${stickerPackID}_${author}`);
 
-  // if resizeImageWidth is set, resize the image to the given width
-  if (resizeWidth) {
-    try {
-      const image = await Jimp.read(stickerPath);
-      // check if width is bigger than resizeImageWidth
-      if (image.getWidth() > resizeWidth) {
-        await image.resize(resizeWidth, Jimp.AUTO);
+  try {
+    // Use fileType.fromFile for APNG detection
+    const { mime } = await FileType.fromFile(stickerPath);
+    const isAPNG = mime === 'image/apng';
+    let image;
+
+    if (isAPNG) {
+      tempStickerPath += '.gif';
+      // APNG to GIF conversion using sharpApng
+      image = await sharpApng.sharpFromApng(stickerPath, {
+        delay: 0,
+        repeat: 0,
+        transparent: true,
+      });
+    } else {
+      tempStickerPath += '.png';
+      // Use sharp for resize
+      image = sharp(stickerPath);
+    }
+    // if resizeImageWidth is set, resize the image to the given width
+    if (resizeWidth) {
+      image.resize(resizeWidth, null, {
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      });
+    }
+
+    await image.toFile(tempStickerPath);
+
+    // Write to clipboard (platform-specific)
+    if (process.platform !== 'linux' && clipboardEx) {
+      clipboardEx.writeFilePaths([tempStickerPath]);
+    } else {
+      const img = nativeImage.createFromPath(tempStickerPath);
+      clipboard.writeImage(img);
+    }
+    console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
+  
+    // Window handling and pasting
+    if (closeWindowAfterSend) {
+      window.minimize();
+      if (process.platform === 'darwin') {
+        app.hide();
       }
-      // save in temp path
-      await image.writeAsync(tempStickerPath);
-    } catch (error) {
-      console.log('Unsupported image format, could not resize');
-      fs.copyFileSync(stickerPath, tempStickerPath);
+    } else {
+      window.setAlwaysOnTop(true);
+      window.setFocusable(false);
     }
-  } else {
-    // copy sticker to temp path
-    fs.copyFileSync(stickerPath, tempStickerPath);
-  }
 
-  // write sticker file to clipboard if not linux
-  if (process.platform !== 'linux') {
-    clipboardEx!.writeFilePaths([tempStickerPath]);
-  } else {
-    // linux
-    const image = nativeImage.createFromPath(tempStickerPath);
-    clipboard.writeImage(image);
-  }
-  console.log(`Wrote sticker to clipboard from path ${tempStickerPath}`);
+    const ctrlKey = process.platform === 'darwin' ? Key.LeftCmd : Key.LeftControl;
+    keyboard.pressKey(ctrlKey);
+    keyboard.pressKey(Key.V);
+    keyboard.releaseKey(Key.V);
+    await keyboard.releaseKey(ctrlKey);
 
-  if (closeWindowAfterSend) {
-    // windows / linux
-    window.minimize();
-    // mac
-    if (process.platform === 'darwin') {
-      app.hide();
+    if (!closeWindowAfterSend) {
+      window.setFocusable(true);
+      window.setAlwaysOnTop(false);
     }
-  } else {
-    window.setAlwaysOnTop(true);
-    window.setFocusable(false);
-  }
-
-  // paste sticker image (these are async functions but awaiting is slower)
-  const ctrlKey = process.platform === 'darwin' ? Key.LeftCmd : Key.LeftControl;
-  keyboard.pressKey(ctrlKey);
-  keyboard.pressKey(Key.V);
-  keyboard.releaseKey(Key.V);
-  await keyboard.releaseKey(ctrlKey);
-
-  if (!closeWindowAfterSend) {
-    window.setFocusable(true);
-    window.setAlwaysOnTop(false);
+  } catch (error) {
+    console.error('Error processing image:', error);
+    return;
   }
 }
 
